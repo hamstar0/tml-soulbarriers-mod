@@ -27,7 +27,7 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		internal void UpdateAllBarriers() {
+		internal void UpdateAllTrackedBarriers() {
 			// Garbage collection
 			foreach( int plrWho in this.PlayerBarriers.Keys.ToArray() ) {
 				if( Main.player[plrWho]?.active != true ) {
@@ -38,7 +38,7 @@ namespace SoulBarriers.Barriers {
 
 		////
 
-		internal void UpdateBarrier( Player hostPlayer, Barrier barrier ) {
+		internal void TrackBarrier( Player hostPlayer, Barrier barrier ) {
 			if( !this.PlayerBarriers.ContainsKey(hostPlayer.whoAmI) ) {
 				this.PlayerBarriers[ hostPlayer.whoAmI ] = barrier;
 			}

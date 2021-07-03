@@ -21,15 +21,20 @@ namespace SoulBarriers {
 		public override ConfigScope Mode => ConfigScope.ServerSide;
 
 
+		////////////////
 
 		[DefaultValue(true)]
 		public bool PBGRecipeEnabled { get; set; } = true;
-
 
 
 		[Range(10f, 500f)]
 		[DefaultValue(48f)]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float DefaultPlayerBarrierRadius { get; set; } = 48f;
+
+
+		[Range(0, 500)]
+		[DefaultValue(20)]
+		public int BarrierDebuffRemovalCost { get; set; } = 48;
 	}
 }

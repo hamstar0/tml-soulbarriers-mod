@@ -32,7 +32,7 @@ namespace SoulBarriers {
 
 
 		public override void PostUpdateEverything() {
-			SoulBarriersMod.BarrierMngr.UpdateAllBarriers();
+			SoulBarriersMod.BarrierMngr.UpdateAllTrackedBarriers();
 		}
 	}
 }

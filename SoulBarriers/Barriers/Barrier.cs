@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 
 
 namespace SoulBarriers.Barriers {
@@ -45,6 +46,35 @@ namespace SoulBarriers.Barriers {
 				return ((Player)host).MountedCenter;
 			} else {
 				return host.Center;
+			}
+		}
+
+
+		////////////////
+
+		internal void Update( Entity host ) {
+			if( host is Player ) {
+				this.UpdateForPlayer( (Player)host );
+			}
+		}
+
+		private void UpdateForPlayer( Player playerHost ) {
+			var config = SoulBarriersConfig.Instance;
+			int maxBuffs = playerHost.buffType.Length;
+
+			for( int i=0; i<maxBuffs; i++ ) {
+				switch( playerHost.buffType[i] ) {
+				case BuffID.Cursed:
+				case BuffID.Silenced:
+				case BuffID.Stoned:
+					playerHost.ClearBuff( playerHost.buffType[i] );
+
+					int dmg = config.Get<int>( nameof(config.BarrierDebuffRemovalCost) );
+					this.Strength -= dmg;
+
+					this.ApplyHitFx( this.GetEntityBarrierOrigin(playerHost), (int)this.Radius, dmg * 4 );
+					break;
+				}
 			}
 		}
 	}
