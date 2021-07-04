@@ -21,4 +21,7 @@
       <HintPath>..\..\..\Mod Libs\Mod Libs General\Project\ModLibsGeneral\bin\Release\net452\ModLibsGeneral.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Barriers\BarrierTypes\" />
+  </ItemGroup>
 </Project>

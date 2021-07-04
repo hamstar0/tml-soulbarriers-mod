@@ -1,22 +1,11 @@
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using ModLibsCore.Classes.Loadable;
 
 
 namespace SoulBarriers.Barriers {
-	public enum BarrierColor {
-		Red = 60,
-		Green = 61,
-		Purple = 62,
-		White = 63,
-		Yellow = 64,
-		BigBlue = 206
-	}
-
-
-
-
-	public class BarrierHelpers {
+	public partial class BarrierManager : ILoadable {
 		public static Color GetColor( BarrierColor color ) {
 			switch( color ) {
 			case BarrierColor.Red:
@@ -38,7 +27,7 @@ namespace SoulBarriers.Barriers {
 
 		public static Vector2 GetEntityBarrierOrigin( Entity host ) {
 			if( host is Player ) {
-				return ((Player)host).MountedCenter;
+				return ( (Player)host ).MountedCenter;
 			} else {
 				return host.Center;
 			}

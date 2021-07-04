@@ -58,7 +58,7 @@ namespace SoulBarriers.Barriers {
 			}
 
 			while( i < maxParticles ) {
-				(Dust dust, Vector2 offset) = this.DrawShieldParticle( position, this.Radius );
+				(Dust dust, Vector2 offset) = this.DrawShieldParticle( position, this.Area );
 				this.ParticleOffsets[dust] = offset;
 
 				i++;
@@ -67,7 +67,7 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 		
-		public (Dust dust, Vector2 offset) DrawShieldParticle( Vector2 position, float radius ) {
+		public (Dust dust, Vector2 offset) DrawShieldParticle( Vector2 position, Rectangle area ) {
 			float distScale = Main.rand.NextFloat();
 			distScale = 1f - (distScale * distScale * distScale * distScale * distScale);
 			distScale *= radius;
