@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
+using SoulBarriers.Buffs;
 
 
 namespace SoulBarriers.Barriers {
@@ -30,9 +32,42 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		public void SetStrength( int strength ) {
+		public void SetStrength( Player hostPlayer, int strength ) {
+			int soulBuffType = ModContent.BuffType<SoulBarrierBuff>();
+
+			if( strength < 0 ) {
+				strength = 0;
+			}
+
+			if( strength >= 1 ) {
+				hostPlayer.AddBuff( soulBuffType, 2 );
+			} else {
+				hostPlayer.ClearBuff( soulBuffType );
+			}
+
 			this.Strength = strength;
 		}
+
+		public void SetStrength( NPC hostNpc, int strength ) {
+			int soulBuffType = ModContent.BuffType<SoulBarrierBuff>();
+
+			if( strength < 0 ) {
+				strength = 0;
+			}
+
+			if( strength >= 1 ) {
+				hostNpc.AddBuff( soulBuffType, 2 );
+			} else {
+				int buffIdx = hostNpc.FindBuffIndex( soulBuffType );
+				if( buffIdx >= 0 ) {
+					hostNpc.DelBuff( buffIdx );
+				}
+			}
+
+			this.Strength = strength;
+		}
+
+		////
 
 		public void SetRadius( float radius ) {
 			this.Radius = radius;
@@ -52,29 +87,17 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		internal void Update( Entity host ) {
-			if( host is Player ) {
-				this.UpdateForPlayer( (Player)host );
-			}
-		}
-
-		private void UpdateForPlayer( Player playerHost ) {
+		private void ApplyDebuffHits( Player hostPlayer, IList<int> debuffIndexes ) {
 			var config = SoulBarriersConfig.Instance;
-			int maxBuffs = playerHost.buffType.Length;
 
-			for( int i=0; i<maxBuffs; i++ ) {
-				switch( playerHost.buffType[i] ) {
-				case BuffID.Cursed:
-				case BuffID.Silenced:
-				case BuffID.Stoned:
-					playerHost.ClearBuff( playerHost.buffType[i] );
+			foreach( int buffIdx in debuffIndexes ) {
+				hostPlayer.DelBuff( buffIdx );
 
-					int dmg = config.Get<int>( nameof(config.BarrierDebuffRemovalCost) );
-					this.Strength -= dmg;
+				int dmg = config.Get<int>( nameof( config.BarrierDebuffRemovalCost ) );
+				this.SetStrength( hostPlayer, this.Strength - dmg );
 
-					this.ApplyHitFx( this.GetEntityBarrierOrigin(playerHost), (int)this.Radius, dmg * 4 );
-					break;
-				}
+				Vector2 origin = this.GetEntityBarrierOrigin( hostPlayer );
+				this.ApplyHitFx( origin, (int)this.Radius, dmg * 4 );
 			}
 		}
 	}

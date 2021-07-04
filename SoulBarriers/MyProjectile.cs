@@ -34,7 +34,7 @@ namespace SoulBarriers {
 
 //Main.NewText( "projectile "+projectile.Name+" ("+projectile.whoAmI+") collides? "+plrBarrier.IsColliding(plr, projectile) );
 				if( plrBarrier.IsColliding(plr, projectile) ) {
-					plrBarrier.ApplyCollision( plr, projectile );
+					plrBarrier.ApplyCollisionHit( plr, projectile );
 				}
 			}
 		}

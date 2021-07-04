@@ -1,8 +1,9 @@
+using SoulBarriers.Buffs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
-
+using Terraria.ModLoader;
 
 namespace SoulBarriers.Barriers {
 	public partial class BarrierManager {
@@ -28,10 +29,13 @@ namespace SoulBarriers.Barriers {
 		////////////////
 
 		internal void UpdateAllTrackedBarriers() {
-			// Garbage collection
 			foreach( int plrWho in this.PlayerBarriers.Keys.ToArray() ) {
-				if( Main.player[plrWho]?.active != true ) {
-					this.PlayerBarriers.Remove( plrWho );
+				Player plr = Main.player[plrWho];
+
+				if( plr?.active != true ) {
+					this.PlayerBarriers.Remove( plrWho );   // Garbage collection
+				} else {
+					this.PlayerBarriers[ plrWho ].UpdateForPlayer( plr );
 				}
 			}
 		}

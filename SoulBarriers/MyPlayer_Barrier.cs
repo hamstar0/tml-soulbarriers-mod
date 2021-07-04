@@ -9,7 +9,7 @@ namespace SoulBarriers {
 		private void UpdateBarrier() {
 			if( this.player.dead ) {
 				if( this.Barrier.Strength >= 1 ) {
-					this.Barrier.SetStrength( 0 );
+					this.Barrier.SetStrength( this.player, 0 );
 				}
 
 				return;
@@ -20,7 +20,7 @@ namespace SoulBarriers {
 					if( this.player.itemTime >= 1 ) {
 						this.IsCharging = true;
 
-						this.Barrier.SetStrength( 0 );
+						this.Barrier.SetStrength( this.player, 0 );
 					}
 				}
 			} else {
@@ -45,7 +45,7 @@ namespace SoulBarriers {
 			var config = SoulBarriersConfig.Instance;
 
 			this.Barrier.SetRadius( config.Get<float>( nameof(config.DefaultPlayerBarrierRadius) ) );
-			this.Barrier.SetStrength( this.Barrier.Strength + strength );
+			this.Barrier.SetStrength( this.player, this.Barrier.Strength + strength );
 		}
 	}
 }
