@@ -7,7 +7,7 @@ namespace SoulBarriers.Barriers {
 	public partial class Barrier {
 		public void ApplyCollisionHit( Entity host, Entity intruder ) {
 			if( intruder is Projectile ) {
-				if( BarrierManager.Instance.OnEntityBarrierCollisionEvent(this, host, intruder) ) {
+				if( BarrierManager.Instance.OnEntityBarrierCollisionEvent(this, host, ref intruder) ) {
 					this.ApplyProjectileCollisionHit( (Projectile)intruder );
 				}
 			}
@@ -32,7 +32,7 @@ namespace SoulBarriers.Barriers {
 		////////////////
 		
 		public void ApplyRawHit( int damage ) {
-			if( !BarrierManager.Instance.OnEntityBarrierRawHit(ref damage) ) {
+			if( !BarrierManager.Instance.OnBarrierRawHitEvent(this, ref damage) ) {
 				return;
 			}
 
