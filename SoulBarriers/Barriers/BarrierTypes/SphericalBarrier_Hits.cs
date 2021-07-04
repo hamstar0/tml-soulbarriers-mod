@@ -4,7 +4,7 @@ using Terraria;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
-	public partial class SpherericalBarrier : Barrier {
+	public partial class SphericalBarrier : Barrier {
 		private void ApplyDebuffHit( Player hostPlayer, int buffIdx ) {
 			var config = SoulBarriersConfig.Instance;
 

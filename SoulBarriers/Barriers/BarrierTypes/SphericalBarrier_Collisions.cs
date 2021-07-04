@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
-	public partial class SpherericalBarrier : Barrier {
+	public partial class SphericalBarrier : Barrier {
 		public override bool IsHostedCollidingDirectly( Entity host, Entity intruder ) {
 			//bool intersects = host.GetRectangle()
 			//	.Intersects( intruder.GetRectangle() );
