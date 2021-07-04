@@ -6,7 +6,7 @@ using SoulBarriers.Barriers;
 
 namespace SoulBarriers {
 	partial class SoulBarriersPlayer : ModPlayer {
-		public Barrier Barrier { get; } = new Barrier( 48f, BarrierColor.BigBlue );
+		public SpherericalBarrier Barrier { get; } = new SpherericalBarrier( 48f, BarrierColor.BigBlue );
 
 		private bool IsCharging = false;
 

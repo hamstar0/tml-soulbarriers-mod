@@ -7,7 +7,7 @@ using SoulBarriers.Buffs;
 
 
 namespace SoulBarriers.Barriers {
-	public partial class Barrier {
+	public partial class SpherericalBarrier {
 		private IDictionary<Dust, Vector2> ParticleOffsets = new Dictionary<Dust, Vector2>();
 
 
@@ -23,7 +23,7 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		public Barrier( float radius, BarrierColor color ) {
+		public SpherericalBarrier( float radius, BarrierColor color ) {
 			this.Radius = radius;
 			this.BarrierColor = color;
 		}

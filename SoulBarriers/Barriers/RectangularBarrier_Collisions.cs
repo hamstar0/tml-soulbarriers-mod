@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 
 namespace SoulBarriers.Barriers {
-	public partial class Barrier {
+	public partial class RectangularBarrier {
 		public bool CanCollide( Entity host, Entity intruder ) {
 			if( intruder is Projectile ) {
 				return this.CanCollideVsProjectile( host, (Projectile)intruder );

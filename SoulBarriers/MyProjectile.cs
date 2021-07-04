@@ -26,7 +26,7 @@ namespace SoulBarriers {
 		////
 
 		private void CheckBarriersHit( Projectile projectile ) {
-			foreach( (int plrWho, Barrier plrBarrier) in BarrierManager.Instance.GetPlayerBarriers() ) {
+			foreach( (int plrWho, SpherericalBarrier plrBarrier) in BarrierManager.Instance.GetPlayerBarriers() ) {
 				Player plr = Main.player[plrWho];
 				if( plr?.active != true ) {
 					continue;

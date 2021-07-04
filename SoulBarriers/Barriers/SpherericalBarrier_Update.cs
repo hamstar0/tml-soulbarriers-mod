@@ -8,7 +8,7 @@ using SoulBarriers.Buffs;
 
 
 namespace SoulBarriers.Barriers {
-	public partial class Barrier {
+	public partial class SpherericalBarrier {
 		internal void UpdateForPlayer( Player hostPlayer ) {
 			if( this.Strength <= 0 ) {
 				return;

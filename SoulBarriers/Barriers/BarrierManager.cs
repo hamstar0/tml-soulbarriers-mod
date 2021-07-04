@@ -14,7 +14,7 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		private IDictionary<int, Barrier> PlayerBarriers = new Dictionary<int, Barrier>();
+		private IDictionary<int, SpherericalBarrier> PlayerBarriers = new Dictionary<int, SpherericalBarrier>();
 
 
 
@@ -36,7 +36,7 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		public IDictionary<int, Barrier> GetPlayerBarriers() {
+		public IDictionary<int, SpherericalBarrier> GetPlayerBarriers() {
 			return this.PlayerBarriers
 				.ToDictionary( kv=>kv.Key, kv=>kv.Value );
 		}
@@ -58,7 +58,7 @@ namespace SoulBarriers.Barriers {
 
 		////
 
-		internal void TrackBarrier( Player hostPlayer, Barrier barrier ) {
+		internal void TrackBarrier( Player hostPlayer, SpherericalBarrier barrier ) {
 			if( !this.PlayerBarriers.ContainsKey(hostPlayer.whoAmI) ) {
 				this.PlayerBarriers[ hostPlayer.whoAmI ] = barrier;
 			}

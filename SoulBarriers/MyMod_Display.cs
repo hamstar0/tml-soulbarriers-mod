@@ -11,7 +11,7 @@ using SoulBarriers.Barriers;
 namespace SoulBarriers {
 	public partial class SoulBarriersMod : Mod {
 		public override void PostDrawInterface( SpriteBatch sb ) {
-			foreach( (int plrWho, Barrier barrier) in BarrierManager.Instance.GetPlayerBarriers() ) {
+			foreach( (int plrWho, SpherericalBarrier barrier) in BarrierManager.Instance.GetPlayerBarriers() ) {
 				if( barrier.Strength <= 0 ) {
 					continue;
 				}
@@ -27,7 +27,7 @@ namespace SoulBarriers {
 
 		////
 
-		private void DisplayBarrierStats( SpriteBatch sb, Player player, Barrier barrier ) {
+		private void DisplayBarrierStats( SpriteBatch sb, Player player, SpherericalBarrier barrier ) {
 			string stats = barrier.Strength+" hp";
 			Vector2 statsDim = Main.fontMouseText.MeasureString( stats );
 
@@ -39,7 +39,7 @@ namespace SoulBarriers {
 				spriteFont: Main.fontMouseText,
 				text: stats,
 				position: pos,
-				color: Barrier.GetColor( barrier.BarrierColor )
+				color: SpherericalBarrier.GetColor( barrier.BarrierColor )
 			);
 		}
 	}

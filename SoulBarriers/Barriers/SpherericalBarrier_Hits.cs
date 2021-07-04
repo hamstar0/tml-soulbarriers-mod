@@ -4,7 +4,7 @@ using Terraria;
 
 
 namespace SoulBarriers.Barriers {
-	public partial class Barrier {
+	public partial class SpherericalBarrier {
 		public void ApplyCollisionHit( Entity host, Entity intruder ) {
 			if( intruder is Projectile ) {
 				if( BarrierManager.Instance.OnEntityBarrierCollisionEvent(this, host, ref intruder) ) {
