@@ -17,21 +17,19 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		////////////////
 
 		public void ApplyProjectileCollisionHit( Projectile proj ) {
-			this.ApplyRawHit( proj.damage );
+			this.ApplyRawHit( proj.Center, proj.damage );
 
 			proj.Kill();
 
 			int dispersal = proj.width < proj.height
 				? proj.width
 				: proj.height;
-
-			this.ApplyHitFx( proj.Center, dispersal, proj.damage );
 		}
 
 
 		////////////////
 		
-		public void ApplyRawHit( int damage ) {
+		public void ApplyRawHit( Vector2 basePosition, int damage ) {
 			if( !BarrierManager.Instance.OnBarrierRawHitEvent(this, ref damage) ) {
 				return;
 			}
@@ -46,21 +44,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					this.Strength = 1;
 				}
 			}
-		}
 
-
-		////////////////
-
-		private void ApplyDebuffHit( Player hostPlayer, int buffIdx ) {
-			var config = SoulBarriersConfig.Instance;
-
-			hostPlayer.DelBuff( buffIdx );
-
-			int dmg = config.Get<int>( nameof( config.BarrierDebuffRemovalCost ) );
-			this.SetStrength( hostPlayer, this.Strength - dmg );
-
-			Vector2 origin = this.GetEntityBarrierOrigin( hostPlayer );
-			this.ApplyHitFx( origin, (int)this.Radius, dmg * 4 );
+			this.CreateHitParticlesForArea( basePosition, damage );
 		}
 	}
 }

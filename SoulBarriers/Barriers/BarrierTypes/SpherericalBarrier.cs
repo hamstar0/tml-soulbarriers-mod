@@ -13,19 +13,14 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public int Strength { get; private set; } = 0;
-
 		public float Radius { get; private set; }
-
-		public BarrierColor BarrierColor { get; private set; }
 
 
 
 		////////////////
 
-		public SpherericalBarrier( float radius, BarrierColor color ) {
+		public SpherericalBarrier( float radius, BarrierColor color ) : base( color ) {
 			this.Radius = radius;
-			this.BarrierColor = color;
 		}
 
 
@@ -70,17 +65,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		public void SetRadius( float radius ) {
 			this.Radius = radius;
-		}
-
-
-		////////////////
-
-		public Vector2 GetEntityBarrierOrigin( Entity host ) {
-			if( host is Player ) {
-				return ((Player)host).MountedCenter;
-			} else {
-				return host.Center;
-			}
 		}
 	}
 }

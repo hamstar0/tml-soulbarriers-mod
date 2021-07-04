@@ -11,29 +11,14 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public int Strength { get; private set; } = 0;
-
 		public Rectangle Area { get; private set; }
 
-		public BarrierColor BarrierColor { get; private set; }
-
 
 
 		////////////////
 
-		public RectangularBarrier( Rectangle area, BarrierColor color ) {
+		public RectangularBarrier( Rectangle area, BarrierColor color ) : base( color ) {
 			this.Area = area;
-			this.BarrierColor = color;
-		}
-
-
-		////////////////
-
-		public void SetStrength( int strength ) {
-			if( strength < 0 ) {
-				strength = 0;
-			}
-			this.Strength = strength;
 		}
 	}
 }
