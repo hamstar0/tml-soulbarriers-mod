@@ -5,7 +5,7 @@ using SoulBarriers.Barriers;
 
 
 namespace SoulBarriers {
-	public class SoulBarriersMod : Mod {
+	public partial class SoulBarriersMod : Mod {
 		public static string GithubUserName => "hamstar0";
 		public static string GithubProjectName => "tml-soulbarriers-mod";
 
@@ -30,6 +30,8 @@ namespace SoulBarriers {
 			SoulBarriersMod.BarrierMngr = null;
 		}
 
+
+		////////////////
 
 		public override void PostUpdateEverything() {
 			SoulBarriersMod.BarrierMngr.UpdateAllTrackedBarriers();

@@ -11,14 +11,14 @@ namespace SoulBarriers.Barriers {
 	public partial class Barrier {
 		private IDictionary<Dust, Vector2> ParticleOffsets = new Dictionary<Dust, Vector2>();
 
-		private BarrierColor BarrierColor;
-
 
 		////////////////
 
 		public int Strength { get; private set; } = 0;
 
 		public float Radius { get; private set; }
+
+		public BarrierColor BarrierColor { get; private set; }
 
 
 

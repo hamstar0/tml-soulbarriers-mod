@@ -18,6 +18,28 @@ namespace SoulBarriers.Barriers {
 
 
 	public partial class Barrier {
+		public static Color GetColor( BarrierColor color ) {
+			switch( color ) {
+			case BarrierColor.Red:
+				return Color.Red;
+			case BarrierColor.Green:
+				return Color.Lime;
+			case BarrierColor.Purple:
+				return Color.Purple;
+			case BarrierColor.Yellow:
+				return Color.Yellow;
+			case BarrierColor.BigBlue:
+				return Color.Blue;
+			case BarrierColor.White:
+			default:
+				return Color.White;
+			}
+		}
+
+
+
+		////////////////
+
 		public int GetParticleCount() {
 			if( this.Strength <= 0 ) {
 				return 0;
