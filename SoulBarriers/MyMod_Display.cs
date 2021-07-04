@@ -11,7 +11,7 @@ using SoulBarriers.Barriers;
 namespace SoulBarriers {
 	public partial class SoulBarriersMod : Mod {
 		public override void PostDrawInterface( SpriteBatch sb ) {
-			foreach( (int plrWho, Barrier barrier) in SoulBarriersMod.BarrierMngr.GetPlayerBarriers() ) {
+			foreach( (int plrWho, Barrier barrier) in BarrierManager.Instance.GetPlayerBarriers() ) {
 				if( barrier.Strength <= 0 ) {
 					continue;
 				}

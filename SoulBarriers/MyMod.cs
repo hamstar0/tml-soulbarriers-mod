@@ -14,27 +14,23 @@ namespace SoulBarriers {
 
 		public static SoulBarriersMod Instance { get; private set; }
 
-		public static BarrierManager BarrierMngr { get; private set; }
-
 
 
 		////////////////
 
 		public override void Load() {
 			SoulBarriersMod.Instance = this;
-			SoulBarriersMod.BarrierMngr = new BarrierManager();
 		}
 
 		public override void Unload() {
 			SoulBarriersMod.Instance = null;
-			SoulBarriersMod.BarrierMngr = null;
 		}
 
 
 		////////////////
 
 		public override void PostUpdateEverything() {
-			SoulBarriersMod.BarrierMngr.UpdateAllTrackedBarriers();
+			BarrierManager.Instance.UpdateAllTrackedBarriers();
 		}
 	}
 }

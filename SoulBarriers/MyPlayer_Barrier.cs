@@ -2,6 +2,7 @@ using System;
 using Terraria;
 using Terraria.ModLoader;
 using SoulBarriers.Items;
+using SoulBarriers.Barriers;
 
 
 namespace SoulBarriers {
@@ -29,7 +30,7 @@ namespace SoulBarriers {
 				}
 			}
 
-			SoulBarriersMod.BarrierMngr.TrackBarrier( this.player, this.Barrier );
+			BarrierManager.Instance.TrackBarrier( this.player, this.Barrier );
 		}
 
 

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using SoulBarriers.Buffs;
 
@@ -81,23 +80,6 @@ namespace SoulBarriers.Barriers {
 				return ((Player)host).MountedCenter;
 			} else {
 				return host.Center;
-			}
-		}
-
-
-		////////////////
-
-		private void ApplyDebuffHits( Player hostPlayer, IList<int> debuffIndexes ) {
-			var config = SoulBarriersConfig.Instance;
-
-			foreach( int buffIdx in debuffIndexes ) {
-				hostPlayer.DelBuff( buffIdx );
-
-				int dmg = config.Get<int>( nameof( config.BarrierDebuffRemovalCost ) );
-				this.SetStrength( hostPlayer, this.Strength - dmg );
-
-				Vector2 origin = this.GetEntityBarrierOrigin( hostPlayer );
-				this.ApplyHitFx( origin, (int)this.Radius, dmg * 4 );
 			}
 		}
 	}

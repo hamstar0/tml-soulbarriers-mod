@@ -6,7 +6,7 @@ using SoulBarriers.Barriers;
 
 namespace SoulBarriers {
 	partial class SoulBarriersPlayer : ModPlayer {
-		private Barrier Barrier = new Barrier( 48f, BarrierColor.BigBlue );
+		public Barrier Barrier { get; } = new Barrier( 48f, BarrierColor.BigBlue );
 
 		private bool IsCharging = false;
 

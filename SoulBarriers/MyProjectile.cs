@@ -16,7 +16,7 @@ namespace SoulBarriers {
 
 		public override bool PreAI( Projectile projectile ) {
 			//NPCID.Sets.ProjectileNPC
-			if( SoulBarriersMod.BarrierMngr.GetPlayerBarrierCount() >= 1 ) {
+			if( BarrierManager.Instance.GetPlayerBarrierCount() >= 1 ) {
 				this.CheckBarriersHit( projectile );
 			}
 
@@ -26,7 +26,7 @@ namespace SoulBarriers {
 		////
 
 		private void CheckBarriersHit( Projectile projectile ) {
-			foreach( (int plrWho, Barrier plrBarrier) in SoulBarriersMod.BarrierMngr.GetPlayerBarriers() ) {
+			foreach( (int plrWho, Barrier plrBarrier) in BarrierManager.Instance.GetPlayerBarriers() ) {
 				Player plr = Main.player[plrWho];
 				if( plr?.active != true ) {
 					continue;

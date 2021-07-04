@@ -7,7 +7,9 @@ namespace SoulBarriers.Barriers {
 	public partial class Barrier {
 		public void ApplyCollisionHit( Entity host, Entity intruder ) {
 			if( intruder is Projectile ) {
-				this.ApplyProjectileCollisionHit( (Projectile)intruder );
+				if( BarrierManager.Instance.OnEntityBarrierCollisionEvent(this, host, intruder) ) {
+					this.ApplyProjectileCollisionHit( (Projectile)intruder );
+				}
 			}
 		}
 
@@ -15,25 +17,35 @@ namespace SoulBarriers.Barriers {
 		////////////////
 
 		public void ApplyProjectileCollisionHit( Projectile proj ) {
-			if( proj.damage >= 1 && this.Strength == 1 ) {
-				this.Strength = 0;
+			this.ApplyRawHit( proj.damage );
 
-				proj.Kill();
-			} else {
-				this.Strength -= proj.damage;
-
-				if( this.Strength <= 0 ) {
-					this.Strength = 1;
-				}
-
-				proj.Kill();
-			}
+			proj.Kill();
 
 			int dispersal = proj.width < proj.height
 				? proj.width
 				: proj.height;
 
 			this.ApplyHitFx( proj.Center, dispersal, proj.damage );
+		}
+
+
+		////////////////
+		
+		public void ApplyRawHit( int damage ) {
+			if( !BarrierManager.Instance.OnEntityBarrierRawHit(ref damage) ) {
+				return;
+			}
+
+			if( damage >= 1 && this.Strength == 1 ) {
+				this.Strength = 0;
+			} else {
+				this.Strength -= damage;
+
+				// Saved from total destruction
+				if( this.Strength <= 0 ) {
+					this.Strength = 1;
+				}
+			}
 		}
 
 

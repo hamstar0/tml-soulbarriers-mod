@@ -1,12 +1,19 @@
-using SoulBarriers.Buffs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.ModLoader;
+using ModLibsCore.Classes.Loadable;
+
 
 namespace SoulBarriers.Barriers {
-	public partial class BarrierManager {
+	public partial class BarrierManager : ILoadable {
+		public static BarrierManager Instance => ModContent.GetInstance<BarrierManager>();
+
+
+
+		////////////////
+
 		private IDictionary<int, Barrier> PlayerBarriers = new Dictionary<int, Barrier>();
 
 
@@ -17,9 +24,18 @@ namespace SoulBarriers.Barriers {
 			return this.PlayerBarriers.Count();
 		}
 
+		////
+
+		void ILoadable.OnModsLoad() { }
+
+		void ILoadable.OnPostModsLoad() { }
+
+		void ILoadable.OnModsUnload() { }
+
+
 
 		////////////////
-		
+
 		public IDictionary<int, Barrier> GetPlayerBarriers() {
 			return this.PlayerBarriers
 				.ToDictionary( kv=>kv.Key, kv=>kv.Value );
