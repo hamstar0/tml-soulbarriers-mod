@@ -7,8 +7,8 @@ using Terraria.ModLoader;
 using SoulBarriers.Buffs;
 
 
-namespace SoulBarriers.Barriers {
-	public partial class RectangularBarrier {
+namespace SoulBarriers.Barriers.BarrierTypes {
+	public abstract partial class Barrier {
 		internal void UpdateForPlayer( Player hostPlayer ) {
 			if( this.Strength <= 0 ) {
 				return;

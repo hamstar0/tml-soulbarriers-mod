@@ -3,8 +3,8 @@ using Terraria;
 using Microsoft.Xna.Framework;
 
 
-namespace SoulBarriers.Barriers {
-	public partial class RectangularBarrier {
+namespace SoulBarriers.Barriers.BarrierTypes {
+	public partial class SpherericalBarrier : Barrier {
 		public bool CanCollide( Entity host, Entity intruder ) {
 			if( intruder is Projectile ) {
 				return this.CanCollideVsProjectile( host, (Projectile)intruder );

@@ -6,8 +6,8 @@ using Terraria.ModLoader;
 using SoulBarriers.Buffs;
 
 
-namespace SoulBarriers.Barriers {
-	public partial class SpherericalBarrier {
+namespace SoulBarriers.Barriers.BarrierTypes {
+	public partial class SpherericalBarrier : Barrier {
 		private IDictionary<Dust, Vector2> ParticleOffsets = new Dictionary<Dust, Vector2>();
 
 

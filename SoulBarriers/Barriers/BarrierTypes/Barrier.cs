@@ -4,8 +4,8 @@ using Microsoft.Xna.Framework;
 using Terraria;
 
 
-namespace SoulBarriers.Barriers {
-	public partial class RectangularBarrier {
+namespace SoulBarriers.Barriers.BarrierTypes {
+	public abstract partial class Barrier {
 		private IDictionary<Dust, Vector2> ParticleOffsets = new Dictionary<Dust, Vector2>();
 
 
@@ -13,16 +13,13 @@ namespace SoulBarriers.Barriers {
 
 		public int Strength { get; private set; } = 0;
 
-		public Rectangle Area { get; private set; }
-
 		public BarrierColor BarrierColor { get; private set; }
 
 
 
 		////////////////
 
-		public RectangularBarrier( Rectangle area, BarrierColor color ) {
-			this.Area = area;
+		public Barrier( BarrierColor color ) {
 			this.BarrierColor = color;
 		}
 
