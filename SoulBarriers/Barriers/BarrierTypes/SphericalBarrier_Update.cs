@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -9,16 +8,31 @@ using SoulBarriers.Buffs;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public partial class SphericalBarrier : Barrier {
-		internal void UpdateForPlayer( Player hostPlayer ) {
-			if( this.Strength <= 0 ) {
+		internal override void UpdateWithContext( Entity host ) {
+			if( host == null || !(host is Player) || this.Strength <= 0 ) {
 				return;
 			}
 
-			int maxBuffs = hostPlayer.buffType.Length;
+			Player hostPlayer = host as Player;
 
+			this.UpdateForPlayerForBuffs( hostPlayer, out bool hasSoulBuff );
+
+			if( !hasSoulBuff ) {
+				this.SetStrength( hostPlayer, 0 );
+
+				if( Main.netMode == NetmodeID.MultiplayerClient ) {
+					BarrierStrengthPacket.SyncFromClientToServer( hostPlayer );
+				}
+			}
+		}
+
+
+		private void UpdateForPlayerForBuffs( Player hostPlayer, out bool hasSoulBuff ) {
+			hasSoulBuff = false;
+
+			int maxBuffs = hostPlayer.buffType.Length;
 			int soulBuffType = ModContent.BuffType<SoulBarrierBuff>();
 			var badBuffIdxs = new List<int>();
-			bool hasSoulBuff = false;
 
 			for( int i=0; i<maxBuffs; i++ ) {
 				if( hostPlayer.buffTime[i] <= 0 ) {
@@ -39,11 +53,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				}
 			}
 
-			if( !hasSoulBuff ) {
-				this.SetStrength( hostPlayer, 0 );
-			} else {
+			if( hasSoulBuff ) {
 				foreach( int debuffIdx in badBuffIdxs ) {
-					this.ApplyDebuffHit( hostPlayer, debuffIdx );
+					this.ApplyDebuffHit( hostPlayer, debuffIdx, true );
 				}
 			}
 		}

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using ModLibsCore.Classes.Loadable;
+using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers.Barriers {
@@ -14,7 +16,9 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		private IDictionary<int, SpherericalBarrier> PlayerBarriers = new Dictionary<int, SpherericalBarrier>();
+		private IDictionary<int, Barrier> PlayerBarriers = new Dictionary<int, Barrier>();
+
+		private IDictionary<Rectangle, Barrier> WorldBarriers = new Dictionary<Rectangle, Barrier>();
 
 
 
@@ -22,6 +26,10 @@ namespace SoulBarriers.Barriers {
 
 		public int GetPlayerBarrierCount() {
 			return this.PlayerBarriers.Count();
+		}
+
+		public int GetWorldBarrierCount() {
+			return this.WorldBarriers.Count();
 		}
 
 		////
@@ -36,8 +44,13 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		public IDictionary<int, SpherericalBarrier> GetPlayerBarriers() {
+		public IDictionary<int, Barrier> GetPlayerBarriers() {
 			return this.PlayerBarriers
+				.ToDictionary( kv=>kv.Key, kv=>kv.Value );
+		}
+
+		public IDictionary<Rectangle, Barrier> GetWorldBarriers() {
+			return this.WorldBarriers
 				.ToDictionary( kv=>kv.Key, kv=>kv.Value );
 		}
 
@@ -51,14 +64,18 @@ namespace SoulBarriers.Barriers {
 				if( plr?.active != true ) {
 					this.PlayerBarriers.Remove( plrWho );   // Garbage collection
 				} else {
-					this.PlayerBarriers[ plrWho ].UpdateForPlayer( plr );
+					this.PlayerBarriers[ plrWho ].UpdateWithContext( plr );
 				}
+			}
+
+			foreach( Rectangle rect in this.WorldBarriers.Keys.ToArray() ) {
+				this.WorldBarriers[rect].UpdateWithContext( null );
 			}
 		}
 
 		////
 
-		internal void TrackBarrier( Player hostPlayer, SpherericalBarrier barrier ) {
+		internal void TrackPlayerBarrier( Player hostPlayer, Barrier barrier ) {
 			if( !this.PlayerBarriers.ContainsKey(hostPlayer.whoAmI) ) {
 				this.PlayerBarriers[ hostPlayer.whoAmI ] = barrier;
 			}

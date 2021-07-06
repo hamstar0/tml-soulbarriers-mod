@@ -18,7 +18,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		private IDictionary<Dust, Vector2> ParticleOffsets = new Dictionary<Dust, Vector2>();
+		protected IDictionary<Dust, Vector2> ParticleOffsets = new Dictionary<Dust, Vector2>();
 
 
 		////////////////
@@ -34,5 +34,15 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		public Barrier( BarrierColor color ) {
 			this.BarrierColor = color;
 		}
+
+
+		////////////////
+		
+		public abstract Vector2 GetRandomOffsetForArea();
+
+
+		////////////////
+
+		internal abstract void UpdateWithContext( Entity host );
 	}
 }

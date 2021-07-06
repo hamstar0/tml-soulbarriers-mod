@@ -23,6 +23,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			return dist < this.Radius;
 		}
 
+
 		public override bool IsHostlessCollidingDirectly( Entity intruder ) {
 			throw new NotImplementedException( "Spherical barriers must have hosts (currently)" );
 		}

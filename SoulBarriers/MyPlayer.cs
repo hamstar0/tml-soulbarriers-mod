@@ -8,7 +8,7 @@ namespace SoulBarriers {
 	partial class SoulBarriersPlayer : ModPlayer {
 		public SpherericalBarrier Barrier { get; } = new SpherericalBarrier( 48f, BarrierColor.BigBlue );
 
-		private bool IsCharging = false;
+		private bool IsBarrierCharging = false;
 
 
 		////////////////

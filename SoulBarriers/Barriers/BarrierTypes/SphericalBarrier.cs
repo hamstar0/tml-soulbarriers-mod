@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -8,11 +7,6 @@ using SoulBarriers.Buffs;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public partial class SphericalBarrier : Barrier {
-		private IDictionary<Dust, Vector2> ParticleOffsets = new Dictionary<Dust, Vector2>();
-
-
-		////////////////
-
 		public float Radius { get; private set; }
 
 
@@ -65,6 +59,20 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		public void SetRadius( float radius ) {
 			this.Radius = radius;
+		}
+
+
+		////////////////
+
+		public override Vector2 GetRandomOffsetForArea() {
+			float distScale = Main.rand.NextFloat();
+			distScale = 1f - ( distScale * distScale * distScale * distScale * distScale );
+			distScale *= this.Radius;
+
+			Vector2 offset = Vector2.One.RotatedByRandom( 2d * Math.PI );
+			offset *= distScale;
+
+			return offset;
 		}
 	}
 }

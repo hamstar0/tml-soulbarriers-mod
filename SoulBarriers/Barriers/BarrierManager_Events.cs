@@ -2,14 +2,15 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using ModLibsCore.Classes.Loadable;
+using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers.Barriers {
-	public delegate bool EntityBarrierCollisionEvent( SpherericalBarrier barrier, Entity host, ref Entity intruder );
+	public delegate bool EntityBarrierCollisionEvent( Barrier barrier, Entity host, ref Entity intruder );
 
-	public delegate bool AreaBarrierCollisionEvent( SpherericalBarrier barrier, Rectangle area, ref Entity intruder );
+	public delegate bool AreaBarrierCollisionEvent( Barrier barrier, Rectangle area, ref Entity intruder );
 	
-	public delegate bool BarrierRawHitEvent( SpherericalBarrier barrier, ref int damage );
+	public delegate bool BarrierRawHitEvent( Barrier barrier, ref int damage );
 
 
 
@@ -26,15 +27,15 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		internal bool OnEntityBarrierCollisionEvent( SpherericalBarrier barrier, Entity host, ref Entity intruder ) {
+		internal bool OnEntityBarrierCollisionEvent( Barrier barrier, Entity host, ref Entity intruder ) {
 			return this.OnEntityBarrierCollision?.Invoke(barrier, host, ref intruder) ?? true;
 		}
 
-		internal bool OnAreaBarrierCollisionEvent( SpherericalBarrier barrier, Rectangle area, ref Entity intruder ) {
+		internal bool OnAreaBarrierCollisionEvent( Barrier barrier, Rectangle area, ref Entity intruder ) {
 			return this.OnAreaBarrierCollision?.Invoke(barrier, area, ref intruder) ?? true;
 		}
 
-		internal bool OnBarrierRawHitEvent( SpherericalBarrier barrier, ref int damage ) {
+		internal bool OnBarrierRawHitEvent( Barrier barrier, ref int damage ) {
 			return this.OnBarrierRawHit?.Invoke(barrier, ref damage) ?? true;
 		}
 	}

@@ -80,45 +80,55 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////
 
-		public abstract (Dust dust, Vector2 offset) CreateBarrierParticleForArea( Vector2 basePosition );
+		public (Dust dust, Vector2 offset) CreateBarrierParticleForArea( Vector2 basePosition ) {
+			Vector2 offset = this.GetRandomOffsetForArea();
 
-		////
-
-		public Dust CreateBarrierParticle( Vector2 position ) {
 			Dust dust = Dust.NewDustPerfect(
-				Position: position,
+				Position: basePosition + offset,
 				Type: (int)this.BarrierColor,
 				Scale: 2f / 3f
 			);
 			dust.noGravity = true;
 			dust.noLight = true;
 
-			return dust;
+			return (dust, offset);
 		}
 
 
 		////////////////
 
-		public void CreateHitParticlesForArea( Vector2 basePosition, int hitStrength ) {
-			int particles = Barrier.GetHitParticleCount( hitStrength );
-
+		public void CreateHitParticlesForArea( Vector2 basePosition, int particles ) {
 			for( int i = 0; i < particles; i++ ) {
 				(Dust dust, Vector2 offset) = this.CreateHitParticleForArea( basePosition );
 				this.ParticleOffsets[dust] = offset;
 			}
 		}
+		
+		public void CreateHitParticlesAt( Vector2 barrierCenter, Vector2 position, int particles, int dispersal = 0 ) {
+			for( int i = 0; i < particles; i++ ) {
+				Dust dust = this.CreateHitParticle( position, dispersal );
+				this.ParticleOffsets[dust] = position - barrierCenter;
+			}
+		}
 
 		////
 		
-		public abstract (Dust dust, Vector2 offset) CreateHitParticleForArea( Vector2 basePosition );
+		public (Dust dust, Vector2 offset) CreateHitParticleForArea( Vector2 basePosition, int dispersal = 0 ) {
+			Vector2 offset = this.GetRandomOffsetForArea();
+			Dust dust = this.CreateHitParticle( basePosition + offset, dispersal );
 
-		////
+			return (dust, offset);
+		}
+		
+		public Dust CreateHitParticle( Vector2 position, float dispersal ) {
+			float dispersalDir = dispersal * 0.5f;
 
-		public Dust CreateHitParticle( Vector2 position, int dispersal = 16 ) {
 			int dustIdx = Dust.NewDust(
 				Position: position,
-				Width: dispersal,
-				Height: dispersal,
+				Width: 0,
+				Height: 0,
+				SpeedX: dispersalDir > 0f ? Main.rand.NextFloat(-dispersalDir, dispersalDir) : 0f,
+				SpeedY: dispersalDir > 0f ? Main.rand.NextFloat(-dispersalDir, dispersalDir) : 0f,
 				Type: (int)this.BarrierColor,
 				Scale: 2f
 			);

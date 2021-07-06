@@ -1,57 +1,29 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ModLoader;
+using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers;
 
 
 namespace SoulBarriers {
 	public static class SoulBarriersAPI {
-		public static SpherericalBarrier GetPlayerBarrier( Player player ) {
+		public static SphericalBarrier GetPlayerBarrier( Player player ) {
 			var myplayer = player.GetModPlayer<SoulBarriersPlayer>();
 			return myplayer.Barrier;
 		}
 
-		public static void HitPlayerBarrier( Player player, Entity entity ) {
-			var myplayer = player.GetModPlayer<SoulBarriersPlayer>();
-			myplayer.Barrier.ApplyCollisionHit( player, entity );
-		}
+		////
 
-		public static void HitPlayerBarrier( Player player, int damage ) {
-			var myplayer = player.GetModPlayer<SoulBarriersPlayer>();
-			myplayer.Barrier.ApplyRawHit( damage );
-		}
+		//public static SphericalBarrier GetNpcBarrier( NPC npc ) { }
 
 		////
 
-		//public static Barrier GetNpcBarrier( NPC npc ) { }
-
-		//public static void HitNpcBarrier( NPC npc, Entity entity ) { }
-
-		//public static void HitNpcBarrier( NPC npc, int damage ) { }
-
-		////
-
-		public static SpherericalBarrier GetAreaBarrier( Rectangle area ) {
-			var myworld = ModContent.GetInstance<SoulBarriersWorld>();
-			return myworld.GetBarrierAt( area );
+		public static RectangularBarrier GetWorldBarrier( Rectangle worldArea ) {
+			return BarrierManager.Instance.GetWorldBarrier( worldArea );
 		}
 
-		public static void RemoveAreaBarrier( Rectangle area ) {
-			var myworld = ModContent.GetInstance<SoulBarriersWorld>();
-			myworld.RemoveBarrierAt( area );
-		}
-
-		public static void HitAreaBarrier( Rectangle area, Entity entity ) {
-			var myworld = ModContent.GetInstance<SoulBarriersWorld>();
-			SpherericalBarrier barrier = myworld.GetBarrierAt( area );
-			barrier.ApplyCollisionHit( area, entity );
-		}
-
-		public static void HitAreaBarrier( Rectangle area, int damage ) {
-			var myworld = ModContent.GetInstance<SoulBarriersWorld>();
-			SpherericalBarrier barrier = myworld.GetBarrierAt( area );
-			barrier.ApplyRawHit( area, damage );
+		public static bool RemoveWorldBarrier( Rectangle worldArea ) {
+			return BarrierManager.Instance.RemoveWorldBarrier( worldArea );
 		}
 	}
 }

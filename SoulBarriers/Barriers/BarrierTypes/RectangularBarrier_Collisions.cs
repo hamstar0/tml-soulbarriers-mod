@@ -9,8 +9,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			throw new NotImplementedException( "Rectangular barriers cannot have hosts (currently)" );
 		}
 
+
 		public override bool IsHostlessCollidingDirectly( Entity intruder ) {
-			f
+			var rect = new Rectangle( (int)intruder.position.X, (int)intruder.position.Y, intruder.width, intruder.height );
+
+			return this.WorldArea.Intersects( rect );
 		}
 	}
 }

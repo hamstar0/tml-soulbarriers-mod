@@ -16,21 +16,21 @@ namespace SoulBarriers {
 				return;
 			}
 
-			if( !this.IsCharging ) {
+			if( !this.IsBarrierCharging ) {
 				if( this.player.HeldItem?.active == true && this.player.HeldItem.type == ModContent.ItemType<PBGItem>() ) {
 					if( this.player.itemTime >= 1 ) {
-						this.IsCharging = true;
+						this.IsBarrierCharging = true;
 
 						this.Barrier.SetStrength( this.player, 0 );
 					}
 				}
 			} else {
 				if( this.player.HeldItem?.active != true || this.player.itemTime <= 0 ) {
-					this.IsCharging = false;
+					this.IsBarrierCharging = false;
 				}
 			}
 
-			BarrierManager.Instance.TrackBarrier( this.player, this.Barrier );
+			BarrierManager.Instance.TrackPlayerBarrier( this.player, this.Barrier );
 		}
 
 
