@@ -35,7 +35,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 			
-			if( damage >= 1 && this.Strength == 1 ) {
+			if( damage >= 1 && this.Strength >= 1 ) {
 				this.Strength = 0;
 			} else {
 				this.Strength -= damage;

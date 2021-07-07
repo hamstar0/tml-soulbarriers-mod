@@ -15,11 +15,22 @@ namespace SoulBarriers {
 		//public static SphericalBarrier GetNpcBarrier( NPC npc ) { }
 
 		public static Barrier GetWorldBarrier( Rectangle worldArea ) {
-			return BarrierManager.Instance.GetOrMakeWorldBarrier( worldArea );
+			return BarrierManager.Instance.GetWorldBarrier( worldArea );
 		}
 
-		public static bool RemoveWorldBarrier( Rectangle worldArea, int strength, BarrierColor type ) {
-			return BarrierManager.Instance.CreateWorldBarrier( worldArea, strength, type );
+		public static Barrier CreateWorldBarrier(
+					Rectangle worldArea,
+					int strength,
+					int maxRegenStrength,
+					float strengthRegenPerTick,
+					BarrierColor color ) {
+			return BarrierManager.Instance.CreateAndDeclareWorldBarrier(
+				worldArea,
+				strength,
+				maxRegenStrength,
+				strengthRegenPerTick,
+				color
+			);
 		}
 
 		public static bool RemoveWorldBarrier( Rectangle worldArea ) {

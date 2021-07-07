@@ -11,8 +11,15 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public RectangularBarrier( BarrierHostType host, int hostWhoAmI, Rectangle worldArea, BarrierColor color )
-					: base( host, hostWhoAmI, color ) {
+		public RectangularBarrier(
+					BarrierHostType hostType,
+					int hostWhoAmI,
+					int strength,
+					int maxRegenStrength,
+					float strengthRegenPerTick,
+					Rectangle worldArea,
+					BarrierColor color
+				) : base( hostType, hostWhoAmI, strength, maxRegenStrength, strengthRegenPerTick, color ) {
 			this.WorldArea = worldArea;
 		}
 

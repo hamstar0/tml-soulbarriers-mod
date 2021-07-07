@@ -11,8 +11,15 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public SphericalBarrier( BarrierHostType hostType, int hostWho, BarrierColor color, float radius )
-					: base( hostType, hostWho, color ) {
+		public SphericalBarrier(
+					BarrierHostType hostType,
+					int hostWhoAmI,
+					int strength,
+					int maxRegenStrength,
+					float strengthRegenPerTick,
+					float radius,
+					BarrierColor color
+				) : base( hostType, hostWhoAmI, strength, maxRegenStrength, strengthRegenPerTick, color ) {
 			this.Radius = radius;
 		}
 
