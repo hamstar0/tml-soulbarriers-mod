@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.ModLoader;
 using ModLibsCore.Classes.Loadable;
 using SoulBarriers.Barriers.BarrierTypes;
-
+using ModLibsCore.Libraries.DotNET.Extensions;
 
 namespace SoulBarriers.Barriers {
 	public partial class BarrierManager : ILoadable {
@@ -41,6 +41,34 @@ namespace SoulBarriers.Barriers {
 		void ILoadable.OnModsUnload() { }
 
 
+		////////////////
+
+		public Barrier GetOrMakePlayerBarrier( int playerWho ) {
+			if( !this.PlayerBarriers.TryGetValue(playerWho, out Barrier barrier) ) {
+				barrier = new SphericalBarrier(
+					BarrierHostType.Player,
+					playerWho,
+					BarrierColor.BigBlue,
+					48f
+				);
+				this.PlayerBarriers[playerWho] = barrier;
+			}
+			return barrier;
+		}
+		
+		public Barrier GetOrMakeWorldBarrier( Rectangle worldArea ) {
+			if( !this.WorldBarriers.TryGetValue(worldArea, out Barrier barrier) ) {
+				barrier = new RectangularBarrier(
+					BarrierHostType.None,
+					0,
+					worldArea,
+					BarrierColor.BigBlue
+				);
+				this.WorldBarriers[worldArea] = barrier;
+			}
+			return barrier;
+		}
+
 
 		////////////////
 
@@ -64,12 +92,12 @@ namespace SoulBarriers.Barriers {
 				if( plr?.active != true ) {
 					this.PlayerBarriers.Remove( plrWho );   // Garbage collection
 				} else {
-					this.PlayerBarriers[ plrWho ].UpdateWithContext( plr );
+					this.PlayerBarriers[ plrWho ].UpdateWithContext();
 				}
 			}
 
 			foreach( Rectangle rect in this.WorldBarriers.Keys.ToArray() ) {
-				this.WorldBarriers[rect].UpdateWithContext( null );
+				this.WorldBarriers[rect].UpdateWithContext();
 			}
 		}
 

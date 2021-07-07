@@ -16,17 +16,18 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			hostPlayer.DelBuff( buffIdx );
 
-			int dmg = config.Get<int>( nameof( config.BarrierDebuffRemovalCost ) );
-			this.SetStrength( hostPlayer, this.Strength - dmg );
+			int damage = config.Get<int>( nameof( config.BarrierDebuffRemovalCost ) );
+			this.SetStrength( this.Strength - damage );
 
-			Vector2 origin = Barrier.GetEntityBarrierOrigin( hostPlayer );
+			Vector2 origin = this.GetBarrierWorldCenter();
 
-			int particles = Barrier.GetHitParticleCount( dmg * 4 );
+			int particles = Barrier.GetHitParticleCount( damage * 4 );
 
-			this.CreateHitParticlesForArea( origin, particles );
+			this.CreateHitParticlesForArea( particles, 4f );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitPacket.Broadcast( hostPlayer, dmg, buffType );
+				BarrierHitPacket.Broadcast( this.HostType, this.HostWhoAmI, origin, damage, buffType );
+
 				NetMessage.SendData( MessageID.SyncPlayer, -1, -1, null, hostPlayer.whoAmI );
 			}
 		}

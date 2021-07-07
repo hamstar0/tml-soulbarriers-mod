@@ -25,20 +25,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public bool IsHostlessColliding( Entity intruder ) {
-			if( !this.CanHostlessCollide( intruder ) ) {
-				return false;
-			}
-
-			if( this.Strength <= 0 ) {
-				return false;
-			}
-
-			return this.IsHostlessCollidingDirectly( intruder );
-		}
-
-		////
-
 		public abstract bool IsHostlessCollidingDirectly( Entity intruder );
 	}
 }

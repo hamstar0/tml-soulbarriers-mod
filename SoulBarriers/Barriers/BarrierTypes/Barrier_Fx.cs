@@ -46,8 +46,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public void Animate( int maxParticles, Vector2 center, Vector2 velocity ) {
+		public void Animate( int maxParticles ) {
 			int i = 0, j = 0;
+			Vector2 center = this.GetBarrierWorldCenter();
 
 			foreach( Dust dust in this.ParticleOffsets.Keys.ToArray() ) {
 				if( j++ > 5 ) {
@@ -56,7 +57,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 				if( dust.active && Enum.IsDefined(typeof(BarrierColor), dust.type) ) {
 					dust.position = center + this.ParticleOffsets[ dust ];
-					dust.velocity = velocity;
+					dust.velocity = this.Host?.velocity ?? dust.velocity;
 
 					i++;
 				} else {
@@ -97,25 +98,27 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public void CreateHitParticlesForArea( Vector2 basePosition, int particles ) {
+		public void CreateHitParticlesForArea( int particles, float dispersal ) {
 			for( int i = 0; i < particles; i++ ) {
-				(Dust dust, Vector2 offset) = this.CreateHitParticleForArea( basePosition );
+				(Dust dust, Vector2 offset) = this.CreateHitParticleForArea( dispersal );
 				this.ParticleOffsets[dust] = offset;
 			}
 		}
 		
-		public void CreateHitParticlesAt( Vector2 barrierCenter, Vector2 position, int particles, int dispersal = 0 ) {
+		public void CreateHitParticlesAt( Vector2 position, int particles, float dispersal ) {
+			Vector2 hitOffsetFromCenter = position - this.GetBarrierWorldCenter();
+
 			for( int i = 0; i < particles; i++ ) {
 				Dust dust = this.CreateHitParticle( position, dispersal );
-				this.ParticleOffsets[dust] = position - barrierCenter;
+				this.ParticleOffsets[ dust ] = hitOffsetFromCenter;
 			}
 		}
 
 		////
 		
-		public (Dust dust, Vector2 offset) CreateHitParticleForArea( Vector2 basePosition, int dispersal = 0 ) {
+		public (Dust dust, Vector2 offset) CreateHitParticleForArea( float dispersal ) {
 			Vector2 offset = this.GetRandomOffsetForArea();
-			Dust dust = this.CreateHitParticle( basePosition + offset, dispersal );
+			Dust dust = this.CreateHitParticle( this.GetBarrierWorldCenter() + offset, dispersal );
 
 			return (dust, offset);
 		}

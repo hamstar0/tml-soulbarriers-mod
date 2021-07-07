@@ -1,8 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ModLoader;
-using SoulBarriers.Buffs;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
@@ -13,49 +11,13 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public SphericalBarrier( float radius, BarrierColor color ) : base( color ) {
+		public SphericalBarrier( BarrierHostType hostType, int hostWho, BarrierColor color, float radius )
+					: base( hostType, hostWho, color ) {
 			this.Radius = radius;
 		}
 
 
 		////////////////
-
-		public void SetStrength( Player hostPlayer, int strength ) {
-			int soulBuffType = ModContent.BuffType<SoulBarrierBuff>();
-
-			if( strength < 0 ) {
-				strength = 0;
-			}
-
-			if( strength >= 1 ) {
-				hostPlayer.AddBuff( soulBuffType, 2 );
-			} else {
-				hostPlayer.ClearBuff( soulBuffType );
-			}
-
-			this.Strength = strength;
-		}
-
-		public void SetStrength( NPC hostNpc, int strength ) {
-			int soulBuffType = ModContent.BuffType<SoulBarrierBuff>();
-
-			if( strength < 0 ) {
-				strength = 0;
-			}
-
-			if( strength >= 1 ) {
-				hostNpc.AddBuff( soulBuffType, 2 );
-			} else {
-				int buffIdx = hostNpc.FindBuffIndex( soulBuffType );
-				if( buffIdx >= 0 ) {
-					hostNpc.DelBuff( buffIdx );
-				}
-			}
-
-			this.Strength = strength;
-		}
-
-		////
 
 		public void SetRadius( float radius ) {
 			this.Radius = radius;
@@ -73,6 +35,15 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			offset *= distScale;
 
 			return offset;
+		}
+
+		public override Vector2 GetBarrierWorldCenter() {
+			if( this.HostType == BarrierHostType.Player ) {
+				Player plr = (Player)this.Host;
+				return plr?.MountedCenter ?? default;
+			} else {
+				return this.Host?.Center ?? default;
+			}
 		}
 	}
 }

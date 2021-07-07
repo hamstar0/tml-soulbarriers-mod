@@ -2,11 +2,12 @@ using System;
 using Terraria;
 using Terraria.ModLoader;
 using SoulBarriers.Barriers;
+using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers {
 	partial class SoulBarriersPlayer : ModPlayer {
-		public SpherericalBarrier Barrier { get; } = new SpherericalBarrier( 48f, BarrierColor.BigBlue );
+		public Barrier Barrier { get; private set; }
 
 		private bool IsBarrierCharging = false;
 
@@ -18,7 +19,7 @@ namespace SoulBarriers {
 
 
 		////////////////
-		
+
 		public override void DrawEffects(
 					PlayerDrawInfo drawInfo,
 					ref float r,
@@ -29,7 +30,7 @@ namespace SoulBarriers {
 			if( this.Barrier.Strength >= 1 ) {
 				int particles = this.Barrier.GetParticleCount();
 
-				this.Barrier.AnimateAt( particles, this.player.MountedCenter, this.player.velocity );
+				this.Barrier.Animate( particles );
 			}
 		}
 

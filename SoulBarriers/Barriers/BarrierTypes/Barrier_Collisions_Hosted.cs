@@ -1,16 +1,22 @@
 using System;
 using Terraria;
+using ModLibsCore.Libraries.Debug;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public bool CanHostedCollide( Entity host, Entity intruder ) {
+		private bool CanHostedCollide( Entity intruder ) {
+			if( this.Host == null ) {
+				LogLibraries.WarnOnce( "Hostless barrier collision detected ("+this.HostType+", "+this.HostWhoAmI+")" );
+				return false;
+			}
+
 			if( intruder is Projectile ) {
-				return this.CanCollideHostedVsProjectile( host, (Projectile)intruder );
+				return this.CanCollideHostedVsProjectile( (Projectile)intruder );
 			} else if( intruder is Player ) {
-				//return this.CanCollideHostedVsPlayer( host, (Player)intruder );
+				//return this.CanCollideHostedVsPlayer( (Player)intruder );
 			} else if( intruder is NPC ) {
-				//return this.CanCollideHostedVsNpc( host, (NPC)intruder );
+				//return this.CanCollideHostedVsNpc( (NPC)intruder );
 			}
 
 			return false;
@@ -18,11 +24,12 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		private bool CanCollideHostedVsProjectile( Entity host, Projectile proj ) {
-			if( host is Player ) {
-				return this.CanCollidePlayerHostedVsProjectile( (Player)host, proj );
-			} else if( host is NPC ) {
-				return this.CanCollideNpcHostedVsProjectile( (NPC)host, proj );
+		private bool CanCollideHostedVsProjectile( Projectile proj ) {
+			switch( this.HostType ) {
+			case BarrierHostType.Player:
+				return this.CanCollidePlayerHostedVsProjectile( (Player)this.Host, proj );
+			case BarrierHostType.NPC:
+				return this.CanCollideNpcHostedVsProjectile( (NPC)this.Host, proj );
 			}
 
 			return false;
@@ -73,20 +80,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public bool IsHostedColliding( Entity host, Entity intruder ) {
-			if( !this.CanHostedCollide( host, intruder ) ) {
-				return false;
-			}
-
-			if( this.Strength <= 0 ) {
-				return false;
-			}
-
-			return this.IsHostedCollidingDirectly( host, intruder );
-		}
-
-		////
-
-		public abstract bool IsHostedCollidingDirectly( Entity host, Entity intruder );
+		public abstract bool IsHostedCollidingDirectly( Entity intruder );
 	}
 }

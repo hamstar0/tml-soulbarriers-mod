@@ -3,14 +3,19 @@ using Terraria;
 using Terraria.ModLoader;
 using SoulBarriers.Items;
 using SoulBarriers.Barriers;
+using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers {
 	partial class SoulBarriersPlayer : ModPlayer {
 		private void UpdateBarrier() {
+			if( this.Barrier == null ) {
+				this.Barrier = BarrierManager.Instance.GetOrMakePlayerBarrier( this.player.whoAmI );
+			}
+
 			if( this.player.dead ) {
 				if( this.Barrier.Strength >= 1 ) {
-					this.Barrier.SetStrength( this.player, 0 );
+					this.Barrier.SetStrength( 0 );
 				}
 
 				return;
@@ -21,7 +26,7 @@ namespace SoulBarriers {
 					if( this.player.itemTime >= 1 ) {
 						this.IsBarrierCharging = true;
 
-						this.Barrier.SetStrength( this.player, 0 );
+						this.Barrier.SetStrength( 0 );
 					}
 				}
 			} else {
@@ -29,8 +34,6 @@ namespace SoulBarriers {
 					this.IsBarrierCharging = false;
 				}
 			}
-
-			BarrierManager.Instance.TrackPlayerBarrier( this.player, this.Barrier );
 		}
 
 
@@ -44,9 +47,13 @@ namespace SoulBarriers {
 
 		public void AddBarrier( int strength ) {
 			var config = SoulBarriersConfig.Instance;
+			float radius = config.Get<float>( nameof(config.DefaultPlayerBarrierRadius) );
 
-			this.Barrier.SetRadius( config.Get<float>( nameof(config.DefaultPlayerBarrierRadius) ) );
-			this.Barrier.SetStrength( this.player, this.Barrier.Strength + strength );
+			if( this.Barrier is SphericalBarrier ) {
+				((SphericalBarrier)this.Barrier).SetRadius( radius );
+			}
+
+			this.Barrier.SetStrength( this.Barrier.Strength + strength );
 		}
 	}
 }

@@ -6,10 +6,10 @@ using Terraria.ID;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public void ApplyCollisionHit( Entity host, Entity intruder ) {
+		public void ApplyCollisionHit( Entity intruder ) {
 			if( intruder is Projectile ) {
-				if( BarrierManager.Instance.OnEntityBarrierCollisionEvent(this, host, ref intruder) ) {
-					this.ApplyProjectileCollisionHit( Barrier.GetEntityBarrierOrigin(host), (Projectile)intruder );
+				if( BarrierManager.Instance.OnEntityBarrierCollisionEvent(this, ref intruder) ) {
+					this.ApplyProjectileCollisionHit( (Projectile)intruder );
 				}
 			}
 		}
@@ -17,22 +17,16 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public void ApplyProjectileCollisionHit( Vector2 barrierCenter, Projectile proj ) {
-			this.ApplyRawHit( proj.Center, proj.damage );
-
-			int dispersal = proj.width < proj.height
-				? proj.width
-				: proj.height;
+		public void ApplyProjectileCollisionHit( Projectile proj ) {
+			this.ApplyRawHit( proj.Center, proj.damage, true );
 
 			proj.Kill();
-
-			this.CreateHitParticlesAt( barrierCenter, proj.Center, dispersal );
 		}
 
 
 		////////////////
 		
-		public void ApplyRawHit( Vector2 basePosition, int damage, bool syncFromServer ) {
+		public void ApplyRawHit( Vector2 hitAt, int damage, bool syncFromServer ) {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
@@ -54,10 +48,10 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			int particles = Barrier.GetHitParticleCount( damage );
 
-			this.CreateHitParticlesForArea( basePosition, particles );
+			this.CreateHitParticlesAt( hitAt, particles, 4f );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitPacket.Broadcast( hostPlayer, dmg, buffType );
+				BarrierHitPacket.Broadcast( this.HostType, this.HostWhoAmI, hitAt, damage, -1 );
 			}
 		}
 	}

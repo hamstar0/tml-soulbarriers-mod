@@ -8,7 +8,8 @@ using SoulBarriers.Buffs;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public partial class SphericalBarrier : Barrier {
-		internal override void UpdateWithContext( Entity host ) {
+		internal override void UpdateWithContext() {
+			Entity host = this.Host;
 			if( host == null || !(host is Player) || this.Strength <= 0 ) {
 				return;
 			}
@@ -18,10 +19,10 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			this.UpdateForPlayerForBuffs( hostPlayer, out bool hasSoulBuff );
 
 			if( !hasSoulBuff ) {
-				this.SetStrength( hostPlayer, 0 );
+				this.SetStrength( 0 );
 
 				if( Main.netMode == NetmodeID.MultiplayerClient ) {
-					BarrierStrengthPacket.SyncFromClientToServer( hostPlayer );
+					BarrierStrengthPacket.SyncFromClientToServer( this, 0 );
 				}
 			}
 		}
