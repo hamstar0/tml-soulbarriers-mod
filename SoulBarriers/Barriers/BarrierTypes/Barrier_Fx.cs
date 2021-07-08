@@ -35,7 +35,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public int GetParticleCount() {
+		public virtual int GetParticleCount() {
 			if( this.Strength <= 0 ) {
 				return 0;
 			}
@@ -69,39 +69,49 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		}
 
 
-
 		////////////////
 
 		public void CreateBarrierParticlesForArea( Vector2 basePosition, int particles ) {
 			for( int i=0; i<particles; i++ ) {
-				(Dust dust, Vector2 offset) = this.CreateBarrierParticleForArea( basePosition );
-				this.ParticleOffsets[ dust ] = offset;
+				(Dust dust, Vector2 offset)? dustData = this.CreateBarrierParticleForArea( basePosition );
+				if( !dustData.HasValue ) { continue; }
+
+				this.ParticleOffsets[ dustData.Value.dust ] = dustData.Value.offset;
 			}
 		}
 
 		////
 
-		public (Dust dust, Vector2 offset) CreateBarrierParticleForArea( Vector2 basePosition ) {
-			Vector2 offset = this.GetRandomOffsetForArea();
+		public (Dust dust, Vector2 offset)? CreateBarrierParticleForArea( Vector2 basePosition ) {
+			Vector2? offset = this.GetRandomOffsetForArea( basePosition, true );
+			if( !offset.HasValue ) {
+				return null;
+			}
 
 			Dust dust = Dust.NewDustPerfect(
-				Position: basePosition + offset,
+				Position: basePosition + offset.Value,
 				Type: (int)this.BarrierColor,
 				Scale: 2f / 3f
 			);
 			dust.noGravity = true;
 			dust.noLight = true;
 
-			return (dust, offset);
+			return (dust, offset.Value);
 		}
 
 
 		////////////////
 
 		public void CreateHitParticlesForArea( int particles, float dispersal ) {
+			Vector2 pos = this.GetBarrierWorldCenter();
+
 			for( int i = 0; i < particles; i++ ) {
-				(Dust dust, Vector2 offset) = this.CreateHitParticleForArea( dispersal );
-				this.ParticleOffsets[dust] = offset;
+				Vector2? offset = this.GetRandomOffsetForArea( pos, true );
+				if( !offset.HasValue ) { continue; }
+
+				Dust dust = this.CreateHitParticle( pos + offset.Value, dispersal );
+
+				this.ParticleOffsets[dust] = offset.Value;
 			}
 		}
 		
@@ -115,13 +125,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		}
 
 		////
-		
-		public (Dust dust, Vector2 offset) CreateHitParticleForArea( float dispersal ) {
-			Vector2 offset = this.GetRandomOffsetForArea();
-			Dust dust = this.CreateHitParticle( this.GetBarrierWorldCenter() + offset, dispersal );
-
-			return (dust, offset);
-		}
 		
 		public Dust CreateHitParticle( Vector2 position, float dispersal ) {
 			float dispersalDir = dispersal * 0.5f;

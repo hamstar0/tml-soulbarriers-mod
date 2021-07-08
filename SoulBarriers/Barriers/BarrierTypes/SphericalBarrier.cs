@@ -33,9 +33,22 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public override Vector2 GetRandomOffsetForArea() {
+		public override Vector2? GetRandomOffsetForArea( Vector2 origin, bool isFxOnly ) {
+			if( isFxOnly ) {
+				float maxDist = 256 * 16;
+				float maxDistSqr = maxDist * maxDist;
+
+				if( (Main.LocalPlayer.MountedCenter - origin).LengthSquared() > maxDistSqr ) {
+					return null;
+				}
+			}
+
 			float distScale = Main.rand.NextFloat();
-			distScale = 1f - ( distScale * distScale * distScale * distScale * distScale );
+			if( isFxOnly ) {
+				distScale = 1f - ( distScale * distScale * distScale * distScale * distScale );
+			} else {
+				distScale = 1f - distScale;
+			}
 			distScale *= this.Radius;
 
 			Vector2 offset = Vector2.One.RotatedByRandom( 2d * Math.PI );

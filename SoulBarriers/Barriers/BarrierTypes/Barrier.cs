@@ -82,7 +82,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		
 		public abstract Vector2 GetBarrierWorldCenter();
 		
-		public abstract Vector2 GetRandomOffsetForArea();
+		public abstract Vector2? GetRandomOffsetForArea( Vector2 origin, bool isFxOnly );
 
 
 		////////////////
