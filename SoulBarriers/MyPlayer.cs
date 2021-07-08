@@ -1,7 +1,6 @@
 using System;
 using Terraria;
 using Terraria.ModLoader;
-using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
 
 

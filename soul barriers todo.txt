@@ -1,0 +1,3 @@
+Future
+-	Re-implement "1 hp safety" as an accessory
+

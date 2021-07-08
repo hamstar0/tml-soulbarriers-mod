@@ -17,10 +17,13 @@ namespace SoulBarriers {
 				if( this.Barrier.Strength >= 1 ) {
 					this.Barrier.SetStrength( 0 );
 				}
-
-				return;
+			} else {
+				this.UpdateBarrierCharging();
 			}
+		}
 
+
+		private void UpdateBarrierCharging() {
 			if( !this.IsBarrierCharging ) {
 				if( this.player.HeldItem?.active == true && this.player.HeldItem.type == ModContent.ItemType<PBGItem>() ) {
 					if( this.player.itemTime >= 1 ) {

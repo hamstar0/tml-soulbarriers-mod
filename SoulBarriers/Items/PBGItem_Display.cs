@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsGeneral.Services.AnimatedColor;
+using SoulBarriers.Buffs;
 
 
 namespace SoulBarriers.Items {
@@ -29,47 +30,22 @@ namespace SoulBarriers.Items {
 
 			//
 
-			var tip2 = new TooltipLine(
-				this.mod,
-				"PlayerBarrierHear",
-				"Current barrier overheat: %" + this.HeatBuildup
-			);
-
-			if( this.HeatBuildup <= 0 ) {
-				tip2.overrideColor = Color.Lime;
-			} else if( this.HeatBuildup <= 75 ) {
-				tip2.overrideColor = Color.White;
-			} else if( this.HeatBuildup <= 99 ) {
-				tip2.overrideColor = Color.Yellow;
-			} else {
-				tip2.overrideColor = Color.Red;
-			}
-
-			//
-
 			tooltips.Add( tip1 );
-			tooltips.Add( tip2 );
 		}
 
 
 		////////////////
 
 		public override Color? GetAlpha( Color lightColor ) {
-			if( this.HeatBuildup <= 0 ) {
+			if( !Main.LocalPlayer.HasBuff(ModContent.BuffType<PBGOverheatedDeBuff>()) ) {
 				return null;
 			}
 
-			float percent = (float)this.HeatBuildup / 100f;
-			percent = Math.Min( percent, 1f );
+			Color color = AnimatedColors.Strobe.CurrentColor;
+			color.G = 0;
+			color.B = 0;
 
-			Color color = Color.Red;
-			if( percent >= 1f ) {
-				color = AnimatedColors.Strobe.CurrentColor;
-				color.G = 0;
-				color.B = 0;
-			}
-
-			return Color.Lerp( lightColor, color, percent );
+			return color;
 		}
 	}
 }

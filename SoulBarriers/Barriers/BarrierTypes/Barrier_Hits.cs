@@ -46,8 +46,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			if( !BarrierManager.Instance.OnPreBarrierRawHitEvent(this, ref damage) ) {
 				return;
 			}
-			
-			if( damage >= 1 && this.Strength >= 1 ) {
+
+			/*if( damage >= 1 && this.Strength >= 1 ) {
 				this.Strength = 0;
 			} else {
 				this.Strength -= damage;
@@ -56,6 +56,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				if( this.Strength <= 0 ) {
 					this.Strength = 1;
 				}
+			}*/
+			this.Strength -= damage;
+
+			if( this.Strength < 0 ) {
+				this.Strength = 0;
 			}
 
 			BarrierManager.Instance.OnBarrierRawHitEvent( this, damage );
