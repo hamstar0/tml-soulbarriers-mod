@@ -35,18 +35,23 @@ namespace SoulBarriers.Barriers {
 
 		internal void UpdateAllTrackedBarriers() {
 			foreach( int plrWho in this.PlayerBarriers.Keys.ToArray() ) {
+				Barrier barrier = this.PlayerBarriers[plrWho];
 				Player plr = Main.player[plrWho];
 
 				if( plr?.active != true ) {
 					this.PlayerBarriers.Remove( plrWho );   // Garbage collection
 				} else {
-					this.PlayerBarriers[ plrWho ].Update_Internal();
+					barrier.Update_Internal();
 				}
 			}
 
 			foreach( Rectangle rect in this.WorldBarriers.Keys.ToArray() ) {
-				this.WorldBarriers[rect].Update_Internal();
+				Barrier barrier = this.WorldBarriers[rect];
+
+				barrier.Update_Internal();
 			}
+
+			this.CheckCollisionsAgainstAllBarriers();
 		}
 	}
 }

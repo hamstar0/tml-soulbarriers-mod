@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public partial class SphericalBarrier : Barrier {
-		public override bool IsHostedCollidingDirectly( Entity intruder ) {
+		public override bool IsCollidingDirectly( Entity intruder ) {
 			//bool intersects = host.GetRectangle()
 			//	.Intersects( intruder.GetRectangle() );
 			//if( intersects ) {
@@ -24,8 +24,22 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		}
 
 
-		public override bool IsHostlessCollidingDirectly( Entity intruder ) {
-			throw new NotImplementedException( "Spherical barriers must have hosts (currently)" );
+		public override bool IsBarrierColliding( Barrier barrier ) {
+			Vector2 myPos = this.GetBarrierWorldCenter();
+
+			if( barrier is SphericalBarrier ) {
+				Vector2 diff = barrier.GetBarrierWorldCenter() - myPos;
+				float joinedRadii = this.Radius + ((SphericalBarrier)barrier).Radius;
+
+				return diff.LengthSquared() < (joinedRadii * joinedRadii);
+			} else if( barrier is RectangularBarrier ) {
+				return Barrier.IsSphereCollidingRectangle(
+					(myPos.X, myPos.Y, this.Radius),
+					((RectangularBarrier)barrier).WorldArea
+				);
+			} else {
+				return barrier.IsBarrierColliding( this );
+			}
 		}
 	}
 }

@@ -8,9 +8,15 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
 		public void ApplyCollisionHit( Entity intruder ) {
 			if( intruder is Projectile ) {
-				if( BarrierManager.Instance.OnEntityBarrierCollisionEvent(this, ref intruder) ) {
+				if( BarrierManager.Instance.OnPreBarrierEntityCollisionEvent( this, ref intruder) ) {
 					this.ApplyProjectileCollisionHit( (Projectile)intruder );
 				}
+			}
+		}
+
+		public void ApplyCollisionHit( Barrier intruder ) {
+			if( BarrierManager.Instance.OnPreBarrierBarrierCollisionEvent( this, intruder) ) {
+				this.ApplyBarrierCollisionHit( intruder );
 			}
 		}
 
@@ -23,6 +29,12 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			proj.Kill();
 		}
 
+		////
+
+		public void ApplyBarrierCollisionHit( Barrier intruder ) {
+			BarrierManager.Instance.OnBarrierBarrierCollisionEvent( this, intruder );
+		}
+
 
 		////////////////
 		
@@ -31,7 +43,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			if( !BarrierManager.Instance.OnBarrierRawHitEvent(this, ref damage) ) {
+			if( !BarrierManager.Instance.OnPreBarrierRawHitEvent(this, ref damage) ) {
 				return;
 			}
 			
@@ -45,6 +57,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					this.Strength = 1;
 				}
 			}
+
+			BarrierManager.Instance.OnBarrierRawHitEvent( this, damage );
 
 			int particles = Barrier.GetHitParticleCount( damage );
 

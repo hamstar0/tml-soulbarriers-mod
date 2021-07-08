@@ -5,15 +5,26 @@ using Microsoft.Xna.Framework;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public partial class RectangularBarrier : Barrier {
-		public override bool IsHostedCollidingDirectly( Entity intruder ) {
-			throw new NotImplementedException( "Rectangular barriers cannot have hosts (currently)" );
-		}
-
-
-		public override bool IsHostlessCollidingDirectly( Entity intruder ) {
+		public override bool IsCollidingDirectly( Entity intruder ) {
 			var rect = new Rectangle( (int)intruder.position.X, (int)intruder.position.Y, intruder.width, intruder.height );
 
 			return this.WorldArea.Intersects( rect );
+		}
+
+		public override bool IsBarrierColliding( Barrier barrier ) {
+			if( barrier is RectangularBarrier ) {
+				return ((RectangularBarrier)barrier).WorldArea.Intersects( this.WorldArea );
+			} else if( barrier is SphericalBarrier ) {
+				var sphBarrier = (SphericalBarrier)barrier;
+				Vector2 sphPos = barrier.GetBarrierWorldCenter();
+
+				return Barrier.IsSphereCollidingRectangle(
+					(sphPos.X, sphPos.Y, sphBarrier.Radius),
+					this.WorldArea
+				);
+			} else {
+				return barrier.IsBarrierColliding( this );
+			}
 		}
 	}
 }

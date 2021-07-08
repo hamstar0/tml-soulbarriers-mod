@@ -1,25 +1,40 @@
 using System;
-using Microsoft.Xna.Framework;
 using Terraria;
 using ModLibsCore.Classes.Loadable;
 using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers.Barriers {
-	public delegate bool EntityBarrierCollisionEvent( Barrier barrier, ref Entity intruder );
+	public delegate bool PreBarrierEntityCollisionEvent( Barrier barrier, ref Entity intruder );
 
-	public delegate bool AreaBarrierCollisionEvent( Barrier barrier, Rectangle area, ref Entity intruder );
+	public delegate void BarrierEntityCollisionEvent( Barrier barrier, Entity intruder );
+
+
+	public delegate bool PreBarrierBarrierCollisionEvent( Barrier barrier, Barrier otherBarrier );
+
+	public delegate void BarrierBarrierCollisionEvent( Barrier barrier, Barrier otherBarrier );
+
 	
-	public delegate bool BarrierRawHitEvent( Barrier barrier, ref int damage );
+	public delegate bool PreBarrierRawHitEvent( Barrier barrier, ref int damage );
+	
+	public delegate void BarrierRawHitEvent( Barrier barrier, int damage );
 
 
 
 
 
 	public partial class BarrierManager : ILoadable {
-		public event EntityBarrierCollisionEvent OnEntityBarrierCollision;
+		public event PreBarrierEntityCollisionEvent OnPreBarrierEntityCollision;
+		
+		public event BarrierEntityCollisionEvent OnBarrierEntityCollision;
 
-		public event AreaBarrierCollisionEvent OnAreaBarrierCollision;
+
+		public event PreBarrierBarrierCollisionEvent OnPreBarrierBarrierCollision;
+
+		public event BarrierBarrierCollisionEvent OnBarrierBarrierCollision;
+
+
+		public event PreBarrierRawHitEvent OnPreBarrierRawHit;
 
 		public event BarrierRawHitEvent OnBarrierRawHit;
 
@@ -27,16 +42,32 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		internal bool OnEntityBarrierCollisionEvent( Barrier barrier, ref Entity intruder ) {
-			return this.OnEntityBarrierCollision?.Invoke(barrier, ref intruder) ?? true;
+		internal bool OnPreBarrierEntityCollisionEvent( Barrier barrier, ref Entity intruder ) {
+			return this.OnPreBarrierEntityCollision?.Invoke(barrier, ref intruder) ?? true;
 		}
 
-		internal bool OnAreaBarrierCollisionEvent( Barrier barrier, Rectangle area, ref Entity intruder ) {
-			return this.OnAreaBarrierCollision?.Invoke(barrier, area, ref intruder) ?? true;
+		internal void OnBarrierEntityCollisionEvent( Barrier barrier, Entity intruder ) {
+			this.OnBarrierEntityCollision?.Invoke( barrier, intruder );
 		}
 
-		internal bool OnBarrierRawHitEvent( Barrier barrier, ref int damage ) {
-			return this.OnBarrierRawHit?.Invoke(barrier, ref damage) ?? true;
+		////
+		
+		internal bool OnPreBarrierBarrierCollisionEvent( Barrier barrier, Barrier otherBarrier ) {
+			return this.OnPreBarrierBarrierCollision?.Invoke(barrier, otherBarrier) ?? true;
+		}
+		
+		internal void OnBarrierBarrierCollisionEvent( Barrier barrier, Barrier otherBarrier ) {
+			this.OnBarrierBarrierCollision?.Invoke( barrier, otherBarrier );
+		}
+
+		////
+
+		internal bool OnPreBarrierRawHitEvent( Barrier barrier, ref int damage ) {
+			return this.OnPreBarrierRawHit?.Invoke(barrier, ref damage) ?? true;
+		}
+
+		internal void OnBarrierRawHitEvent( Barrier barrier, int damage ) {
+			this.OnBarrierRawHit?.Invoke( barrier, damage );
 		}
 	}
 }
