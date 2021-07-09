@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 
 
-namespace SoulBarriers.Barriers.BarrierTypes {
+namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 	public partial class SphericalBarrier : Barrier {
 		public float Radius { get; private set; }
 

@@ -3,7 +3,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 
 
-namespace SoulBarriers.Barriers.BarrierTypes {
+namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 	public partial class SphericalBarrier : Barrier {
 		public override bool IsCollidingDirectly( Entity intruder ) {
 			//bool intersects = host.GetRectangle()

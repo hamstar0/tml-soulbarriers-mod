@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 using SoulBarriers.Buffs;
 
 
-namespace SoulBarriers.Barriers.BarrierTypes {
+namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 	public partial class SphericalBarrier : Barrier {
 		protected override void Update() {
 			Entity host = this.Host;

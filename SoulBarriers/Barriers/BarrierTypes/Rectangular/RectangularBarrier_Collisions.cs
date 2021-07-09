@@ -3,7 +3,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 
 
-namespace SoulBarriers.Barriers.BarrierTypes {
+namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 	public partial class RectangularBarrier : Barrier {
 		public override bool IsCollidingDirectly( Entity intruder ) {
 			var rect = new Rectangle( (int)intruder.position.X, (int)intruder.position.Y, intruder.width, intruder.height );

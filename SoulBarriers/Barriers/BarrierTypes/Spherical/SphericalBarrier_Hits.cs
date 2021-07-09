@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ID;
 
 
-namespace SoulBarriers.Barriers.BarrierTypes {
+namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 	public partial class SphericalBarrier : Barrier {
 		private void ApplyDebuffHit( Player hostPlayer, int buffIdx, bool syncFromServer ) {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
