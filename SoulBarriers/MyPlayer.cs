@@ -9,8 +9,6 @@ namespace SoulBarriers {
 	partial class SoulBarriersPlayer : ModPlayer {
 		public Barrier Barrier { get; private set; }
 
-		private bool IsBarrierCharging = false;
-
 
 		////////////////
 

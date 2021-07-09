@@ -1,8 +1,8 @@
-using ModLibsCore.Classes.UI.ModConfig;
 using System.ComponentModel;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
+using ModLibsCore.Classes.UI.ModConfig;
 
 
 namespace SoulBarriers {

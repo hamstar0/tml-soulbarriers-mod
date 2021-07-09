@@ -48,6 +48,7 @@ namespace SoulBarriers.Barriers {
 				} else {
 					barrier.Update_Internal();
 
+					// New barrier found
 					if( !this.BarriersByID.ContainsKey(id) ) {
 						this.BarriersByID[id] = barrier;
 					}
@@ -55,11 +56,12 @@ namespace SoulBarriers.Barriers {
 			}
 
 			foreach( Rectangle rect in this.WorldBarriers.Keys.ToArray() ) {
-				Barrier barrier = this.WorldBarriers[rect];
+				Barrier barrier = this.WorldBarriers[ rect ];
 				string id = barrier.GetID();
 
 				barrier.Update_Internal();
 
+				// New barrier found
 				if( !this.BarriersByID.ContainsKey(id) ) {
 					this.BarriersByID[id] = barrier;
 				}

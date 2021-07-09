@@ -26,7 +26,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			this.ApplyHitFx( damage * 4 );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitPacket.BroadcastFromServer( this, origin, damage, buffType );
+				BarrierHitRawPacket.BroadcastToClients( this, origin, damage, buffType );
 
 				NetMessage.SendData( MessageID.SyncPlayer, -1, -1, null, hostPlayer.whoAmI );
 			}

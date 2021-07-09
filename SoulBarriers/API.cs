@@ -3,7 +3,8 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers;
-
+using Terraria.ID;
+using ModLibsCore.Classes.Errors;
 
 namespace SoulBarriers {
 	public static class SoulBarriersAPI {
@@ -24,12 +25,19 @@ namespace SoulBarriers {
 					int maxRegenStrength,
 					float strengthRegenPerTick,
 					BarrierColor color ) {
+			if( Main.netMode == NetmodeID.MultiplayerClient ) {
+				throw new ModLibsException( "Not available for clients." );
+			}
+
 			return BarrierManager.Instance.CreateAndDeclareWorldBarrier(
-				worldArea,
-				strength,
-				maxRegenStrength,
-				strengthRegenPerTick,
-				color
+				hostType: BarrierHostType.None,
+				hostWhoAmI: -1,
+				worldArea: worldArea,
+				strength: strength,
+				maxRegenStrength: maxRegenStrength,
+				strengthRegenPerTick: strengthRegenPerTick,
+				color: color,
+				syncFromServer: true
 			);
 		}
 

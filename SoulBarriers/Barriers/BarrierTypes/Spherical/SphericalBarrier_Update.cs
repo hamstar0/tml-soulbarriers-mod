@@ -15,15 +15,13 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 				return;
 			}
 
-			Player hostPlayer = host as Player;
-
-			this.UpdateForPlayerForBuffs( hostPlayer, out bool hasSoulBuff );
+			this.UpdateForPlayerForBuffs( (Player)host, out bool hasSoulBuff );
 
 			if( !hasSoulBuff ) {
 				this.SetStrength( 0 );
 
 				if( Main.netMode == NetmodeID.MultiplayerClient ) {
-					BarrierStrengthPacket.SyncFromClientToServer( this, 0, true );
+					BarrierStrengthPacket.SyncToServerForEveryone( this, 0, false );
 				}
 			}
 		}

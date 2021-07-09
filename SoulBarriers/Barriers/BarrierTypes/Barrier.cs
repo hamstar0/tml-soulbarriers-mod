@@ -22,12 +22,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		protected IDictionary<Dust, Vector2> ParticleOffsets = new Dictionary<Dust, Vector2>();
 
-		////
-
-		protected BarrierHostType HostType;
-
-		protected int HostWhoAmI;
-
 
 		////////////////
 
@@ -43,6 +37,12 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 
 		////////////////
+
+		public BarrierHostType HostType { get; protected set; }
+
+		public int HostWhoAmI { get; protected set; }
+
+		////
 
 		public Entity Host {
 			get {

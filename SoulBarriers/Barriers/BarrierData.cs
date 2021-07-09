@@ -10,6 +10,15 @@ namespace SoulBarriers.Barriers {
 	}
 
 
+	
+	public enum BarrierIntruderType {
+		Barrier = 0,
+		Player = 1,
+		NPC = 2,
+		Projectile = 3
+	}
+
+
 
 	public enum BarrierColor {
 		Red = 60,

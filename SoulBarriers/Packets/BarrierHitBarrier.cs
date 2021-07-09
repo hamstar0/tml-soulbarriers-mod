@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using ModLibsCore.Classes.Errors;
@@ -10,13 +9,13 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers.Packets {
-	class BarrierHitPacket : SimplePacketPayload {
-		public static void BroadcastFromServer( Barrier barrier, Vector2 hitPosition, int damage, int buffType = -1 ) {
+	class BarrierHitBarrierPacket : SimplePacketPayload {
+		public static void BroadcastToClients( Barrier barrier, Barrier otherBarrier ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
 
-			var packet = new BarrierHitPacket( barrier.GetID(), hitPosition, damage, buffType );
+			var packet = new BarrierHitBarrierPacket( barrier, otherBarrier );
 
 			SimplePacket.SendToServer( packet );
 		}
@@ -27,21 +26,17 @@ namespace SoulBarriers.Packets {
 
 		private string BarrierID;
 
-		private Vector2 HitPosition;
-
-		private int Damage;
-
-		private int BuffType;
+		private string OtherBarrierID;
 
 
 
 		////////////////
 
-		public BarrierHitPacket( string barrierID, Vector2 hitPosition, int damage, int buffType ) {
-			this.BarrierID = barrierID;
-			this.HitPosition = hitPosition;
-			this.Damage = damage;
-			this.BuffType = buffType;
+		private BarrierHitBarrierPacket() { }
+
+		private BarrierHitBarrierPacket( Barrier barrier, Barrier otherBarrier ) {
+			this.BarrierID = barrier.GetID();
+			this.OtherBarrierID = otherBarrier.GetID();
 		}
 
 		////////////////
@@ -52,14 +47,13 @@ namespace SoulBarriers.Packets {
 				LogLibraries.Warn( "No such barrier from "+Main.player[fromWho]+" ("+fromWho+") id'd: "+this.BarrierID );
 				return;
 			}
-
-			if( this.Damage >= 1 ) {
-				barrier.ApplyRawHit( this.HitPosition, this.Damage, false );
+			Barrier otherBarrier = BarrierManager.Instance.GetBarrierByID( this.OtherBarrierID );
+			if( barrier == null ) {
+				LogLibraries.Warn( "No such other barrier from "+Main.player[fromWho]+" ("+fromWho+") id'd: "+this.OtherBarrierID );
+				return;
 			}
 
-			if( this.BuffType >= 1 ) {
-				barrier.ApplyPlayerDebuffHit( this.BuffType, false );
-			}
+			barrier.ApplyCollisionHit( otherBarrier, false );
 		}
 
 		////
@@ -69,7 +63,7 @@ namespace SoulBarriers.Packets {
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {
-			throw new NotImplementedException( "Server doesn't sync barrier hits." );
+			throw new NotImplementedException( "Server doesn't sync barrier collision hits." );
 		}
 	}
 }

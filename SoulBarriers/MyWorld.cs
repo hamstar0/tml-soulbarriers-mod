@@ -30,11 +30,14 @@ namespace SoulBarriers {
 				float strRegen = tag.GetInt( "barrier_"+i+"_str_regen" );
 				
 				mngr.CreateAndDeclareWorldBarrier(
+					hostType: BarrierHostType.None,
+					hostWhoAmI: -1,
 					worldArea: new Rectangle(x, y, w, h),
 					strength: maxStr,
 					maxRegenStrength: maxStr,
 					strengthRegenPerTick: strRegen,
-					color: (BarrierColor)c
+					color: (BarrierColor)c,
+					syncFromServer: false
 				);
 			}
 		}
@@ -81,11 +84,14 @@ namespace SoulBarriers {
 				int color = reader.ReadInt32();
 
 				mngr.CreateAndDeclareWorldBarrier(
+					hostType: BarrierHostType.None,
+					hostWhoAmI: -1,
 					rect,
 					strength,
 					maxRegenStrength,
 					strengthRegen,
-					(BarrierColor)color
+					(BarrierColor)color,
+					false
 				);
 			}
 		}

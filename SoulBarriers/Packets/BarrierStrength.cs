@@ -10,12 +10,12 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 namespace SoulBarriers.Packets {
 	class BarrierStrengthPacket : SimplePacketPayload {
-		public static void SyncFromClientToServer( Barrier barrier, int strength, bool applyHitFx ) {
+		public static void SyncToServerForEveryone( Barrier barrier, int strength, bool applyHitFx ) {
 			if( Main.netMode != NetmodeID.MultiplayerClient ) {
 				throw new ModLibsException( "Not client." );
 			}
 
-			var packet = new BarrierStrengthPacket( barrier.GetID(), strength, applyHitFx );
+			var packet = new BarrierStrengthPacket( barrier, strength, applyHitFx );
 
 			SimplePacket.SendToServer( packet );
 		}
@@ -34,14 +34,16 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
-		public BarrierStrengthPacket( string barrierID, int strength, bool applyHitFx ) {
-			this.BarrierID = barrierID;
+		private BarrierStrengthPacket() { }
+
+		private BarrierStrengthPacket( Barrier barrier, int strength, bool applyHitFx ) {
+			this.BarrierID = barrier.GetID();
 			this.Strength = strength;
 			this.ApplyHitFx = applyHitFx;
 		}
 
 		////////////////
-		
+
 		private void Receive( int fromWho ) {
 			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
 			if( barrier == null ) {

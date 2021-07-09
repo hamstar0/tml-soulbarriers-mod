@@ -37,7 +37,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			this.ApplyHitFx( hitAt, damage );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitPacket.BroadcastFromServer( this, hitAt, damage, -1 );
+				BarrierHitRawPacket.BroadcastToClients( this, hitAt, damage, -1 );
 			}
 		}
 	}

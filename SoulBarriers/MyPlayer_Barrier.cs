@@ -1,7 +1,6 @@
 using System;
 using Terraria;
 using Terraria.ModLoader;
-using SoulBarriers.Items;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes.Spherical;
 
@@ -17,36 +16,11 @@ namespace SoulBarriers {
 				if( this.Barrier.Strength >= 1 ) {
 					this.Barrier.SetStrength( 0 );
 				}
-			} else {
-				this.UpdatePersonalBarrierCharging();
-			}
-		}
-
-
-		private void UpdatePersonalBarrierCharging() {
-			if( !this.IsBarrierCharging ) {
-				if( this.player.HeldItem?.active == true && this.player.HeldItem.type == ModContent.ItemType<PBGItem>() ) {
-					if( this.player.itemTime >= 1 ) {
-						this.IsBarrierCharging = true;
-
-						this.Barrier.SetStrength( 0 );
-					}
-				}
-			} else {
-				if( this.player.HeldItem?.active != true || this.player.itemTime <= 0 ) {
-					this.IsBarrierCharging = false;
-				}
 			}
 		}
 
 
 		////////////////
-
-		public int GetBarrierStrength() {
-			return this.Barrier.Strength;
-		}
-
-		////
 
 		public void AddBarrier( int strength ) {
 			var config = SoulBarriersConfig.Instance;

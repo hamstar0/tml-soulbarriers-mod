@@ -13,7 +13,7 @@ namespace SoulBarriers.Items {
 		public override void ModifyTooltips( List<TooltipLine> tooltips ) {
 			var myplayer = Main.LocalPlayer.GetModPlayer<SoulBarriersPlayer>();
 
-			int barrierStr = myplayer.GetBarrierStrength();
+			int barrierStr = myplayer.Barrier.Strength;
 			var tip1 = new TooltipLine(
 				this.mod,
 				"PlayerBarrierStrength",

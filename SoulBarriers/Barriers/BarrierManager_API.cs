@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using ModLibsCore.Classes.Loadable;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers.BarrierTypes.Spherical;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular;
+using SoulBarriers.Packets;
 
 
 namespace SoulBarriers.Barriers {
@@ -47,31 +49,55 @@ namespace SoulBarriers.Barriers {
 		////////////////
 
 		public Barrier CreateAndDeclareWorldBarrier(
+					BarrierHostType hostType,
+					int hostWhoAmI,
 					Rectangle worldArea,
 					int strength,
 					int maxRegenStrength,
 					float strengthRegenPerTick,
-					BarrierColor color ) {
-			this.WorldBarriers[worldArea] = new RectangularBarrier(
-				hostType: BarrierHostType.None,
-				hostWhoAmI: 0,
+					BarrierColor color,
+					bool syncFromServer ) {
+			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
+				return null;
+			}
+
+			var barrier = new RectangularBarrier(
+				hostType: hostType,
+				hostWhoAmI: hostWhoAmI,
 				strength: strength,
 				maxRegenStrength: maxRegenStrength,
 				strengthRegenPerTick: strengthRegenPerTick,
 				worldArea: worldArea,
 				color: color
 			);
-			return this.WorldBarriers[worldArea];
+
+			this.WorldBarriers[worldArea] = barrier;
+
+			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
+				WorldBarrierCreatePacket.BroadcastToClients( barrier );
+			} 
+
+			return barrier;
 		}
 
-		public bool RemoveWorldBarrier( Rectangle worldArea ) {
-			Barrier barrier = this.WorldBarriers.GetOrDefault( worldArea );
 
-			if( barrier != null ) {
-				this.BarriersByID.Remove( barrier.GetID() );
+		////
+
+		public void RemoveWorldBarrier( Rectangle worldArea, bool syncFromServer ) {
+			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
+				return;
 			}
 
-			return this.WorldBarriers.Remove( worldArea );
+			Barrier barrier = this.WorldBarriers.GetOrDefault( worldArea );
+			if( barrier != null ) {
+				this.BarriersByID.Remove( barrier.GetID() );
+
+				if( syncFromServer && Main.netMode == NetmodeID.Server ) {
+					BarrierRemovePacket.BroadcastToClients( barrier );
+				}
+			}
+
+			this.WorldBarriers.Remove( worldArea );
 		}
 
 

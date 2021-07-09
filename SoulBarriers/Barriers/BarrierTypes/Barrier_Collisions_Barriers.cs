@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
@@ -26,9 +27,13 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		////////////////
 
 		internal void CheckCollisionsAgainstBarriers( IEnumerable<Barrier> barriers ) {
+			if( Main.netMode == NetmodeID.MultiplayerClient ) {
+				return;
+			}
+
 			foreach( Barrier barrier in barriers ) {
 				if( this.IsBarrierColliding( barrier ) ) {
-					this.ApplyBarrierCollisionHit( barrier );
+					this.ApplyCollisionHit( barrier, true );
 				}
 			}
 		}
