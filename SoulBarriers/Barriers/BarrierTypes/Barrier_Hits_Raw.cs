@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using SoulBarriers.Packets;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
@@ -33,12 +34,10 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			BarrierManager.Instance.OnBarrierRawHitEvent( this, damage );
 
-			int particles = Barrier.GetHitParticleCount( damage );
-
-			this.CreateHitParticlesAt( hitAt, particles, 4f );
+			this.ApplyHitFx( hitAt, damage );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitPacket.Broadcast( this.HostType, this.HostWhoAmI, hitAt, damage, -1 );
+				BarrierHitPacket.BroadcastFromServer( this, hitAt, damage, -1 );
 			}
 		}
 	}

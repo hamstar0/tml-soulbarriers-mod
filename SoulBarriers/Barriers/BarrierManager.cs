@@ -20,6 +20,8 @@ namespace SoulBarriers.Barriers {
 
 		private IDictionary<Rectangle, Barrier> WorldBarriers = new Dictionary<Rectangle, Barrier>();
 
+		private IDictionary<string, Barrier> BarriersByID = new Dictionary<string, Barrier>();
+
 
 
 		////////////////
@@ -32,23 +34,35 @@ namespace SoulBarriers.Barriers {
 
 
 		////////////////
-
+		
 		internal void UpdateAllTrackedBarriers() {
 			foreach( int plrWho in this.PlayerBarriers.Keys.ToArray() ) {
 				Barrier barrier = this.PlayerBarriers[plrWho];
 				Player plr = Main.player[plrWho];
+				string id = barrier.GetID();
 
 				if( plr?.active != true ) {
 					this.PlayerBarriers.Remove( plrWho );   // Garbage collection
+
+					this.BarriersByID.Remove( id );
 				} else {
 					barrier.Update_Internal();
+
+					if( !this.BarriersByID.ContainsKey(id) ) {
+						this.BarriersByID[id] = barrier;
+					}
 				}
 			}
 
 			foreach( Rectangle rect in this.WorldBarriers.Keys.ToArray() ) {
 				Barrier barrier = this.WorldBarriers[rect];
+				string id = barrier.GetID();
 
 				barrier.Update_Internal();
+
+				if( !this.BarriersByID.ContainsKey(id) ) {
+					this.BarriersByID[id] = barrier;
+				}
 			}
 
 			this.CheckCollisionsAgainstAllBarriers();

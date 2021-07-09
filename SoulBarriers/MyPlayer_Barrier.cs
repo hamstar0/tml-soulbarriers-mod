@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ModLoader;
 using SoulBarriers.Items;
 using SoulBarriers.Barriers;
-using SoulBarriers.Barriers.BarrierTypes;
+using SoulBarriers.Barriers.BarrierTypes.Spherical;
 
 
 namespace SoulBarriers {

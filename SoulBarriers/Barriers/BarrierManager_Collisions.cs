@@ -10,8 +10,7 @@ using SoulBarriers.Barriers.BarrierTypes;
 namespace SoulBarriers.Barriers {
 	public partial class BarrierManager : ILoadable {
 		private void CheckCollisionsAgainstAllBarriers() {
-			ISet<Barrier> collisionTestedBarriers = new HashSet<Barrier>( this.PlayerBarriers.Values );
-			collisionTestedBarriers.UnionWith( this.WorldBarriers.Values );
+			ISet<Barrier> collisionTestedBarriers = new HashSet<Barrier>( this.BarriersByID.Values );
 
 			foreach( Barrier barrier in collisionTestedBarriers.ToArray() ) {
 				collisionTestedBarriers.Remove( barrier );

@@ -26,6 +26,13 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 
 		////////////////
 
+		public override string GetID() {
+			return (int)this.HostType+":"+this.HostWhoAmI;
+		}
+
+
+		////////////////
+
 		public void SetRadius( float radius ) {
 			this.Radius = radius;
 		}

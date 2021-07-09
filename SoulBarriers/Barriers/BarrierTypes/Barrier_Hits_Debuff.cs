@@ -2,17 +2,19 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using SoulBarriers.Packets;
 
 
-namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
-	public partial class SphericalBarrier : Barrier {
-		private void ApplyDebuffHit( Player hostPlayer, int buffIdx, bool syncFromServer ) {
+namespace SoulBarriers.Barriers.BarrierTypes {
+	public abstract partial class Barrier {
+		public void ApplyPlayerDebuffHit( int buffType, bool syncFromServer ) {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
 
 			var config = SoulBarriersConfig.Instance;
-			int buffType = hostPlayer.buffType[buffIdx];
+			var hostPlayer = (Player)this.Host;
+			int buffIdx = hostPlayer?.FindBuffIndex( buffType ) ?? -1;
 
 			hostPlayer.DelBuff( buffIdx );
 
@@ -21,12 +23,10 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 
 			Vector2 origin = this.GetBarrierWorldCenter();
 
-			int particles = Barrier.GetHitParticleCount( damage * 4 );
-
-			this.CreateHitParticlesForArea( particles, 4f );
+			this.ApplyHitFx( damage * 4 );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitPacket.Broadcast( this.HostType, this.HostWhoAmI, origin, damage, buffType );
+				BarrierHitPacket.BroadcastFromServer( this, origin, damage, buffType );
 
 				NetMessage.SendData( MessageID.SyncPlayer, -1, -1, null, hostPlayer.whoAmI );
 			}

@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using SoulBarriers.Buffs;
+using SoulBarriers.Packets;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
@@ -22,7 +23,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 				this.SetStrength( 0 );
 
 				if( Main.netMode == NetmodeID.MultiplayerClient ) {
-					BarrierStrengthPacket.SyncFromClientToServer( this, 0 );
+					BarrierStrengthPacket.SyncFromClientToServer( this, 0, true );
 				}
 			}
 		}
@@ -56,7 +57,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 
 			if( hasSoulBuff ) {
 				foreach( int debuffIdx in badBuffIdxs ) {
-					this.ApplyDebuffHit( hostPlayer, debuffIdx, true );
+					this.ApplyPlayerDebuffHit( hostPlayer.buffType[debuffIdx], true );
 				}
 			}
 		}

@@ -6,6 +6,8 @@ using Terraria;
 using ModLibsCore.Classes.Loadable;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers.BarrierTypes;
+using SoulBarriers.Barriers.BarrierTypes.Spherical;
+using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 
 
 namespace SoulBarriers.Barriers {
@@ -63,7 +65,20 @@ namespace SoulBarriers.Barriers {
 		}
 
 		public bool RemoveWorldBarrier( Rectangle worldArea ) {
+			Barrier barrier = this.WorldBarriers.GetOrDefault( worldArea );
+
+			if( barrier != null ) {
+				this.BarriersByID.Remove( barrier.GetID() );
+			}
+
 			return this.WorldBarriers.Remove( worldArea );
+		}
+
+
+		////////////////
+		
+		public Barrier GetBarrierByID( string id ) {
+			return this.BarriersByID.GetOrDefault( id );
 		}
 
 
@@ -82,6 +97,10 @@ namespace SoulBarriers.Barriers {
 		////
 
 		public void RemoveAllWorldBarriers() {
+			foreach( string id in this.WorldBarriers.Values.Select(b=>b.GetID()) ) {
+				this.BarriersByID.Remove( id );
+			}
+
 			this.WorldBarriers.Clear();
 		}
 	}

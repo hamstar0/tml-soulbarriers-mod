@@ -35,6 +35,20 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
+		public void ApplyHitFx( int damage ) {
+			int particles = Barrier.GetHitParticleCount( damage );
+
+			this.CreateHitParticlesForArea( particles, 4f );
+		}
+
+		public void ApplyHitFx( Vector2 hitAt, int damage ) {
+			int particles = Barrier.GetHitParticleCount( damage );
+
+			this.CreateHitParticlesAt( hitAt, particles, 4f );
+		}
+
+		////////////////
+
 		public virtual int GetParticleCount() {
 			if( this.Strength <= 0 ) {
 				return 0;
@@ -46,7 +60,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public void Animate( int maxParticles ) {
+		internal void Animate( int maxParticles ) {
 			int i = 0, j = 0;
 			Vector2 center = this.GetBarrierWorldCenter();
 

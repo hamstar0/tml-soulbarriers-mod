@@ -26,6 +26,13 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 		////////////////
 
+		public override string GetID() {
+			return (int)this.HostType+":"+this.HostWhoAmI+","+this.WorldArea.ToString();
+		}
+
+
+		////////////////
+
 		public override int GetParticleCount() {
 			int chunksX = this.WorldArea.Width / (128*16);
 			int chunksY = this.WorldArea.Height / (128*16);
