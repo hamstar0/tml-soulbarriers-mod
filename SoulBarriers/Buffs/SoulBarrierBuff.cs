@@ -19,7 +19,18 @@ namespace SoulBarriers.Buffs {
 		public override void ModifyBuffTip( ref string tip, ref int rare ) {
 			var myplayer = Main.LocalPlayer.GetModPlayer<SoulBarriersPlayer>();
 
-			tip += "Current barrier strength: " + myplayer.Barrier.Strength;
+			tip += "\nCurrent barrier strength: " + myplayer.Barrier.Strength;
+		}
+
+
+		////////////////
+
+		public override void Update( Player player, ref int buffIndex ) {
+			player.buffTime[buffIndex] = 3;
+		}
+
+		public override void Update( NPC npc, ref int buffIndex ) {
+			npc.buffTime[buffIndex] = 3;
 		}
 	}
 }

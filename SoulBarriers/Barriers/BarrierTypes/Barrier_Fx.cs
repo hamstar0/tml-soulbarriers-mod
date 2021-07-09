@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
@@ -39,12 +40,16 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			int particles = Barrier.GetHitParticleCount( damage );
 
 			this.CreateHitParticlesForArea( particles, 4f );
+
+			Main.PlaySound( SoundID.Item10, this.GetBarrierWorldCenter() );
 		}
 
 		public void ApplyHitFx( Vector2 hitAt, int damage ) {
 			int particles = Barrier.GetHitParticleCount( damage );
 
 			this.CreateHitParticlesAt( hitAt, particles, 4f );
+
+			Main.PlaySound( SoundID.Item10, hitAt );
 		}
 
 		////////////////

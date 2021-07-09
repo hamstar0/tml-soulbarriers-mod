@@ -19,8 +19,8 @@ namespace SoulBarriers.Items {
 			float barrierStrScale = config.Get<float>( nameof(config.PBGBarrierStrengthScale) );
 			int barrierStr = (int)(barrierStrScale * (float)player.statMana);
 
-			player.GetModPlayer<SoulBarriersPlayer>()
-				.AddBarrier( barrierStr );
+			var myplayer = player.GetModPlayer<SoulBarriersPlayer>();
+			myplayer.Barrier.SetStrength( barrierStr );
 
 			player.statMana = 0;
 

@@ -27,17 +27,22 @@ namespace SoulBarriers.Barriers {
 
 		public Barrier GetOrMakePlayerBarrier( int playerWho ) {
 			if( !this.PlayerBarriers.TryGetValue( playerWho, out Barrier barrier ) ) {
+				var config = SoulBarriersConfig.Instance;
+				float radius = config.Get<float>( nameof( config.DefaultPlayerBarrierRadius ) );
+
 				barrier = new SphericalBarrier(
 					hostType: BarrierHostType.Player,
 					hostWhoAmI: playerWho,
 					strength: 0,
 					maxRegenStrength: 0,
 					strengthRegenPerTick: 0f,
-					radius: 48f,
+					radius: radius,
 					color: BarrierColor.BigBlue
 				);
+
 				this.PlayerBarriers[playerWho] = barrier;
 			}
+
 			return barrier;
 		}
 

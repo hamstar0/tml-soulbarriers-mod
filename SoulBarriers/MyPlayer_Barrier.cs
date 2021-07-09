@@ -2,7 +2,6 @@ using System;
 using Terraria;
 using Terraria.ModLoader;
 using SoulBarriers.Barriers;
-using SoulBarriers.Barriers.BarrierTypes.Spherical;
 
 
 namespace SoulBarriers {
@@ -17,20 +16,6 @@ namespace SoulBarriers {
 					this.Barrier.SetStrength( 0 );
 				}
 			}
-		}
-
-
-		////////////////
-
-		public void AddBarrier( int strength ) {
-			var config = SoulBarriersConfig.Instance;
-			float radius = config.Get<float>( nameof(config.DefaultPlayerBarrierRadius) );
-
-			if( this.Barrier is SphericalBarrier ) {
-				((SphericalBarrier)this.Barrier).SetRadius( radius );
-			}
-
-			this.Barrier.SetStrength( this.Barrier.Strength + strength );
 		}
 	}
 }

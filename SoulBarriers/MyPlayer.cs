@@ -25,7 +25,7 @@ namespace SoulBarriers {
 					ref float b,
 					ref float a,
 					ref bool fullBright ) {
-			if( this.Barrier.Strength >= 1 ) {
+			if( this.Barrier != null && this.Barrier.Strength >= 1 ) {
 				int particles = this.Barrier.GetParticleCount();
 
 				this.Barrier.Animate( particles );

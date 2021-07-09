@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Graphics;
 using Terraria;
 using Terraria.ModLoader;
 using ModLibsCore.Libraries.DotNET.Extensions;
@@ -17,16 +16,16 @@ namespace SoulBarriers {
 				if( barrier.Strength <= 0 ) {
 					continue;
 				}
+				if( !(barrier is SphericalBarrier) ) {
+					continue;
+				}
 
 				Player plr = Main.player[ plrWho ];
 				Vector2 barrierPos = barrier.GetBarrierWorldCenter();
+				float radius = ((SphericalBarrier)barrier).Radius;
 
-				if( barrier is SphericalBarrier ) {
-					float radius = ((SphericalBarrier)barrier).Radius;
-
-					if( (barrierPos - Main.MouseWorld).LengthSquared() < (radius * radius) ) {
-						this.DisplayBarrierStats( sb, plr, barrier, radius );
-					}
+				if( (barrierPos - Main.MouseWorld).LengthSquared() < (radius * radius) ) {
+					this.DisplayBarrierStats( sb, plr, barrier, radius );
 				}
 			}
 		}
@@ -39,14 +38,18 @@ namespace SoulBarriers {
 			Vector2 statsDim = Main.fontMouseText.MeasureString( stats );
 
 			Vector2 pos = player.MountedCenter;
-			pos.Y -= radius;
-			pos.X -= statsDim.X * 0.5f;
+			pos.Y -= radius + (statsDim.Y * 1.5f);
+			//pos.X -= statsDim.X * 0.5f;
 
-			sb.DrawString(
-				spriteFont: Main.fontMouseText,
+			Utils.DrawBorderStringFourWay(
+				sb: sb,
+				font: Main.fontMouseText,
 				text: stats,
-				position: pos,
-				color: Barrier.GetColor( barrier.BarrierColor )
+				x: pos.X - Main.screenPosition.X,
+				y: pos.Y - Main.screenPosition.Y,
+				textColor: Barrier.GetColor( barrier.BarrierColor ) * ((float)Main.mouseTextColor / 255f),
+				borderColor: Color.Black,
+				origin: statsDim * 0.5f
 			);
 		}
 	}
