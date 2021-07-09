@@ -1,7 +1,7 @@
 using System;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using ModLibsGeneral.Libraries.NPCs;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
@@ -9,7 +9,15 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		public void ApplyCollisionHit( Entity intruder ) {
 			if( intruder is Projectile ) {
 				if( BarrierManager.Instance.OnPreBarrierEntityCollisionEvent( this, ref intruder) ) {
-					this.ApplyProjectileCollisionHit( (Projectile)intruder );
+					this.ApplyEntityCollisionHit( (Projectile)intruder );
+				}
+			} else if( intruder is Player ) {
+				if( BarrierManager.Instance.OnPreBarrierEntityCollisionEvent( this, ref intruder ) ) {
+					this.ApplyEntityCollisionHit( (Player)intruder );
+				}
+			} else if( intruder is NPC ) {
+				if( BarrierManager.Instance.OnPreBarrierEntityCollisionEvent( this, ref intruder ) ) {
+					this.ApplyEntityCollisionHit( (NPC)intruder );
 				}
 			}
 		}
@@ -23,55 +31,30 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public void ApplyProjectileCollisionHit( Projectile proj ) {
-			this.ApplyRawHit( proj.Center, proj.damage, true );
+		public void ApplyEntityCollisionHit( Projectile intruderProjectile ) {
+			this.ApplyRawHit( intruderProjectile.Center, intruderProjectile.damage, true );
 
-			proj.Kill();
+			intruderProjectile.Kill();
+		}
+
+		public void ApplyEntityCollisionHit( Player intruderPlayer ) {
+			BarrierManager.Instance.OnBarrierEntityCollisionEvent( this, intruderPlayer );
+		}
+
+		public void ApplyEntityCollisionHit( NPC intruderNpc ) {
+			if( NPCID.Sets.ProjectileNPC[intruderNpc.type] ) {
+				this.ApplyRawHit( intruderNpc.Center, intruderNpc.damage, true );
+
+				NPCLibraries.Kill( intruderNpc, Main.netMode != NetmodeID.MultiplayerClient );
+			} else {
+				BarrierManager.Instance.OnBarrierEntityCollisionEvent( this, intruderNpc );
+			}
 		}
 
 		////
 
 		public void ApplyBarrierCollisionHit( Barrier intruder ) {
 			BarrierManager.Instance.OnBarrierBarrierCollisionEvent( this, intruder );
-		}
-
-
-		////////////////
-		
-		public void ApplyRawHit( Vector2 hitAt, int damage, bool syncFromServer ) {
-			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
-				return;
-			}
-
-			if( !BarrierManager.Instance.OnPreBarrierRawHitEvent(this, ref damage) ) {
-				return;
-			}
-
-			/*if( damage >= 1 && this.Strength >= 1 ) {
-				this.Strength = 0;
-			} else {
-				this.Strength -= damage;
-
-				// Saved from total destruction
-				if( this.Strength <= 0 ) {
-					this.Strength = 1;
-				}
-			}*/
-			this.Strength -= damage;
-
-			if( this.Strength < 0 ) {
-				this.Strength = 0;
-			}
-
-			BarrierManager.Instance.OnBarrierRawHitEvent( this, damage );
-
-			int particles = Barrier.GetHitParticleCount( damage );
-
-			this.CreateHitParticlesAt( hitAt, particles, 4f );
-
-			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitPacket.Broadcast( this.HostType, this.HostWhoAmI, hitAt, damage, -1 );
-			}
 		}
 	}
 }
