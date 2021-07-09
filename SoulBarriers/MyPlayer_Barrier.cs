@@ -8,7 +8,7 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 namespace SoulBarriers {
 	partial class SoulBarriersPlayer : ModPlayer {
-		private void UpdateBarrier() {
+		private void UpdatePersonalBarrier() {
 			if( this.Barrier == null ) {
 				this.Barrier = BarrierManager.Instance.GetOrMakePlayerBarrier( this.player.whoAmI );
 			}
@@ -18,12 +18,12 @@ namespace SoulBarriers {
 					this.Barrier.SetStrength( 0 );
 				}
 			} else {
-				this.UpdateBarrierCharging();
+				this.UpdatePersonalBarrierCharging();
 			}
 		}
 
 
-		private void UpdateBarrierCharging() {
+		private void UpdatePersonalBarrierCharging() {
 			if( !this.IsBarrierCharging ) {
 				if( this.player.HeldItem?.active == true && this.player.HeldItem.type == ModContent.ItemType<PBGItem>() ) {
 					if( this.player.itemTime >= 1 ) {

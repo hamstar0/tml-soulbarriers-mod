@@ -1,6 +1,7 @@
 using System;
 using Terraria;
 using Terraria.ModLoader;
+using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
 
 
@@ -37,7 +38,9 @@ namespace SoulBarriers {
 		////////////////
 
 		public override void PreUpdate() {
-			this.UpdateBarrier();
+			this.UpdatePersonalBarrier();
+
+			BarrierManager.Instance.CheckCollisionsAgainstEntity( this.player );
 		}
 	}
 }

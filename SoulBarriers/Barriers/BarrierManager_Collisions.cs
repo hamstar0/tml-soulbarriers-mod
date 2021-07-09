@@ -23,7 +23,7 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		internal void CheckCollisionsAgainstProjectile( Projectile projectile ) {
+		internal void CheckCollisionsAgainstEntity( Entity ent ) {
 			foreach( (int plrWho, Barrier barrier) in this.PlayerBarriers ) {
 				Player plr = Main.player[plrWho];
 				if( plr?.active != true ) {
@@ -31,14 +31,14 @@ namespace SoulBarriers.Barriers {
 				}
 
 //Main.NewText( "projectile "+projectile.Name+" ("+projectile.whoAmI+") collides? "+plrBarrier.IsColliding(plr, projectile) );
-				if( barrier.IsColliding( projectile ) ) {
-					barrier.ApplyCollisionHit( projectile );
+				if( barrier.IsColliding( ent ) ) {
+					barrier.ApplyCollisionHit( ent );
 				}
 			}
 
 			foreach( Barrier barrier in this.WorldBarriers.Values ) {
-				if( barrier.IsColliding(projectile) ) {
-					barrier.ApplyCollisionHit( projectile );
+				if( barrier.IsColliding( ent ) ) {
+					barrier.ApplyCollisionHit( ent );
 				}
 			}
 		}
