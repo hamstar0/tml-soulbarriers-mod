@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
-using SoulBarriers.Barriers.BarrierTypes;
-using SoulBarriers.Barriers;
 using Terraria.ID;
 using ModLibsCore.Classes.Errors;
+using SoulBarriers.Barriers.BarrierTypes;
+using SoulBarriers.Barriers;
+
 
 namespace SoulBarriers {
 	public static class SoulBarriersAPI {
@@ -41,8 +42,12 @@ namespace SoulBarriers {
 			);
 		}
 
-		public static bool RemoveWorldBarrier( Rectangle worldArea ) {
-			return BarrierManager.Instance.RemoveWorldBarrier( worldArea );
+		public static void RemoveWorldBarrier( Rectangle worldArea ) {
+			if( Main.netMode == NetmodeID.MultiplayerClient ) {
+				throw new ModLibsException( "Not available for clients." );
+			}
+
+			BarrierManager.Instance.RemoveWorldBarrier( worldArea, true );
 		}
 	}
 }
