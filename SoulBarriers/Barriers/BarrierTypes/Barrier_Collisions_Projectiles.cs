@@ -8,6 +8,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			switch( this.HostType ) {
 			case BarrierHostType.None:
 				//throw new NotImplementedException( "Projectile intruders not implemented" );
+				break;
 			case BarrierHostType.Player:
 				return this.CanCollidePlayerVsProjectile( (Player)this.Host, intruder );
 			case BarrierHostType.NPC:
