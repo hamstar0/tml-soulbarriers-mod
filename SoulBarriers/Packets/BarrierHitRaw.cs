@@ -13,6 +13,7 @@ namespace SoulBarriers.Packets {
 	class BarrierHitRawPacket : SimplePacketPayload {
 		public static void BroadcastToClients(
 					Barrier barrier,
+					bool hasHitPosition,
 					Vector2 hitPosition,
 					int damage,
 					int buffType = -1 ) {
@@ -20,7 +21,7 @@ namespace SoulBarriers.Packets {
 				throw new ModLibsException( "Not server." );
 			}
 
-			var packet = new BarrierHitRawPacket( barrier, hitPosition, damage, buffType );
+			var packet = new BarrierHitRawPacket( barrier, hasHitPosition,  hitPosition, damage, buffType );
 
 			SimplePacket.SendToServer( packet );
 		}
@@ -30,6 +31,8 @@ namespace SoulBarriers.Packets {
 		////////////////
 
 		private string BarrierID;
+
+		private bool HasHitPosition;
 
 		private Vector2 HitPosition;
 
@@ -43,8 +46,9 @@ namespace SoulBarriers.Packets {
 
 		private BarrierHitRawPacket() { }
 
-		private BarrierHitRawPacket( Barrier barrier, Vector2 hitPosition, int damage, int buffType ) {
+		private BarrierHitRawPacket( Barrier barrier, bool hasHitPosition, Vector2 hitPosition, int damage, int buffType ) {
 			this.BarrierID = barrier.GetID();
+			this.HasHitPosition = hasHitPosition;
 			this.HitPosition = hitPosition;
 			this.Damage = damage;
 			this.BuffType = buffType;
@@ -60,7 +64,11 @@ namespace SoulBarriers.Packets {
 			}
 
 			if( this.Damage >= 1 ) {
-				barrier.ApplyRawHit( this.HitPosition, this.Damage, false );
+				barrier.ApplyRawHit(
+					this.HasHitPosition ? this.HitPosition : (Vector2?)null,
+					this.Damage,
+					false
+				);
 			}
 
 			if( this.BuffType >= 1 ) {

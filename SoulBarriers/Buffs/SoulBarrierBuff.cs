@@ -26,7 +26,13 @@ namespace SoulBarriers.Buffs {
 		////////////////
 
 		public override void Update( Player player, ref int buffIndex ) {
-			player.buffTime[buffIndex] = 3;
+			var myplayer = player.GetModPlayer<SoulBarriersPlayer>();
+
+			if( myplayer.Barrier.Strength <= 0 ) {
+				player.DelBuff( buffIndex );
+			} else {
+				player.buffTime[buffIndex] = 3;
+			}
 		}
 
 		public override void Update( NPC npc, ref int buffIndex ) {

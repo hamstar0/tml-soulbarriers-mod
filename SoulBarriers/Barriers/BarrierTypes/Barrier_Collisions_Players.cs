@@ -6,6 +6,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
 		private bool CanCollideVsPlayer( Player player ) {
 			switch( this.HostType ) {
+			case BarrierHostType.None:
+				return true;
 			case BarrierHostType.Player:
 				return this.CanCollidePlayerVsPlayer( (Player)this.Host, player );
 			case BarrierHostType.NPC:

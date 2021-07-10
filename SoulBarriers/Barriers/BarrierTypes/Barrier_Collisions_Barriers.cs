@@ -30,6 +30,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			if( Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
+			if( !this.IsActive ) {
+				return;
+			}
 
 			foreach( Barrier barrier in barriers ) {
 				if( this.IsBarrierColliding( barrier ) ) {

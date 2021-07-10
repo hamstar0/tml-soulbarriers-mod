@@ -33,6 +33,13 @@ namespace SoulBarriers.Barriers {
 			}
 
 			foreach( (int plrWho, Barrier barrier) in this.PlayerBarriers ) {
+				if( !barrier.IsActive ) {
+					continue;
+				}
+				if( barrier.Host == ent ) {
+					continue;
+				}
+
 				Player plr = Main.player[plrWho];
 				if( plr?.active != true ) {
 					continue;
@@ -45,6 +52,13 @@ namespace SoulBarriers.Barriers {
 			}
 
 			foreach( Barrier barrier in this.WorldBarriers.Values ) {
+				if( !barrier.IsActive ) {
+					continue;
+				}
+				if( barrier.Host == ent ) {
+					continue;
+				}
+
 				if( barrier.IsColliding( ent ) ) {
 					barrier.ApplyCollisionHit( ent, true );
 				}

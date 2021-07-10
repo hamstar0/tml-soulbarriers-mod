@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using ModLibsCore.Classes.Loadable;
+using ModLibsCore.Libraries.Debug;
 using SoulBarriers.Barriers.BarrierTypes;
 
 
@@ -68,6 +69,21 @@ namespace SoulBarriers.Barriers {
 			}
 
 			this.CheckCollisionsAgainstAllBarriers();
+
+			if( SoulBarriersConfig.Instance.DebugModeInfo ) {
+				foreach( string id in this.BarriersByID.Keys ) {
+					Barrier barrier = this.BarriersByID[id];
+					int str = barrier.Strength;
+					int maxStr = barrier.MaxRegenStrength;
+
+					if( str > 0 ) {
+						DebugLibraries.Print( "barrier:["+id+"]",
+							"str:("+str+":"+maxStr+") - "
+							+"dusts:"+barrier.ParticleOffsets.Keys.Count( d=>d.active )
+						);
+					}
+				}
+			}
 		}
 	}
 }

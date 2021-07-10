@@ -23,6 +23,13 @@ namespace SoulBarriers {
 
 		////////////////
 
+		public bool DebugModeInfo { get; set; } = false;
+
+		public bool DebugModeWorldBarrierTest { get; set; } = false;
+		
+
+		////
+
 		[DefaultValue(true)]
 		public bool PBGRecipeEnabled { get; set; } = true;
 

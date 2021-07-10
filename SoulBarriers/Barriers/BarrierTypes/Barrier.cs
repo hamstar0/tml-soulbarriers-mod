@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -20,10 +21,12 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		protected IDictionary<Dust, Vector2> ParticleOffsets = new Dictionary<Dust, Vector2>();
+		protected IDictionary<Dust, Vector2> _ParticleOffsets { get; } = new Dictionary<Dust, Vector2>();
+
+		public IReadOnlyDictionary<Dust, Vector2> ParticleOffsets { get; private set; }
 
 
-		////////////////
+		////
 
 		public int Strength { get; protected set; } = 0;
 
@@ -58,6 +61,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 		}
 
+		public bool IsActive => this.Strength >= 1;
+
 
 
 		////////////////
@@ -69,6 +74,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					int maxRegenStrength,
 					float strengthRegenPerTick,
 					BarrierColor color ) {
+			this.ParticleOffsets = new ReadOnlyDictionary<Dust, Vector2>( this._ParticleOffsets );
+
 			this.HostType = barrierHostType;
 			this.HostWhoAmI = hostWhoAmI;
 			this.Strength = strength;
@@ -87,7 +94,14 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		public abstract Vector2 GetBarrierWorldCenter();
 		
-		public abstract Vector2? GetRandomOffsetForArea( Vector2 origin, bool isFxOnly );
+		public abstract Vector2 GetRandomOffsetForArea( Vector2 origin, bool isFxOnly, out bool isFarAway );
+
+		public Vector2 GetWorldPositionWithinBarrierArea( Vector2 offset, out bool isOoB ) {
+			Vector2 pos = this.GetBarrierWorldCenter() + offset;
+			isOoB = pos.X <= 0 || pos.X >= Main.maxTilesX*16
+				|| pos.Y <= 0 || pos.Y >= Main.maxTilesY*16;
+			return pos;
+		}
 
 
 		////////////////

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
@@ -112,6 +114,28 @@ namespace SoulBarriers {
 				writer.Write( barrier.MaxRegenStrength );
 				writer.Write( barrier.StrengthRegenPerTick );
 				writer.Write( (int)barrier.BarrierColor );
+			}
+		}
+
+
+		////////////////
+
+		public override void PostDrawTiles() {
+			var plrRect = Main.LocalPlayer.getRect();
+			plrRect.X -= 80 * 16;
+			plrRect.Y -= 60 * 16;
+			plrRect.Width += 160 * 16;
+			plrRect.Height += 120 * 16;
+
+			foreach( (Rectangle rect, Barrier barrier) in BarrierManager.Instance.GetWorldBarriers() ) {
+				if( !plrRect.Intersects( rect ) ) {
+					continue;
+				}
+
+				int particles = barrier.GetParticleCount();
+
+				barrier.Animate( particles );
+//DebugLibraries.Print( "worldbarrier "+rect, "has:"+barrier.ParticleOffsets.Count+", of:"+particles );
 			}
 		}
 	}

@@ -7,7 +7,7 @@ using SoulBarriers.Packets;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public void ApplyRawHit( Vector2 hitAt, int damage, bool syncFromServer ) {
+		public void ApplyRawHit( Vector2? hitAt, int damage, bool syncFromServer ) {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
@@ -34,10 +34,19 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			BarrierManager.Instance.OnBarrierRawHitEvent( this, damage );
 
-			this.ApplyHitFx( hitAt, damage );
+			if( hitAt.HasValue ) {
+				this.ApplyHitFx( hitAt.Value, damage );
+			} else {
+				this.ApplyHitFx( damage );
+			}
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitRawPacket.BroadcastToClients( this, hitAt, damage, -1 );
+				BarrierHitRawPacket.BroadcastToClients(
+					this,
+					hitAt.HasValue, hitAt ?? default,
+					damage,
+					-1
+				);
 			}
 		}
 	}

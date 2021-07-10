@@ -75,12 +75,12 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				}
 
 				if( dust.active && Enum.IsDefined(typeof(BarrierColor), dust.type) ) {
-					dust.position = center + this.ParticleOffsets[ dust ];
-					dust.velocity = this.Host?.velocity ?? dust.velocity;
+					dust.position = center + this._ParticleOffsets[ dust ];
+					dust.velocity = this.Host?.velocity ?? (dust.velocity * 0.99f);
 
 					i++;
 				} else {
-					this.ParticleOffsets.Remove( dust );
+					this._ParticleOffsets.Remove( dust );
 				}
 			}
 
@@ -90,32 +90,32 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public void CreateBarrierParticlesForArea( Vector2 basePosition, int particles ) {
+		public void CreateBarrierParticlesForArea( Vector2 worldCenterPos, int particles ) {
 			for( int i=0; i<particles; i++ ) {
-				(Dust dust, Vector2 offset)? dustData = this.CreateBarrierParticleForArea( basePosition );
+				(Dust dust, Vector2 offset)? dustData = this.CreateBarrierParticleForArea( worldCenterPos );
 				if( !dustData.HasValue ) { continue; }
 
-				this.ParticleOffsets[ dustData.Value.dust ] = dustData.Value.offset;
+				this._ParticleOffsets[ dustData.Value.dust ] = dustData.Value.offset;
 			}
 		}
 
 		////
 
-		public (Dust dust, Vector2 offset)? CreateBarrierParticleForArea( Vector2 basePosition ) {
-			Vector2? offset = this.GetRandomOffsetForArea( basePosition, true );
-			if( !offset.HasValue ) {
+		public (Dust dust, Vector2 offset)? CreateBarrierParticleForArea( Vector2 worldCenterPos ) {
+			Vector2 offset = this.GetRandomOffsetForArea( worldCenterPos, true, out bool isFarAway );
+			if( isFarAway ) {
 				return null;
 			}
 
 			Dust dust = Dust.NewDustPerfect(
-				Position: basePosition + offset.Value,
+				Position: worldCenterPos + offset,
 				Type: (int)this.BarrierColor,
 				Scale: 2f / 3f
 			);
 			dust.noGravity = true;
 			dust.noLight = true;
 
-			return (dust, offset.Value);
+			return (dust, offset);
 		}
 
 
@@ -125,12 +125,14 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			Vector2 pos = this.GetBarrierWorldCenter();
 
 			for( int i = 0; i < particles; i++ ) {
-				Vector2? offset = this.GetRandomOffsetForArea( pos, true );
-				if( !offset.HasValue ) { continue; }
+				Vector2 offset = this.GetRandomOffsetForArea( pos, true, out bool isFarAway );
+				if( isFarAway ) {
+					continue;
+				}
 
-				Dust dust = this.CreateHitParticle( pos + offset.Value, dispersal );
+				Dust dust = this.CreateHitParticle( pos + offset, dispersal );
 
-				this.ParticleOffsets[dust] = offset.Value;
+				this._ParticleOffsets[dust] = offset;
 			}
 		}
 		
@@ -139,7 +141,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			for( int i = 0; i < particles; i++ ) {
 				Dust dust = this.CreateHitParticle( position, dispersal );
-				this.ParticleOffsets[ dust ] = hitOffsetFromCenter;
+				this._ParticleOffsets[ dust ] = hitOffsetFromCenter;
 			}
 		}
 

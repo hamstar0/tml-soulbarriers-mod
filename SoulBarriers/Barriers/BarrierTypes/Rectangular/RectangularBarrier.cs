@@ -29,42 +29,5 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 		public override string GetID() {
 			return (int)this.HostType+":"+this.HostWhoAmI+","+this.WorldArea.ToString();
 		}
-
-
-		////////////////
-
-		public override int GetParticleCount() {
-			int chunksX = this.WorldArea.Width / (128*16);
-			int chunksY = this.WorldArea.Height / (128*16);
-			int chunks = chunksX * chunksY;
-
-			return base.GetParticleCount() * chunks;
-		}
-
-
-		////////////////
-
-		public override Vector2? GetRandomOffsetForArea( Vector2 origin, bool isFxOnly ) {
-			var pos = new Vector2(
-				Main.rand.NextFloat( this.WorldArea.Width ),
-				Main.rand.NextFloat( this.WorldArea.Height )
-			);
-
-			if( isFxOnly ) {
-				float distSqr = (Main.LocalPlayer.MountedCenter - pos).LengthSquared();
-				float maxDistSqr = 96f * 16f;
-				maxDistSqr *= maxDistSqr;
-
-				if( distSqr > Main.rand.NextFloat(maxDistSqr) ) {
-					return null;
-				}
-			}
-
-			return pos;
-		}
-
-		public override Vector2 GetBarrierWorldCenter() {
-			return this.WorldArea.Center.ToVector2();
-		}
 	}
 }
