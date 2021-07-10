@@ -107,15 +107,23 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return null;
 			}
 
+			Dust dust = this.CreateBarrierParticleAt( worldCenterPos + offset );
+
+			return (dust, offset);
+		}
+
+		////
+
+		public virtual Dust CreateBarrierParticleAt( Vector2 position, float scale = 2f / 3f ) {
 			Dust dust = Dust.NewDustPerfect(
-				Position: worldCenterPos + offset,
+				Position: position,
 				Type: (int)this.BarrierColor,
-				Scale: 2f / 3f
+				Scale: scale
 			);
 			dust.noGravity = true;
 			dust.noLight = true;
 
-			return (dust, offset);
+			return dust;
 		}
 
 
@@ -147,7 +155,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////
 		
-		public Dust CreateHitParticle( Vector2 position, float dispersal ) {
+		public virtual Dust CreateHitParticle( Vector2 position, float dispersal, float scale = 2f ) {
 			float dispersalDir = dispersal * 0.5f;
 
 			int dustIdx = Dust.NewDust(
@@ -157,7 +165,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				SpeedX: dispersalDir > 0f ? Main.rand.NextFloat(-dispersalDir, dispersalDir) : 0f,
 				SpeedY: dispersalDir > 0f ? Main.rand.NextFloat(-dispersalDir, dispersalDir) : 0f,
 				Type: (int)this.BarrierColor,
-				Scale: 2f
+				Scale: scale
 			);
 			Main.dust[dustIdx].noGravity = true;
 			Main.dust[dustIdx].noLight = true;

@@ -10,7 +10,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 			float chunksY = (float)this.WorldArea.Height / (12f * 16f);
 			float chunks = chunksX * chunksY;
 
-			return (int)((float)base.GetParticleCount() * chunks);
+			return (int)((float)base.GetParticleCount() * chunks * 2);
 		}
 
 
@@ -27,17 +27,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 			);
 
 			if( isFxOnly ) {
-				isFarAway = Main.rand.NextFloat() > 0.15f;
-
-				if( isFarAway ) {
-					Vector2 worldPos = randPos + this.GetBarrierWorldCenter();
-					float distSqr = (Main.LocalPlayer.MountedCenter - worldPos).LengthSquared();
-
-					float maxDistSqr = 12f * 16f;
-					maxDistSqr *= maxDistSqr;
-
-					isFarAway = distSqr > Main.rand.NextFloat( maxDistSqr );
-				}
+				isFarAway = this.DecideIfParticleTooFarAway( randPos );
 			} else {
 				isFarAway = false;
 			}
