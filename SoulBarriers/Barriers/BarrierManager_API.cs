@@ -61,6 +61,7 @@ namespace SoulBarriers.Barriers {
 					int maxRegenStrength,
 					float strengthRegenPerTick,
 					BarrierColor color,
+					bool isSaveable,
 					bool syncFromServer ) {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return null;
@@ -73,7 +74,8 @@ namespace SoulBarriers.Barriers {
 				maxRegenStrength: maxRegenStrength,
 				strengthRegenPerTick: strengthRegenPerTick,
 				worldArea: worldArea,
-				color: color
+				color: color,
+				isSaveable: isSaveable
 			);
 
 			this.WorldBarriers[worldArea] = barrier;

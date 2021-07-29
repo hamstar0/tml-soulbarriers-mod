@@ -5,6 +5,11 @@ using Terraria;
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 	public partial class RectangularBarrier : Barrier {
+		private bool IsSaveable;
+
+
+		////////////////
+
 		public Rectangle WorldArea { get; private set; }
 
 
@@ -18,9 +23,18 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 					int maxRegenStrength,
 					float strengthRegenPerTick,
 					Rectangle worldArea,
-					BarrierColor color
+					BarrierColor color,
+					bool isSaveable
 				) : base( hostType, hostWhoAmI, strength, maxRegenStrength, strengthRegenPerTick, color ) {
 			this.WorldArea = worldArea;
+			this.IsSaveable = isSaveable;
+		}
+
+
+		////////////////
+
+		public override bool CanSave() {
+			return this.IsSaveable;
 		}
 
 

@@ -25,7 +25,8 @@ namespace SoulBarriers {
 					int strength,
 					int maxRegenStrength,
 					float strengthRegenPerTick,
-					BarrierColor color ) {
+					BarrierColor color,
+					bool isSaveable ) {
 			if( Main.netMode == NetmodeID.MultiplayerClient ) {
 				throw new ModLibsException( "Not available for clients." );
 			}
@@ -38,6 +39,7 @@ namespace SoulBarriers {
 				maxRegenStrength: maxRegenStrength,
 				strengthRegenPerTick: strengthRegenPerTick,
 				color: color,
+				isSaveable: isSaveable,
 				syncFromServer: true
 			);
 		}

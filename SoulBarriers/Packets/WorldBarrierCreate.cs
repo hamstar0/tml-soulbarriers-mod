@@ -66,6 +66,7 @@ namespace SoulBarriers.Packets {
 				maxRegenStrength: this.MaxRegenStrength,
 				strengthRegenPerTick: this.StrengthRegenPerTick,
 				color: (BarrierColor)this.Color,
+				isSaveable: true,
 				syncFromServer: false
 			);
 		}

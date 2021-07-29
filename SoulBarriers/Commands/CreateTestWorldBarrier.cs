@@ -27,8 +27,13 @@ namespace SoulBarriers.Commands {
 				return;
 			}
 
+			if( args.Length != 1 ) {
+				caller.Reply( "Incorrect parameter quantity.", Color.Yellow );
+				return;
+			}
+
 			if( !int.TryParse(args[0], out int str) ) {
-				throw new UsageException( args[0] + " is not an integer" );
+				caller.Reply( args[0] + " is not an integer", Color.Yellow );
 			}
 
 			var rect = caller.Player.getRect();
@@ -42,7 +47,8 @@ namespace SoulBarriers.Commands {
 				strength: str,
 				maxRegenStrength: str,
 				strengthRegenPerTick: 5f / 60f,
-				color: BarrierColor.Red
+				color: BarrierColor.Red,
+				isSaveable: false
 			);
 
 			BarrierManager.Instance.OnBarrierEntityCollision += (Barrier mybarrier, Entity intruder) => {

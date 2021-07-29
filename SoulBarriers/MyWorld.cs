@@ -29,7 +29,7 @@ namespace SoulBarriers {
 				int h = tag.GetInt( "barrier_"+i+"_area_h" );
 				int c = tag.GetInt( "barrier_"+i+"_color" );
 				int maxStr = tag.GetInt( "barrier_"+i+"_max_str" );
-				float strRegen = tag.GetInt( "barrier_"+i+"_str_regen" );
+				float strRegen = tag.GetFloat( "barrier_"+i+"_str_regen" );
 				
 				mngr.CreateAndDeclareWorldBarrier(
 					hostType: BarrierHostType.None,
@@ -39,6 +39,7 @@ namespace SoulBarriers {
 					maxRegenStrength: maxStr,
 					strengthRegenPerTick: strRegen,
 					color: (BarrierColor)c,
+					isSaveable: true,
 					syncFromServer: false
 				);
 			}
@@ -47,20 +48,25 @@ namespace SoulBarriers {
 
 		public override TagCompound Save() {
 			var mngr = BarrierManager.Instance;
-			int count = mngr.GetWorldBarrierCount();
-			var tag = new TagCompound { { "barrier_count", count } };
+			var tag = new TagCompound();
 
 			int i = 0;
 			foreach( (Rectangle rect, Barrier barrier) in mngr.GetWorldBarriers() ) {
-				tag[ "barrier_"+i+"_area_x" ] = rect.X;
-				tag[ "barrier_"+i+"_area_y" ] = rect.Y;
-				tag[ "barrier_"+i+"_area_w" ] = rect.Width;
-				tag[ "barrier_"+i+"_area_h" ] = rect.Height;
+				if( !barrier.CanSave() ) {
+					continue;
+				}
+
+				tag[ "barrier_"+i+"_area_x" ] = (int)rect.X;
+				tag[ "barrier_"+i+"_area_y" ] = (int)rect.Y;
+				tag[ "barrier_"+i+"_area_w" ] = (int)rect.Width;
+				tag[ "barrier_"+i+"_area_h" ] = (int)rect.Height;
 				tag[ "barrier_"+i+"_color" ] = (int)barrier.BarrierColor;
-				tag[ "barrier_"+i+"_max_str" ] = barrier.MaxRegenStrength;
-				tag[ "barrier_"+i+"_str_regen" ] = barrier.StrengthRegenPerTick;
+				tag[ "barrier_"+i+"_max_str" ] = (int)barrier.MaxRegenStrength;
+				tag[ "barrier_"+i+"_str_regen" ] = (float)barrier.StrengthRegenPerTick;
 				i++;
 			}
+
+			tag["barrier_count"] = (int)i;
 
 			return tag;
 		}
@@ -93,6 +99,7 @@ namespace SoulBarriers {
 					maxRegenStrength,
 					strengthRegen,
 					(BarrierColor)color,
+					isSaveable: true,
 					false
 				);
 			}

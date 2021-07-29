@@ -87,6 +87,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
+		public abstract bool CanSave();
+
+
+		////////////////
+
 		public abstract string GetID();
 
 
