@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using ModLibsGeneral.Libraries.World;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
 
@@ -38,9 +39,9 @@ namespace SoulBarriers.Commands {
 
 			var rect = caller.Player.getRect();
 			rect.X += caller.Player.direction * (32 * 16);
-			rect.Y = (int)caller.Player.MountedCenter.Y - (64 * 16);
+			rect.Y = 1;	//(int)caller.Player.MountedCenter.Y - (64 * 16);
 			rect.Width = 8 * 16;
-			rect.Height = 128 * 16;
+			rect.Height = WorldLocationLibraries.RockLayerTopTileY * 16;	//128 * 16;
 
 			Barrier barrier = SoulBarriersAPI.CreateWorldBarrier(
 				worldArea: rect,
@@ -52,7 +53,7 @@ namespace SoulBarriers.Commands {
 			);
 
 			BarrierManager.Instance.OnBarrierEntityCollision += (Barrier mybarrier, Entity intruder) => {
-				if( intruder is Player ) {
+				if( intruder is Player && !((Player)intruder).dead ) {
 					((Player)intruder).KillMe(
 						damageSource: PlayerDeathReason.ByCustomReason("Access denied."),
 						dmg: 999999999,
@@ -62,7 +63,6 @@ namespace SoulBarriers.Commands {
 			};
 
 			BarrierManager.Instance.OnBarrierBarrierCollision += ( Barrier mybarrier, Barrier otherBarrier ) => {
-//Main.NewText( "barrier near" );
 				int damage = mybarrier.Strength > otherBarrier.Strength
 					? otherBarrier.Strength
 					: mybarrier.Strength;

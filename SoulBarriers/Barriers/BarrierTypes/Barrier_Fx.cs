@@ -66,25 +66,21 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		////////////////
 
 		internal void Animate( int maxParticles ) {
-			int i = 0, j = 0;
 			Vector2 center = this.GetBarrierWorldCenter();
 
-			foreach( Dust dust in this.ParticleOffsets.Keys.ToArray() ) {
-				if( j++ > 5 ) {
-					break;
-				}
-
+			foreach( Dust dust in this._ParticleOffsets.Keys.ToArray() ) {
 				if( dust.active && Enum.IsDefined(typeof(BarrierColor), dust.type) ) {
 					dust.position = center + this._ParticleOffsets[ dust ];
 					dust.velocity = this.Host?.velocity ?? (dust.velocity * 0.99f);
 
-					i++;
+					maxParticles--;
 				} else {
 					this._ParticleOffsets.Remove( dust );
 				}
 			}
 
-			this.CreateBarrierParticlesForArea( center, maxParticles - i );
+			int particles = maxParticles;	//Math.Min( 5, maxParticles );
+			this.CreateBarrierParticlesForArea( center, particles  );
 		}
 
 

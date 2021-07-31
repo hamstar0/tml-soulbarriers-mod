@@ -5,18 +5,18 @@ using Terraria;
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 	public partial class RectangularBarrier : Barrier {
-		public bool DecideIfParticleTooFarAway( Vector2 randPos ) {
+		public bool DecideIfParticleTooFarAway( Vector2 randOffset ) {
 			if( Main.rand.NextFloat() <= 0.1f ) {
 				return false;
 			}
 
-			Vector2 worldPos = randPos + this.GetBarrierWorldCenter();
-			float distSqr = ( Main.LocalPlayer.MountedCenter - worldPos ).LengthSquared();
+			Vector2 worldPos = randOffset + this.GetBarrierWorldCenter();
+			float distSqr = (Main.LocalPlayer.MountedCenter - worldPos).LengthSquared();
 
-			float maxDistSqr = 16f * 16f;
-			maxDistSqr *= maxDistSqr;
+			float maxRandDist = 12f * 16f;
+			float maxRandDistSqr = maxRandDist * maxRandDist;
 
-			return distSqr > Main.rand.NextFloat( maxDistSqr );
+			return distSqr > Main.rand.NextFloat( maxRandDistSqr );
 		}
 
 

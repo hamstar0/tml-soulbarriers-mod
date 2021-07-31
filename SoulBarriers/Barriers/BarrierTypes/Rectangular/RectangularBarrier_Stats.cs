@@ -6,11 +6,12 @@ using Terraria;
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 	public partial class RectangularBarrier : Barrier {
 		public override int GetParticleCount() {
-			float chunksX = (float)this.WorldArea.Width / (12f * 16f);
-			float chunksY = (float)this.WorldArea.Height / (12f * 16f);
+			float chunkSize = 12f * 16f;
+			float chunksX = (float)this.WorldArea.Width / chunkSize;
+			float chunksY = (float)this.WorldArea.Height / chunkSize;
 			float chunks = chunksX * chunksY;
 
-			return (int)((float)base.GetParticleCount() * chunks * 2);
+			return (int)((float)base.GetParticleCount() * (int)chunks * 2);
 		}
 
 
@@ -21,18 +22,18 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 		}
 
 		public override Vector2 GetRandomOffsetForArea( Vector2 origin, bool isFxOnly, out bool isFarAway ) {
-			var randPos = new Vector2(
+			var randOffset = new Vector2(
 				Main.rand.Next( -this.WorldArea.Width/2, this.WorldArea.Width/2 ),
 				Main.rand.Next( -this.WorldArea.Height/2, this.WorldArea.Height/2 )
 			);
 
 			if( isFxOnly ) {
-				isFarAway = this.DecideIfParticleTooFarAway( randPos );
+				isFarAway = this.DecideIfParticleTooFarAway( randOffset );
 			} else {
 				isFarAway = false;
 			}
 
-			return randPos;
+			return randOffset;
 		}
 	}
 }

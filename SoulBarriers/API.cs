@@ -20,6 +20,9 @@ namespace SoulBarriers {
 			return BarrierManager.Instance.GetWorldBarrier( worldArea );
 		}
 
+
+		////
+
 		public static Barrier CreateWorldBarrier(
 					Rectangle worldArea,
 					int strength,
