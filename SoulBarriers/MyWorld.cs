@@ -92,15 +92,15 @@ namespace SoulBarriers {
 				int color = reader.ReadInt32();
 
 				mngr.CreateAndDeclareWorldBarrier(
-					hostType: BarrierHostType.None,
-					hostWhoAmI: -1,
-					rect,
-					strength,
-					maxRegenStrength,
-					strengthRegen,
-					(BarrierColor)color,
+					worldArea: rect,
+					strength: strength,
+					maxRegenStrength: maxRegenStrength,
+					strengthRegenPerTick: strengthRegen,
+					color: ( BarrierColor)color,
 					isSaveable: true,
-					false
+					syncFromServer: false,
+					hostType: BarrierHostType.None,
+					hostWhoAmI: -1
 				);
 			}
 		}
