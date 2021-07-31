@@ -12,7 +12,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			if( !BarrierManager.Instance.OnPreBarrierRawHitEvent(this, ref damage) ) {
+			if( !this.OnPreBarrierRawHit?.Invoke(ref damage) ?? false ) {
 				return;
 			}
 
@@ -32,7 +32,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				this.Strength = 0;
 			}
 
-			BarrierManager.Instance.OnBarrierRawHitEvent( this, damage );
+			this.OnBarrierRawHit?.Invoke( damage );
 
 			if( hitAt.HasValue ) {
 				this.ApplyHitFx( hitAt.Value, damage );

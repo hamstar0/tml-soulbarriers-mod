@@ -51,27 +51,6 @@ namespace SoulBarriers.Commands {
 				color: BarrierColor.Red,
 				isSaveable: false
 			);
-
-			BarrierManager.Instance.OnBarrierEntityCollision += (Barrier mybarrier, Entity intruder) => {
-				if( intruder is Player && !((Player)intruder).dead ) {
-					((Player)intruder).KillMe(
-						damageSource: PlayerDeathReason.ByCustomReason("Access denied."),
-						dmg: 999999999,
-						hitDirection: 0
-					);
-				}
-			};
-
-			BarrierManager.Instance.OnBarrierBarrierCollision += ( Barrier mybarrier, Barrier otherBarrier ) => {
-				int damage = mybarrier.Strength > otherBarrier.Strength
-					? otherBarrier.Strength
-					: mybarrier.Strength;
-
-				if( damage > 0 ) {
-					mybarrier.ApplyRawHit( null, damage, true );
-					otherBarrier.ApplyRawHit( null, damage, true );
-				}
-			};
 		}
 	}
 }

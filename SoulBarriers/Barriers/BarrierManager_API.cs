@@ -10,7 +10,7 @@ using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers.BarrierTypes.Spherical;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 using SoulBarriers.Packets;
-
+using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 
 namespace SoulBarriers.Barriers {
 	public partial class BarrierManager : ILoadable {
@@ -54,28 +54,28 @@ namespace SoulBarriers.Barriers {
 		////////////////
 
 		public Barrier CreateAndDeclareWorldBarrier(
-					BarrierHostType hostType,
-					int hostWhoAmI,
 					Rectangle worldArea,
 					int strength,
 					int maxRegenStrength,
 					float strengthRegenPerTick,
 					BarrierColor color,
 					bool isSaveable,
-					bool syncFromServer ) {
+					bool syncFromServer,
+					BarrierHostType hostType = BarrierHostType.None,
+					int hostWhoAmI = -1 ) {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return null;
 			}
 
-			var barrier = new RectangularBarrier(
-				hostType: hostType,
-				hostWhoAmI: hostWhoAmI,
+			var barrier = new AccessBarrier(
 				strength: strength,
 				maxRegenStrength: maxRegenStrength,
 				strengthRegenPerTick: strengthRegenPerTick,
 				worldArea: worldArea,
 				color: color,
-				isSaveable: isSaveable
+				isSaveable: isSaveable,
+				hostType: hostType,
+				hostWhoAmI: hostWhoAmI
 			);
 
 			this.WorldBarriers[worldArea] = barrier;

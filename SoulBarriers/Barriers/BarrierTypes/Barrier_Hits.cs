@@ -9,22 +9,22 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
 		public void ApplyCollisionHit( Entity intruder, bool syncFromServer ) {
 			if( intruder is Projectile ) {
-				if( BarrierManager.Instance.OnPreBarrierEntityCollisionEvent(this, ref intruder) ) {
+				if( this.OnPreBarrierEntityCollision?.Invoke(ref intruder) ?? false ) {
 					this.ApplyEntityCollisionHit( (Projectile)intruder, syncFromServer );
 				}
 			} else if( intruder is Player ) {
-				if( BarrierManager.Instance.OnPreBarrierEntityCollisionEvent(this, ref intruder) ) {
+				if( this.OnPreBarrierEntityCollision?.Invoke(ref intruder) ?? false ) {
 					this.ApplyEntityCollisionHit( (Player)intruder, syncFromServer );
 				}
 			} else if( intruder is NPC ) {
-				if( BarrierManager.Instance.OnPreBarrierEntityCollisionEvent(this, ref intruder) ) {
+				if( this.OnPreBarrierEntityCollision?.Invoke(ref intruder) ?? false ) {
 					this.ApplyEntityCollisionHit( (NPC)intruder, syncFromServer );
 				}
 			}
 		}
 
 		public void ApplyCollisionHit( Barrier intruder, bool syncFromServer ) {
-			if( BarrierManager.Instance.OnPreBarrierBarrierCollisionEvent(this, intruder) ) {
+			if( this.OnPreBarrierBarrierCollision?.Invoke(intruder) ?? false ) {
 				this.ApplyBarrierCollisionHit( intruder, syncFromServer );
 			}
 		}
@@ -43,7 +43,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			BarrierManager.Instance.OnBarrierEntityCollisionEvent( this, intruderPlayer );
+			this.OnBarrierEntityCollision.Invoke( intruderPlayer );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.Player, intruderPlayer.whoAmI );
@@ -64,7 +64,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, intruderNpc.whoAmI );
 				}
 			} else {
-				BarrierManager.Instance.OnBarrierEntityCollisionEvent( this, intruderNpc );
+				this.OnBarrierEntityCollision.Invoke( intruderNpc );
 
 				if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 					BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.NPC, intruderNpc.whoAmI );
@@ -79,7 +79,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			BarrierManager.Instance.OnBarrierBarrierCollisionEvent( this, intruder );
+			this.OnBarrierBarrierCollision?.Invoke( intruder );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitBarrierPacket.BroadcastToClients( this, intruder );
