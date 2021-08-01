@@ -5,7 +5,7 @@ using Terraria.ID;
 using ModLibsCore.Classes.Errors;
 using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers;
-
+using System.Linq;
 
 namespace SoulBarriers {
 	public static class SoulBarriersAPI {
@@ -18,6 +18,15 @@ namespace SoulBarriers {
 
 		public static Barrier GetWorldBarrier( Rectangle worldArea ) {
 			return BarrierManager.Instance.GetWorldBarrier( worldArea );
+		}
+
+
+		////
+		
+		public static Barrier[] GetWorldBarriers() {
+			return BarrierManager.Instance.GetWorldBarriers()
+				.Values
+				.ToArray();
 		}
 
 
