@@ -43,7 +43,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			this.OnBarrierEntityCollision.Invoke( intruderPlayer );
+			this.OnBarrierEntityCollision?.Invoke( intruderPlayer );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.Player, intruderPlayer.whoAmI );
@@ -64,7 +64,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, intruderNpc.whoAmI );
 				}
 			} else {
-				this.OnBarrierEntityCollision.Invoke( intruderNpc );
+				this.OnBarrierEntityCollision?.Invoke( intruderNpc );
 
 				if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 					BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.NPC, intruderNpc.whoAmI );

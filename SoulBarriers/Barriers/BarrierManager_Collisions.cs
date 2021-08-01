@@ -32,11 +32,12 @@ namespace SoulBarriers.Barriers {
 				return;
 			}
 
+			// Check for player barriers:
 			foreach( (int plrWho, Barrier barrier) in this.PlayerBarriers ) {
 				if( !barrier.IsActive ) {
 					continue;
 				}
-				if( barrier.Host == ent ) {
+				if( barrier.Host != null && barrier.Host == ent ) {
 					continue;
 				}
 
@@ -51,11 +52,12 @@ namespace SoulBarriers.Barriers {
 				}
 			}
 
+			// Check for world barriers:
 			foreach( Barrier barrier in this.WorldBarriers.Values ) {
 				if( !barrier.IsActive ) {
 					continue;
 				}
-				if( barrier.Host == ent ) {
+				if( barrier.Host != null && barrier.Host == ent ) {
 					continue;
 				}
 

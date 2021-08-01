@@ -26,6 +26,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					isSaveable,
 					hostType,
 					hostWhoAmI ) {
+			this.OnPreBarrierEntityCollision += ( ref Entity intruder ) => true;
+			
 			this.OnBarrierEntityCollision += ( Entity intruder ) => {
 				if( intruder is Player ) {
 					var plrIntrud = intruder as Player;
