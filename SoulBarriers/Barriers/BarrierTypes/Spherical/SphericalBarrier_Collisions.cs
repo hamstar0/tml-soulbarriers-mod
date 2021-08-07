@@ -18,7 +18,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 				? intruder.width
 				: intruder.height;
 
-			float dist = (origin - intruder.Center).Length() - (float)(leastDim / 2);
+			float dist = (origin - intruder.Center).Length();
+			dist -= (float)leastDim * 0.5f;
 
 			//Main.NewText("3 "+((Projectile)intruder).Name+" "+intersects );
 			return dist < this.Radius;

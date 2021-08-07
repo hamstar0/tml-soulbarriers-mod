@@ -75,7 +75,7 @@ namespace SoulBarriers.Packets {
 				return;
 			}
 
-			barrier.ApplyCollisionHit( entity, false );
+			barrier.ApplyEntityCollisionHitIf( entity, false );
 		}
 
 		////

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -12,7 +13,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			if( !this.OnPreBarrierRawHit?.Invoke(ref damage) ?? false ) {
+			if( !this.OnPreBarrierRawHit.All( f=>f.Invoke(ref damage) ) ) {
 				return;
 			}
 
@@ -32,7 +33,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				this.Strength = 0;
 			}
 
-			this.OnBarrierRawHit?.Invoke( damage );
+			foreach( BarrierRawHitEvent e in this.OnBarrierRawHit ) {
+				e.Invoke( damage );
+			}
 
 			if( hitAt.HasValue ) {
 				this.ApplyHitFx( hitAt.Value, damage );

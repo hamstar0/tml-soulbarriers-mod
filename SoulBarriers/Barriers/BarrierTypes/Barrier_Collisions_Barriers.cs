@@ -36,7 +36,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			foreach( Barrier barrier in barriers ) {
 				if( this.IsBarrierColliding( barrier ) ) {
-					this.ApplyCollisionHit( barrier, true );
+					this.ApplyBarrierCollisionHitIf( barrier, true );
 				}
 			}
 		}

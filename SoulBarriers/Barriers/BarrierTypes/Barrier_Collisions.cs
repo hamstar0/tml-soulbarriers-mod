@@ -14,8 +14,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			} else if( intruder is Player ) {
 				return this.CanCollideVsPlayer( (Player)intruder );
 			} else if( intruder is NPC ) {
-				throw new NotImplementedException( "NPC intruders not implemented" );
-				//return this.CanCollideVsNpc( (NPC)intruder );
+				return this.CanCollideVsNpc( (NPC)intruder );
 			}
 
 			return false;

@@ -53,7 +53,7 @@ namespace SoulBarriers.Packets {
 				return;
 			}
 
-			barrier.ApplyCollisionHit( otherBarrier, false );
+			barrier.ApplyBarrierCollisionHitIf( otherBarrier, false );
 		}
 
 		////

@@ -7,15 +7,23 @@ using SoulBarriers.Barriers.BarrierTypes.Spherical;
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 	public partial class RectangularBarrier : Barrier {
 		public override bool IsCollidingDirectly( Entity intruder ) {
-			var rect = new Rectangle( (int)intruder.position.X, (int)intruder.position.Y, intruder.width, intruder.height );
+			var rect = new Rectangle(
+				(int)intruder.position.X,
+				(int)intruder.position.Y,
+				intruder.width,
+				intruder.height
+			);
 
 			return this.WorldArea.Intersects( rect );
 		}
 
 		public override bool IsBarrierColliding( Barrier barrier ) {
 			if( barrier is RectangularBarrier ) {
-				return ((RectangularBarrier)barrier).WorldArea.Intersects( this.WorldArea );
-			} else if( barrier is SphericalBarrier ) {
+				return ((RectangularBarrier)barrier).WorldArea
+					.Intersects( this.WorldArea );
+			}
+			
+			if( barrier is SphericalBarrier ) {
 				var sphBarrier = (SphericalBarrier)barrier;
 				Vector2 sphPos = barrier.GetBarrierWorldCenter();
 
@@ -23,9 +31,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 					(sphPos.X, sphPos.Y, sphBarrier.Radius),
 					this.WorldArea
 				);
-			} else {
-				return barrier.IsBarrierColliding( this );
 			}
+
+			return barrier.IsBarrierColliding( this );
 		}
 	}
 }

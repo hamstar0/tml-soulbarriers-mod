@@ -1,30 +1,44 @@
 using System;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
+using ModLibsCore.Libraries.Debug;
 using ModLibsGeneral.Libraries.NPCs;
 using SoulBarriers.Packets;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public void ApplyCollisionHit( Entity intruder, bool syncFromServer ) {
-			if( intruder is Projectile ) {
-				if( this.OnPreBarrierEntityCollision?.Invoke(ref intruder) ?? false ) {
-					this.ApplyEntityCollisionHit( (Projectile)intruder, syncFromServer );
+		public void ApplyEntityCollisionHitIf( Entity intruder, bool syncFromServer ) {
+			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
+				return;
+			}
+
+			if( this.OnPreBarrierEntityCollision.All( f=>f.Invoke(ref intruder) ) ) {
+				foreach( BarrierEntityCollisionEvent e in this.OnBarrierEntityCollision ) {
+					e.Invoke(intruder);
 				}
-			} else if( intruder is Player ) {
-				if( this.OnPreBarrierEntityCollision?.Invoke(ref intruder) ?? false ) {
-					this.ApplyEntityCollisionHit( (Player)intruder, syncFromServer );
-				}
-			} else if( intruder is NPC ) {
-				if( this.OnPreBarrierEntityCollision?.Invoke(ref intruder) ?? false ) {
-					this.ApplyEntityCollisionHit( (NPC)intruder, syncFromServer );
+
+				if( intruder is Projectile ) {
+					this.ApplyProjectileCollisionHit( (Projectile)intruder, syncFromServer );
+				} else if( intruder is Player ) {
+					this.ApplyPlayerCollisionHit( (Player)intruder, syncFromServer );
+				} else if( intruder is NPC ) {
+					this.ApplyNpcCollisionHit( (NPC)intruder, syncFromServer );
 				}
 			}
 		}
 
-		public void ApplyCollisionHit( Barrier intruder, bool syncFromServer ) {
-			if( this.OnPreBarrierBarrierCollision?.Invoke(intruder) ?? false ) {
+		public void ApplyBarrierCollisionHitIf( Barrier intruder, bool syncFromServer ) {
+			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
+				return;
+			}
+
+			if( this.OnPreBarrierBarrierCollision.All( f=>f.Invoke(intruder) ) ) {
+				foreach( BarrierBarrierCollisionEvent e in this.OnBarrierBarrierCollision ) {
+					e.Invoke(intruder);
+				}
+
 				this.ApplyBarrierCollisionHit( intruder, syncFromServer );
 			}
 		}
@@ -32,30 +46,38 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public void ApplyEntityCollisionHit( Projectile intruderProjectile, bool syncFromServer ) {
-			this.ApplyRawHit( intruderProjectile.Center, intruderProjectile.damage, syncFromServer );
-
-			intruderProjectile.Kill();
-		}
-
-		public void ApplyEntityCollisionHit( Player intruderPlayer, bool syncFromServer ) {
+		private void ApplyProjectileCollisionHit( Projectile intruderProjectile, bool syncFromServer ) {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
 
-			this.OnBarrierEntityCollision?.Invoke( intruderPlayer );
+			if( intruderProjectile.active && intruderProjectile.damage >= 1 ) {
+LogLibraries.LogOnce( "1 "+this.GetID() );
+				this.ApplyRawHit( intruderProjectile.Center, intruderProjectile.damage, syncFromServer );
+
+				intruderProjectile.Kill();
+			}
+		}
+
+		private void ApplyPlayerCollisionHit( Player intruderPlayer, bool syncFromServer ) {
+			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
+				return;
+			}
+LogLibraries.LogOnce( "2 "+this.GetID() );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.Player, intruderPlayer.whoAmI );
 			}
 		}
 
-		public void ApplyEntityCollisionHit( NPC intruderNpc, bool syncFromServer ) {
+		private void ApplyNpcCollisionHit( NPC intruderNpc, bool syncFromServer ) {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
 
+			// Is npc a "projectile"?
 			if( NPCID.Sets.ProjectileNPC[intruderNpc.type] ) {
+LogLibraries.LogOnce( "3a "+this.GetID() );
 				this.ApplyRawHit( intruderNpc.Center, intruderNpc.damage, true );
 
 				NPCLibraries.Kill( intruderNpc, Main.netMode != NetmodeID.MultiplayerClient );
@@ -64,8 +86,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, intruderNpc.whoAmI );
 				}
 			} else {
-				this.OnBarrierEntityCollision?.Invoke( intruderNpc );
-
+LogLibraries.LogOnce( "3b "+this.GetID() );
+				// Custom behavior I guess
 				if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 					BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.NPC, intruderNpc.whoAmI );
 				}
@@ -74,13 +96,12 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////
 
-		public void ApplyBarrierCollisionHit( Barrier intruder, bool syncFromServer ) {
+		private void ApplyBarrierCollisionHit( Barrier intruder, bool syncFromServer ) {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
-
-			this.OnBarrierBarrierCollision?.Invoke( intruder );
-
+LogLibraries.LogOnce( "4 "+this.GetID() );
+			
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitBarrierPacket.BroadcastToClients( this, intruder );
 			}

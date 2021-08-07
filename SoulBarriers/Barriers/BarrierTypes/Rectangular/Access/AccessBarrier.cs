@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.DataStructures;
+using ModLibsCore.Libraries.Debug;
 using ModLibsGeneral.Libraries.NPCs;
 
 
@@ -26,9 +27,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					isSaveable,
 					hostType,
 					hostWhoAmI ) {
-			this.OnPreBarrierEntityCollision += ( ref Entity intruder ) => true;
-			
-			this.OnBarrierEntityCollision += ( Entity intruder ) => {
+			void onBarrierEntityCollide( Entity intruder ) {
+//DebugLibraries.ChatOnce( "b_col_ent_"+this.GetID(), "ent: "+intruder );
 				if( intruder is Player ) {
 					var plrIntrud = intruder as Player;
 
@@ -48,9 +48,13 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 
 					projIntrud.Kill();
 				}
-			};
+			}
+			
+			void onBarrierBarrierCollide( Barrier otherBarrier ) {
+				if( otherBarrier is AccessBarrier ) {
+					return;
+				}
 
-			this.OnBarrierBarrierCollision += ( Barrier otherBarrier ) => {
 				int damage = this.Strength > otherBarrier.Strength
 					? otherBarrier.Strength
 					: this.Strength;
@@ -59,7 +63,13 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					this.ApplyRawHit( null, damage, true );
 					otherBarrier.ApplyRawHit( null, damage, true );
 				}
-			};
+			}
+
+			//
+
+			//this.OnPreBarrierEntityCollision += ( ref Entity intruder ) => true;
+			this.OnBarrierEntityCollision.Add( onBarrierEntityCollide );
+			this.OnBarrierBarrierCollision.Add( onBarrierBarrierCollide );
 		}
 	}
 }

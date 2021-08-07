@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Terraria;
 
 
@@ -21,18 +22,18 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 
 	public abstract partial class Barrier {
-		public event PreBarrierEntityCollisionEvent OnPreBarrierEntityCollision;
-		
-		public event BarrierEntityCollisionEvent OnBarrierEntityCollision;
+		internal ISet<PreBarrierEntityCollisionEvent> OnPreBarrierEntityCollision = new HashSet<PreBarrierEntityCollisionEvent>();
+
+		internal ISet<BarrierEntityCollisionEvent> OnBarrierEntityCollision = new HashSet<BarrierEntityCollisionEvent>();
 
 
-		public event PreBarrierBarrierCollisionEvent OnPreBarrierBarrierCollision;
+		internal ISet<PreBarrierBarrierCollisionEvent> OnPreBarrierBarrierCollision = new HashSet<PreBarrierBarrierCollisionEvent>();
 
-		public event BarrierBarrierCollisionEvent OnBarrierBarrierCollision;
+		internal ISet<BarrierBarrierCollisionEvent> OnBarrierBarrierCollision = new HashSet<BarrierBarrierCollisionEvent>();
 
 
-		public event PreBarrierRawHitEvent OnPreBarrierRawHit;
+		internal ISet<PreBarrierRawHitEvent> OnPreBarrierRawHit = new HashSet<PreBarrierRawHitEvent>();
 
-		public event BarrierRawHitEvent OnBarrierRawHit;
+		internal ISet<BarrierRawHitEvent> OnBarrierRawHit = new HashSet<BarrierRawHitEvent>();
 	}
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using Terraria;
 using Terraria.ID;
 using ModLibsCore.Classes.Loadable;
+using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers.BarrierTypes;
 
@@ -46,9 +47,12 @@ namespace SoulBarriers.Barriers {
 					continue;
 				}
 
-//Main.NewText( "projectile "+projectile.Name+" ("+projectile.whoAmI+") collides? "+plrBarrier.IsColliding(plr, projectile) );
+/*DebugLibraries.Print(
+	"pb_v_e_"+barrier.GetID()+"_"+ent,
+	"collide? "+barrier.IsColliding(ent)
+);*/
 				if( barrier.IsColliding( ent ) ) {
-					barrier.ApplyCollisionHit( ent, true );
+					barrier.ApplyEntityCollisionHitIf( ent, true );
 				}
 			}
 
@@ -61,8 +65,14 @@ namespace SoulBarriers.Barriers {
 					continue;
 				}
 
-				if( barrier.IsColliding( ent ) ) {
-					barrier.ApplyCollisionHit( ent, true );
+/*DebugLibraries.Print( "wb_v_e_"+barrier.GetID(), "collide? "+barrier.IsColliding(ent)+", ent: "+new Rectangle(
+	(int)ent.position.X,
+	(int)ent.position.Y,
+	ent.width,
+	ent.height
+) );*/
+				if( barrier.IsColliding(ent) ) {
+					barrier.ApplyEntityCollisionHitIf( ent, true );
 				}
 			}
 		}
