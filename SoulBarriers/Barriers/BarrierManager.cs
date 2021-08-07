@@ -78,7 +78,7 @@ namespace SoulBarriers.Barriers {
 					int str = barrier.Strength;
 					int maxStr = barrier.MaxRegenStrength;
 
-					if( str > 0 ) {
+					if( str >= 1 ) {
 						DebugLibraries.Print( "barrier:["+id+"]",
 							"str:("+str+":"+maxStr+") - "
 							+"dusts:"+barrier.ParticleOffsets.Keys.Count( d=>d.active )

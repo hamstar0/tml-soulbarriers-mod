@@ -7,10 +7,10 @@ using Terraria.ID;
 using ModLibsCore.Classes.Loadable;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers.BarrierTypes;
-using SoulBarriers.Barriers.BarrierTypes.Spherical;
-using SoulBarriers.Barriers.BarrierTypes.Rectangular;
-using SoulBarriers.Packets;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
+using SoulBarriers.Barriers.BarrierTypes.Spherical.Personal;
+using SoulBarriers.Packets;
+
 
 namespace SoulBarriers.Barriers {
 	public partial class BarrierManager : ILoadable {
@@ -30,12 +30,10 @@ namespace SoulBarriers.Barriers {
 				var config = SoulBarriersConfig.Instance;
 				float radius = config.Get<float>( nameof( config.DefaultPlayerBarrierRadius ) );
 
-				barrier = new SphericalBarrier(
+				barrier = new PersonalBarrier(
 					hostType: BarrierHostType.Player,
 					hostWhoAmI: playerWho,
 					strength: 0,
-					maxRegenStrength: 0,
-					strengthRegenPerTick: 0f,
 					radius: radius,
 					color: BarrierColor.BigBlue
 				);

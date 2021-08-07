@@ -118,6 +118,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			this.Strength = strength;
 
+			this.BufferedStrengthRegen = 0f;
+
 			if( this.HostType == BarrierHostType.Player ) {
 				this.RefreshForPlayerHost();
 			} else if( this.HostType == BarrierHostType.NPC ) {
