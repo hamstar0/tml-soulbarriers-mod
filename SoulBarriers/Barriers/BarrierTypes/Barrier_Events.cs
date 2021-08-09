@@ -16,7 +16,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 	
 	public delegate bool PreBarrierRawHitEvent( ref int damage );
 	
-	public delegate void BarrierRawHitEvent( int damage );
+	public delegate void BarrierRawHitEvent( int previousStrength, int attemptedDamage );
 
 
 

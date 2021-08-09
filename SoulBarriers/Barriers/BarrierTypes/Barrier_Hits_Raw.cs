@@ -17,20 +17,12 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			/*if( damage >= 1 && this.Strength >= 1 ) {
-				this.Strength = 0;
-			} else {
-				this.Strength -= damage;
+			int oldStr = this.Strength;
 
-				// Saved from total destruction
-				if( this.Strength <= 0 ) {
-					this.Strength = 1;
-				}
-			}*/
 			this.SetStrength( this.Strength - damage );
 
 			foreach( BarrierRawHitEvent e in this.OnBarrierRawHit ) {
-				e.Invoke( damage );
+				e.Invoke( oldStr, damage );
 			}
 
 			if( hitAt.HasValue ) {
