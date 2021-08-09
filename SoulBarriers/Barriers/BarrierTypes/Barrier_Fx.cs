@@ -70,8 +70,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			foreach( Dust dust in this._ParticleOffsets.Keys.ToArray() ) {
 				if( dust.active && Enum.IsDefined(typeof(BarrierColor), dust.type) ) {
-					dust.position = center + this._ParticleOffsets[ dust ];
-					dust.velocity = this.Host?.velocity ?? (dust.velocity * 0.99f);
+					//dust.position = center + this._ParticleOffsets[ dust ];
+					//dust.velocity = this.Host?.velocity ?? (dust.velocity * 0.99f);
 
 					maxParticles--;
 				} else {
