@@ -27,11 +27,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					this.Strength = 1;
 				}
 			}*/
-			this.Strength -= damage;
-
-			if( this.Strength < 0 ) {
-				this.Strength = 0;
-			}
+			this.SetStrength( this.Strength - damage );
 
 			foreach( BarrierRawHitEvent e in this.OnBarrierRawHit ) {
 				e.Invoke( damage );

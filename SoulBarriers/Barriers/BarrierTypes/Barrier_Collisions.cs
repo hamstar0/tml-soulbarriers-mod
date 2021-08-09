@@ -28,10 +28,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return false;
 			}
 
-			if( this.Strength <= 0 ) {
-				return false;
-			}
-
 			return this.IsCollidingDirectly( intruder );
 		}
 

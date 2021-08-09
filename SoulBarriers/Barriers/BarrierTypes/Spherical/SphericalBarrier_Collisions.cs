@@ -39,9 +39,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 					(myPos.X, myPos.Y, this.Radius),
 					((RectangularBarrier)barrier).WorldArea
 				);
-			} else {
-				return barrier.IsBarrierColliding( this );
 			}
+
+			return false;
 		}
 	}
 }

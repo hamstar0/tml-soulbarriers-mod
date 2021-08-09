@@ -25,19 +25,19 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
-		private int HostType;
+		public int HostType;
 
-		private int HostWhoAmI;
+		public int HostWhoAmI;
 
-		private Rectangle WorldArea;
+		public Rectangle WorldArea;
 
-		private int Strength;
+		public int Strength;
 
-		private int MaxRegenStrength;
+		public int MaxRegenStrength;
 
-		private float StrengthRegenPerTick;
+		public float StrengthRegenPerTick;
 
-		private int Color;
+		public int Color;
 
 
 

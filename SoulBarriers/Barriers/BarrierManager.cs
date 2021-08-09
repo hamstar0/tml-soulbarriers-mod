@@ -68,7 +68,11 @@ namespace SoulBarriers.Barriers {
 				}
 			}
 
+			//
+
 			this.CheckCollisionsAgainstAllBarriers();
+
+			//
 
 			if( SoulBarriersConfig.Instance.DebugModeInfo ) {
 				DebugLibraries.Print( "player pos", Main.LocalPlayer.position.ToPoint().ToString() ) ;

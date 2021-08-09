@@ -53,6 +53,6 @@ namespace SoulBarriers {
 
 		[Range(0, 500)]
 		[DefaultValue(20)]
-		public int BarrierDebuffRemovalCost { get; set; } = 48;
+		public int BarrierDebuffRemovalCost { get; set; } = 20;
 	}
 }

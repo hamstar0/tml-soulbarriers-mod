@@ -52,7 +52,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 
 			if( intruderProjectile.active && intruderProjectile.damage >= 1 ) {
-LogLibraries.LogOnce( "1 "+this.GetID() );
 				this.ApplyRawHit( intruderProjectile.Center, intruderProjectile.damage, syncFromServer );
 
 				intruderProjectile.Kill();
@@ -63,7 +62,6 @@ LogLibraries.LogOnce( "1 "+this.GetID() );
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
-LogLibraries.LogOnce( "2 "+this.GetID() );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.Player, intruderPlayer.whoAmI );
@@ -77,7 +75,6 @@ LogLibraries.LogOnce( "2 "+this.GetID() );
 
 			// Is npc a "projectile"?
 			if( NPCID.Sets.ProjectileNPC[intruderNpc.type] ) {
-LogLibraries.LogOnce( "3a "+this.GetID() );
 				this.ApplyRawHit( intruderNpc.Center, intruderNpc.damage, true );
 
 				NPCLibraries.Kill( intruderNpc, Main.netMode != NetmodeID.MultiplayerClient );
@@ -86,7 +83,6 @@ LogLibraries.LogOnce( "3a "+this.GetID() );
 					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, intruderNpc.whoAmI );
 				}
 			} else {
-LogLibraries.LogOnce( "3b "+this.GetID() );
 				// Custom behavior I guess
 				if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 					BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.NPC, intruderNpc.whoAmI );
@@ -100,7 +96,6 @@ LogLibraries.LogOnce( "3b "+this.GetID() );
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
-LogLibraries.LogOnce( "4 "+this.GetID() );
 			
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitBarrierPacket.BroadcastToClients( this, intruder );

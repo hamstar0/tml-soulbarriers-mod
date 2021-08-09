@@ -1,4 +1,5 @@
 using System;
+using Terraria;
 using ModLibsCore.Libraries.Debug;
 
 
@@ -19,18 +20,32 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			if( this.Strength <= 0 ) {
 				return;
 			}
-			if( this.Strength >= this.MaxRegenStrength ) {
-				return;
-			}
 
 			this.UpdateRegenBuffered();
 		}
 
 		private void UpdateRegenBuffered() {
-			this.BufferedStrengthRegen += this.StrengthRegenPerTick;
+			if( this.Strength >= this.MaxRegenStrength ) {
+				this.BufferedStrengthRegen = 0f;
 
-			this.Strength += (int)this.BufferedStrengthRegen;
-			this.BufferedStrengthRegen -= (int)this.BufferedStrengthRegen;
+				return;
+			}
+
+			if( ((double)this.BufferedStrengthRegen + (double)this.StrengthRegenPerTick) > (double)Int32.MaxValue ) {
+				this.BufferedStrengthRegen = Int32.MaxValue;
+			} else {
+				this.BufferedStrengthRegen += this.StrengthRegenPerTick;
+			}
+
+			if( ((double)this.Strength + (double)this.BufferedStrengthRegen) > (double)Int32.MaxValue ) {
+				this.Strength = Int32.MaxValue;
+				this.BufferedStrengthRegen = 0f;
+			} else {
+				int wholeNumberBufferedRegen = (int)this.BufferedStrengthRegen;
+
+				this.Strength += wholeNumberBufferedRegen;
+				this.BufferedStrengthRegen -= wholeNumberBufferedRegen;
+			}
 
 			if( this.Strength > this.MaxRegenStrength ) {
 				this.Strength = this.MaxRegenStrength;
@@ -40,6 +55,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		protected abstract void Update();
+		protected virtual void Update() { }
 	}
 }

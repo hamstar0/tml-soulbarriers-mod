@@ -19,14 +19,15 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					BarrierHostType hostType = BarrierHostType.None,
 					int hostWhoAmI = -1
 				) : base(
-					strength,
-					maxRegenStrength,
-					strengthRegenPerTick,
-					worldArea,
-					color,
-					isSaveable,
-					hostType,
-					hostWhoAmI ) {
+					strength: strength,
+					maxRegenStrength: maxRegenStrength,
+					strengthRegenPerTick: strengthRegenPerTick,
+					worldArea: worldArea,
+					color: color,
+					isSaveable: isSaveable,
+					hostType: hostType,
+					hostWhoAmI: hostWhoAmI ) {
+LogLibraries.Log( "CREATED AccessBarrier " + this.GetID()+" str: "+strength+", area: "+worldArea );
 			void onBarrierEntityCollide( Entity intruder ) {
 //DebugLibraries.ChatOnce( "b_col_ent_"+this.GetID(), "ent: "+intruder );
 				if( intruder is Player ) {
@@ -59,9 +60,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					? otherBarrier.Strength
 					: this.Strength;
 
-				if( damage > 0 ) {
-					this.ApplyRawHit( null, damage, true );
-					otherBarrier.ApplyRawHit( null, damage, true );
+				if( damage >= 1 ) {
+					this.ApplyRawHit( null, damage, false );
+					otherBarrier.ApplyRawHit( null, damage, false );
 				}
 			}
 

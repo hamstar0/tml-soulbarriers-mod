@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using ModLibsCore.Libraries.Debug;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
@@ -35,7 +36,16 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 
 			foreach( Barrier barrier in barriers ) {
-				if( this.IsBarrierColliding( barrier ) ) {
+				if( barrier == this ) {
+					continue;
+				}
+/*if( this is SphericalBarrier ) {
+	DebugLibraries.Print(
+		"b_v_b_"+this.GetID()+" v "+barrier.GetID(),
+		"colliding? "+this.IsBarrierColliding(barrier)
+	);
+}*/
+				if( this.IsBarrierColliding(barrier) ) {
 					this.ApplyBarrierCollisionHitIf( barrier, true );
 				}
 			}

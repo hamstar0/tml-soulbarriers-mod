@@ -33,7 +33,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 				);
 			}
 
-			return barrier.IsBarrierColliding( this );
+			return false;
 		}
 	}
 }
