@@ -22,18 +22,18 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 
 	public abstract partial class Barrier {
-		internal ISet<PreBarrierEntityCollisionEvent> OnPreBarrierEntityCollision = new HashSet<PreBarrierEntityCollisionEvent>();
+		protected ISet<PreBarrierEntityCollisionEvent> OnPreBarrierEntityCollision = new HashSet<PreBarrierEntityCollisionEvent>();
 
-		internal ISet<BarrierEntityCollisionEvent> OnBarrierEntityCollision = new HashSet<BarrierEntityCollisionEvent>();
-
-
-		internal ISet<PreBarrierBarrierCollisionEvent> OnPreBarrierBarrierCollision = new HashSet<PreBarrierBarrierCollisionEvent>();
-
-		internal ISet<BarrierBarrierCollisionEvent> OnBarrierBarrierCollision = new HashSet<BarrierBarrierCollisionEvent>();
+		protected ISet<BarrierEntityCollisionEvent> OnBarrierEntityCollision = new HashSet<BarrierEntityCollisionEvent>();
 
 
-		internal ISet<PreBarrierRawHitEvent> OnPreBarrierRawHit = new HashSet<PreBarrierRawHitEvent>();
+		protected ISet<PreBarrierBarrierCollisionEvent> OnPreBarrierBarrierCollision = new HashSet<PreBarrierBarrierCollisionEvent>();
 
-		internal ISet<BarrierRawHitEvent> OnBarrierRawHit = new HashSet<BarrierRawHitEvent>();
+		protected ISet<BarrierBarrierCollisionEvent> OnBarrierBarrierCollision = new HashSet<BarrierBarrierCollisionEvent>();
+
+
+		protected ISet<PreBarrierRawHitEvent> OnPreBarrierRawHit = new HashSet<PreBarrierRawHitEvent>();
+
+		protected ISet<BarrierRawHitEvent> OnBarrierRawHit = new HashSet<BarrierRawHitEvent>();
 	}
 }
