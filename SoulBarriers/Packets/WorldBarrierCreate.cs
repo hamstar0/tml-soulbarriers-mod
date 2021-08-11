@@ -7,6 +7,7 @@ using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Services.Network.SimplePacket;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular;
+using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 
 
 namespace SoulBarriers.Packets {
@@ -58,7 +59,7 @@ namespace SoulBarriers.Packets {
 		////////////////
 
 		public override void ReceiveOnClient() {
-			BarrierManager.Instance.CreateAndDeclareWorldBarrier(
+			var barrier = new AccessBarrier(
 				hostType: (BarrierHostType)this.HostType,
 				hostWhoAmI: this.HostWhoAmI,
 				worldArea: this.WorldArea,
@@ -66,9 +67,9 @@ namespace SoulBarriers.Packets {
 				maxRegenStrength: this.MaxRegenStrength,
 				strengthRegenPerTick: this.StrengthRegenPerTick,
 				color: (BarrierColor)this.Color,
-				isSaveable: true,
-				syncFromServer: false
+				isSaveable: true
 			);
+			BarrierManager.Instance.DeclareWorldBarrier( barrier, false );
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {

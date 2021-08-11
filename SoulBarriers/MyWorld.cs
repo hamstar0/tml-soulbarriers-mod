@@ -8,6 +8,7 @@ using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
+using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 
 
 namespace SoulBarriers {
@@ -31,7 +32,7 @@ namespace SoulBarriers {
 				int maxStr = tag.GetInt( "barrier_"+i+"_max_str" );
 				float strRegen = tag.GetFloat( "barrier_"+i+"_str_regen" );
 				
-				mngr.CreateAndDeclareWorldBarrier(
+				var barrier = new AccessBarrier(
 					hostType: BarrierHostType.None,
 					hostWhoAmI: -1,
 					worldArea: new Rectangle(x, y, w, h),
@@ -39,9 +40,9 @@ namespace SoulBarriers {
 					maxRegenStrength: maxStr,
 					strengthRegenPerTick: strRegen,
 					color: (BarrierColor)c,
-					isSaveable: true,
-					syncFromServer: false
+					isSaveable: true
 				);
+				mngr.DeclareWorldBarrier( barrier, false );
 			}
 		}
 
@@ -91,17 +92,17 @@ namespace SoulBarriers {
 				float strengthRegen = reader.ReadSingle();
 				int color = reader.ReadInt32();
 
-				mngr.CreateAndDeclareWorldBarrier(
+				var barrier = new AccessBarrier(
 					worldArea: rect,
 					strength: strength,
 					maxRegenStrength: maxRegenStrength,
 					strengthRegenPerTick: strengthRegen,
 					color: ( BarrierColor)color,
 					isSaveable: true,
-					syncFromServer: false,
 					hostType: BarrierHostType.None,
 					hostWhoAmI: -1
 				);
+				mngr.DeclareWorldBarrier( barrier, false );
 			}
 		}
 

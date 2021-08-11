@@ -6,6 +6,8 @@ using ModLibsCore.Classes.Errors;
 using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers;
 using System.Linq;
+using SoulBarriers.Barriers.BarrierTypes.Rectangular;
+
 
 namespace SoulBarriers {
 	public static class SoulBarriersAPI {
@@ -22,7 +24,7 @@ namespace SoulBarriers {
 
 
 		////
-		
+
 		public static Barrier[] GetWorldBarriers() {
 			return BarrierManager.Instance.GetWorldBarriers()
 				.Values
@@ -32,18 +34,18 @@ namespace SoulBarriers {
 
 		////
 
-		public static Barrier CreateWorldBarrier(
-					Rectangle worldArea,
+		public static bool DeclareWorldBarrier( RectangularBarrier barrier ) {
+					/*Rectangle worldArea,
 					int strength,
 					int maxRegenStrength,
 					float strengthRegenPerTick,
 					BarrierColor color,
-					bool isSaveable ) {
+					bool isSaveable ) {*/
 			if( Main.netMode == NetmodeID.MultiplayerClient ) {
 				throw new ModLibsException( "Not available for clients." );
 			}
 
-			return BarrierManager.Instance.CreateAndDeclareWorldBarrier(
+			/*return BarrierManager.Instance.CreateAndDeclareWorldBarrier(
 				hostType: BarrierHostType.None,
 				hostWhoAmI: -1,
 				worldArea: worldArea,
@@ -53,7 +55,8 @@ namespace SoulBarriers {
 				color: color,
 				isSaveable: isSaveable,
 				syncFromServer: true
-			);
+			);*/
+			return BarrierManager.Instance.DeclareWorldBarrier( barrier, true );
 		}
 
 		public static void RemoveWorldBarrier( Rectangle worldArea ) {

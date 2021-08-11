@@ -7,7 +7,7 @@ using Terraria.ID;
 using ModLibsCore.Classes.Loadable;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers.BarrierTypes;
-using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
+using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 using SoulBarriers.Barriers.BarrierTypes.Spherical.Personal;
 using SoulBarriers.Packets;
 
@@ -51,8 +51,8 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		public Barrier CreateAndDeclareWorldBarrier(
-					Rectangle worldArea,
+		public bool DeclareWorldBarrier( RectangularBarrier barrier, bool syncFromServer ) {
+					/*Rectangle worldArea,
 					int strength,
 					int maxRegenStrength,
 					float strengthRegenPerTick,
@@ -60,12 +60,12 @@ namespace SoulBarriers.Barriers {
 					bool isSaveable,
 					bool syncFromServer,
 					BarrierHostType hostType = BarrierHostType.None,
-					int hostWhoAmI = -1 ) {
+					int hostWhoAmI = -1 ) {*/
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
-				return null;
+				return false;
 			}
 
-			var barrier = new AccessBarrier(
+			/*var barrier = new AccessBarrier(
 				strength: strength,
 				maxRegenStrength: maxRegenStrength,
 				strengthRegenPerTick: strengthRegenPerTick,
@@ -74,15 +74,15 @@ namespace SoulBarriers.Barriers {
 				isSaveable: isSaveable,
 				hostType: hostType,
 				hostWhoAmI: hostWhoAmI
-			);
+			);*/
 
-			this.WorldBarriers[worldArea] = barrier;
+			this.WorldBarriers[ barrier.WorldArea ] = barrier;
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				WorldBarrierCreatePacket.BroadcastToClients( barrier );
 			} 
 
-			return barrier;
+			return true;
 		}
 
 

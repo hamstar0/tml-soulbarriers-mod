@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
-using Terraria.DataStructures;
 using Terraria.ModLoader;
 using ModLibsGeneral.Libraries.World;
 using SoulBarriers.Barriers;
-using SoulBarriers.Barriers.BarrierTypes;
+using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 
 
 namespace SoulBarriers.Commands {
@@ -43,14 +41,16 @@ namespace SoulBarriers.Commands {
 			rect.Width = 8 * 16;
 			rect.Height = WorldLocationLibraries.RockLayerTopTileY * 16;	//128 * 16;
 
-			Barrier barrier = SoulBarriersAPI.CreateWorldBarrier(
-				worldArea: rect,
+			var barrier = new AccessBarrier(
 				strength: str,
 				maxRegenStrength: str,
 				strengthRegenPerTick: 5f / 60f,
+				worldArea: rect,
 				color: BarrierColor.Red,
 				isSaveable: false
 			);
+
+			SoulBarriersAPI.DeclareWorldBarrier( barrier );
 		}
 	}
 }
