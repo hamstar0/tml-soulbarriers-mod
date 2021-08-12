@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
+using ModLibsGeneral.Libraries.Misc;
 using ModLibsGeneral.Services.AnimatedColor;
 using SoulBarriers.Buffs;
 
@@ -13,20 +13,33 @@ namespace SoulBarriers.Items {
 		public override void ModifyTooltips( List<TooltipLine> tooltips ) {
 			var myplayer = Main.LocalPlayer.GetModPlayer<SoulBarriersPlayer>();
 
-			int barrierStr = myplayer.Barrier.Strength;
+			int str = myplayer.Barrier.Strength;
+			int maxStr = myplayer.Barrier.MaxRegenStrength;
+
+			string msg = str.ToString();
+			if( maxStr >= 1 && str > maxStr ) {
+				msg = "+" + msg;
+			}
+			string postMsg = maxStr >= 1 && str <= maxStr
+				? " of "+maxStr
+				: "";
+
+			string colorCode;
+			if( str <= 0 ) {
+				colorCode = MiscLibraries.RenderColorHex( Color.DarkGray );
+			} else if( str < maxStr ) {
+				colorCode = MiscLibraries.RenderColorHex( Color.OrangeRed );
+			} else if( maxStr >= 1 ) {
+				colorCode = MiscLibraries.RenderColorHex( Main.DiscoColor );
+			} else {
+				colorCode = "44DDFF";//MiscLibraries.RenderColorHex( Color.White );
+			}
+
 			var tip1 = new TooltipLine(
 				this.mod,
 				"PlayerBarrierStrength",
-				"Current barrier strength: " + barrierStr
+				"Current barrier strength: [c/"+colorCode+":"+msg+"]"+postMsg
 			);
-
-			if( barrierStr <= 0 ) {
-				tip1.overrideColor = Color.DarkGray;
-			} else if( barrierStr >= Main.LocalPlayer.statManaMax2 ) {
-				tip1.overrideColor = Main.DiscoColor;
-			} else {
-				tip1.overrideColor = Color.OrangeRed;
-			}
 
 			//
 
