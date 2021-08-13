@@ -17,27 +17,31 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		}
 
 		private void UpdateRegen() {
-			if( this.Strength <= 0 ) {
-				return;
+			if( this.Strength >= 1 ) {
+				this.UpdateRegenBuffered();
 			}
-
-			this.UpdateRegenBuffered();
 		}
 
 		private void UpdateRegenBuffered() {
-			if( this.Strength >= this.MaxRegenStrength ) {
+			if( this.MaxRegenStrength.HasValue
+						&& this.Strength >= this.MaxRegenStrength
+						&& this.StrengthRegenPerTick >= 0f ) {
 				this.BufferedStrengthRegen = 0f;
 
 				return;
 			}
 
-			if( ((double)this.BufferedStrengthRegen + (double)this.StrengthRegenPerTick) > (double)Int32.MaxValue ) {
+			//
+
+			double nextRegen = (double)this.BufferedStrengthRegen + (double)this.StrengthRegenPerTick;
+			if( nextRegen > (double)Int32.MaxValue ) {
 				this.BufferedStrengthRegen = Int32.MaxValue;
 			} else {
 				this.BufferedStrengthRegen += this.StrengthRegenPerTick;
 			}
 
-			if( ((double)this.Strength + (double)this.BufferedStrengthRegen) > (double)Int32.MaxValue ) {
+			double nextStrength = (double)this.Strength + (double)this.BufferedStrengthRegen;
+			if( nextStrength > (double)Int32.MaxValue ) {
 				this.Strength = Int32.MaxValue;
 				this.BufferedStrengthRegen = 0f;
 			} else {
@@ -46,9 +50,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				this.Strength += wholeNumberBufferedRegen;
 				this.BufferedStrengthRegen -= wholeNumberBufferedRegen;
 			}
-
-			if( this.Strength > this.MaxRegenStrength ) {
-				this.Strength = this.MaxRegenStrength;
+			
+			if( this.MaxRegenStrength.HasValue ) {
+				if( this.Strength > this.MaxRegenStrength.Value ) {
+					this.Strength = this.MaxRegenStrength.Value;
+				}
 			}
 		}
 

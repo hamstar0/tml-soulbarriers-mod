@@ -11,7 +11,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 	public partial class AccessBarrier : RectangularBarrier {
 		public AccessBarrier(
 					int strength,
-					int maxRegenStrength,
+					int? maxRegenStrength,
 					float strengthRegenPerTick,
 					Rectangle worldArea,
 					BarrierColor color,

@@ -95,7 +95,7 @@ namespace SoulBarriers {
 				var barrier = new AccessBarrier(
 					worldArea: rect,
 					strength: strength,
-					maxRegenStrength: maxRegenStrength,
+					maxRegenStrength: maxRegenStrength == -1 ? (int?)null : (int?)maxRegenStrength,
 					strengthRegenPerTick: strengthRegen,
 					color: ( BarrierColor)color,
 					isSaveable: true,
@@ -119,7 +119,7 @@ namespace SoulBarriers {
 				writer.Write( rect.Width );
 				writer.Write( rect.Height );
 				writer.Write( barrier.Strength );
-				writer.Write( barrier.MaxRegenStrength );
+				writer.Write( barrier.MaxRegenStrength.HasValue ? barrier.MaxRegenStrength.Value : -1 );;
 				writer.Write( barrier.StrengthRegenPerTick );
 				writer.Write( (int)barrier.BarrierColor );
 			}

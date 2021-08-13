@@ -80,11 +80,13 @@ namespace SoulBarriers.Barriers {
 				foreach( string id in this.BarriersByID.Keys ) {
 					Barrier barrier = this.BarriersByID[id];
 					int str = barrier.Strength;
-					int maxStr = barrier.MaxRegenStrength;
+					string maxStrStr = barrier.MaxRegenStrength.HasValue
+						? barrier.MaxRegenStrength.Value.ToString()
+						: "null";
 
 					if( str >= 1 ) {
 						DebugLibraries.Print( "barrier:["+id+"]",
-							"str:("+str+":"+maxStr+") - "
+							"str:("+str+":"+maxStrStr+") - "
 							+"dusts:"+barrier.ParticleOffsets.Keys.Count( d=>d.active )
 						);
 					}

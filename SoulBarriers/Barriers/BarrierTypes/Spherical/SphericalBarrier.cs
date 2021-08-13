@@ -14,7 +14,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 					BarrierHostType hostType,
 					int hostWhoAmI,
 					int strength,
-					int maxRegenStrength,
+					int? maxRegenStrength,
 					float strengthRegenPerTick,
 					float radius,
 					BarrierColor color

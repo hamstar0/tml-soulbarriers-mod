@@ -30,7 +30,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		public int Strength { get; protected set; } = 0;
 
-		public int MaxRegenStrength { get; protected set; } = 0;
+		public int? MaxRegenStrength { get; protected set; } = null;
 
 		public float StrengthRegenPerTick { get; protected set; } = 0;
 
@@ -71,7 +71,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					BarrierHostType barrierHostType,
 					int hostWhoAmI,
 					int strength,
-					int maxRegenStrength,
+					int? maxRegenStrength,
 					float strengthRegenPerTick,
 					BarrierColor color ) {
 			this.ParticleOffsets = new ReadOnlyDictionary<Dust, Vector2>( this._ParticleOffsets );

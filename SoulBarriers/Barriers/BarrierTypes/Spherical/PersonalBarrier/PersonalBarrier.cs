@@ -15,8 +15,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 					hostType: hostType,
 					hostWhoAmI: hostWhoAmI,
 					strength: strength,
-					maxRegenStrength: Int32.MaxValue,
-					strengthRegenPerTick: 0f,
+					maxRegenStrength: null,
+					strengthRegenPerTick: -1f / (60f * 3f), // Decays slowly (1 hp / 3s)
 					radius: radius,
 					color: color ) {
 			bool onPreBarrierEntityCollision( ref Entity intruder ) {

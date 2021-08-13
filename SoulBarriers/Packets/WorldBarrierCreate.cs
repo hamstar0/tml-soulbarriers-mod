@@ -51,7 +51,7 @@ namespace SoulBarriers.Packets {
 			this.HostWhoAmI = barrier.HostWhoAmI;
 			this.WorldArea = barrier.WorldArea;
 			this.Strength = barrier.Strength;
-			this.MaxRegenStrength = barrier.MaxRegenStrength;
+			this.MaxRegenStrength = barrier.MaxRegenStrength.HasValue ? -1 : barrier.MaxRegenStrength.Value;
 			this.StrengthRegenPerTick = barrier.StrengthRegenPerTick;
 			this.Color = (int)barrier.BarrierColor;
 		}
@@ -64,7 +64,7 @@ namespace SoulBarriers.Packets {
 				hostWhoAmI: this.HostWhoAmI,
 				worldArea: this.WorldArea,
 				strength: this.Strength,
-				maxRegenStrength: this.MaxRegenStrength,
+				maxRegenStrength: this.MaxRegenStrength == -1 ? (int?)null : (int?)this.MaxRegenStrength,
 				strengthRegenPerTick: this.StrengthRegenPerTick,
 				color: (BarrierColor)this.Color,
 				isSaveable: true

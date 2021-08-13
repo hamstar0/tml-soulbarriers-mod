@@ -14,7 +14,7 @@ namespace SoulBarriers.Items {
 			var myplayer = Main.LocalPlayer.GetModPlayer<SoulBarriersPlayer>();
 
 			int str = myplayer.Barrier.Strength;
-			int maxStr = myplayer.Barrier.MaxRegenStrength;
+			/*int maxStr = myplayer.Barrier.MaxRegenStrength;
 
 			string msg = str.ToString();
 			if( maxStr >= 1 && str > maxStr ) {
@@ -22,23 +22,42 @@ namespace SoulBarriers.Items {
 			}
 			string postMsg = maxStr >= 1 && str <= maxStr
 				? " of "+maxStr
-				: "";
+				: "";*/
 
 			string colorCode;
 			if( str <= 0 ) {
-				colorCode = MiscLibraries.RenderColorHex( Color.DarkGray );
-			} else if( str < maxStr ) {
+				colorCode = "444444";
+			} else if( str <= 50 ) {
+				Color c = Color.Lerp( Color.Red, Color.Yellow, (float)str / 50f );
+				colorCode = MiscLibraries.RenderColorHex( c );
+			} else if( str <= 100 ) {
+				float sStr = str - 50;
+				Color c = Color.Lerp( Color.Yellow, Color.Lime, sStr / 50f );
+				colorCode = MiscLibraries.RenderColorHex( c );
+			} else if( str <= 150 ) {
+				float sStr = str - 100;
+				Color c = Color.Lerp( Color.Lime, Color.Blue, sStr / 50f );
+				colorCode = MiscLibraries.RenderColorHex( c );
+			} else if( str <= 200 ) {
+				float sStr = str - 150;
+				Color c = Color.Lerp( Color.Lime, Color.Magenta, sStr / 50f );
+				colorCode = MiscLibraries.RenderColorHex( c );
+			} else {
+				colorCode = MiscLibraries.RenderColorHex( Color.Cyan );
+			}
+
+			/*} else if( str < maxStr ) {
 				colorCode = MiscLibraries.RenderColorHex( Color.OrangeRed );
 			} else if( maxStr >= 1 ) {
 				colorCode = MiscLibraries.RenderColorHex( Main.DiscoColor );
 			} else {
 				colorCode = "44DDFF";//MiscLibraries.RenderColorHex( Color.White );
-			}
+			}*/
 
 			var tip1 = new TooltipLine(
 				this.mod,
 				"PlayerBarrierStrength",
-				"Current barrier strength: [c/"+colorCode+":"+msg+"]"+postMsg
+				"Current barrier strength: [c/"+colorCode+":"+str+"]"
 			);
 
 			//

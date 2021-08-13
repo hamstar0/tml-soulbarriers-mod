@@ -25,7 +25,7 @@ namespace SoulBarriers.Items {
 			player.statMana = 0;
 
 			int seconds = config.Get<int>( nameof(config.PBGOverheatDurationSeconds) );
-			if( seconds > 0 ) {
+			if( seconds >= 1 ) {
 				player.AddBuff( ModContent.BuffType<PBGOverheatedDeBuff>(), seconds * 60 );
 			}
 

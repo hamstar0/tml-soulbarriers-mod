@@ -41,8 +41,8 @@ namespace SoulBarriers {
 
 
 		[Range(0, 60 * 60)]
-		[DefaultValue( 30 )]
-		public int PBGOverheatDurationSeconds { get; set; } = 30;
+		[DefaultValue( 20 )]
+		public int PBGOverheatDurationSeconds { get; set; } = 20;
 
 
 		[Range(10f, 500f)]
