@@ -1,12 +1,14 @@
 using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using SoulBarriers.Barriers;
+using ModLibsGeneral.Libraries.NPCs;
 
 
 namespace SoulBarriers {
 	class SoulBarriersNPC : GlobalNPC {
-		internal bool BlockLoot = false;
+		internal bool KillFromBarrier = false;
 
 
 		////////////////
@@ -20,7 +22,7 @@ namespace SoulBarriers {
 		////////////////
 
 		public override bool SpecialNPCLoot( NPC npc ) {
-			return this.BlockLoot;
+			return this.KillFromBarrier;
 		}
 
 		////////////////
@@ -28,7 +30,12 @@ namespace SoulBarriers {
 		public override bool PreAI( NPC npc ) {
 			BarrierManager.Instance.CheckCollisionsAgainstEntity( npc );
 
-			return base.PreAI( npc );
+			if( this.KillFromBarrier ) {
+				npc.HitEffect( 1 );
+				NPCLibraries.Kill( npc, Main.netMode == NetmodeID.Server );
+			}
+
+			return !this.KillFromBarrier;
 		}
 	}
 }

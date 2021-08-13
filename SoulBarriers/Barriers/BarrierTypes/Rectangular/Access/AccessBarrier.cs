@@ -45,10 +45,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 
 					if( !intruderNpc.friendly && !intruderNpc.boss && intruderNpc.realLife == -1 ) {
 						var mynpc = intruderNpc.GetGlobalNPC<SoulBarriersNPC>();
-						mynpc.BlockLoot = true;
-
-						intruderNpc.HitEffect( 1 );
-						NPCLibraries.Kill( intruderNpc, Main.netMode == NetmodeID.Server );
+						mynpc.KillFromBarrier = true;
 					}
 				} else if( intruder is Projectile ) {
 					var projIntrud = intruder as Projectile;
