@@ -31,20 +31,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 		}
 
-		public void ApplyBarrierCollisionHitIf( Barrier intruder, bool syncFromServer ) {
-			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
-				return;
-			}
-
-			if( this.OnPreBarrierBarrierCollision.All( f=>f.Invoke(intruder) ) ) {
-				foreach( BarrierBarrierCollisionEvent e in this.OnBarrierBarrierCollision ) {
-					e.Invoke(intruder);
-				}
-
-				this.ApplyBarrierCollisionHit( intruder, syncFromServer );
-			}
-		}
-
 
 		////////////////
 
@@ -94,18 +80,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 					BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.NPC, intruderNpc.whoAmI );
 				}
-			}
-		}
-
-		////
-
-		private void ApplyBarrierCollisionHit( Barrier intruder, bool syncFromServer ) {
-			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
-				return;
-			}
-			
-			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitBarrierPacket.BroadcastToClients( this, intruder );
 			}
 		}
 	}

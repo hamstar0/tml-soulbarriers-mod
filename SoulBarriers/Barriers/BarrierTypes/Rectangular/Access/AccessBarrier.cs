@@ -1,10 +1,8 @@
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.DataStructures;
 using ModLibsCore.Libraries.Debug;
-using ModLibsGeneral.Libraries.NPCs;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {

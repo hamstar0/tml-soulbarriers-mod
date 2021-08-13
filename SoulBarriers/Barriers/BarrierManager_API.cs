@@ -35,7 +35,7 @@ namespace SoulBarriers.Barriers {
 					hostWhoAmI: playerWho,
 					strength: 0,
 					radius: radius,
-					color: BarrierColor.BigBlue
+					color: BarrierColor.Green
 				);
 
 				this.PlayerBarriers[playerWho] = barrier;
