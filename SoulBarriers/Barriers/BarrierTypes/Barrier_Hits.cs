@@ -19,12 +19,14 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					e.Invoke(intruder);
 				}
 
-				if( intruder is Projectile ) {
-					this.ApplyProjectileCollisionHit( (Projectile)intruder, syncFromServer );
-				} else if( intruder is Player ) {
-					this.ApplyPlayerCollisionHit( (Player)intruder, syncFromServer );
-				} else if( intruder is NPC ) {
-					this.ApplyNpcCollisionHit( (NPC)intruder, syncFromServer );
+				if( intruder.active ) {
+					if( intruder is Projectile ) {
+						this.ApplyProjectileCollisionHit( (Projectile)intruder, syncFromServer );
+					} else if( intruder is Player ) {
+						this.ApplyPlayerCollisionHit( (Player)intruder, syncFromServer );
+					} else if( intruder is NPC ) {
+						this.ApplyNpcCollisionHit( (NPC)intruder, syncFromServer );
+					}
 				}
 			}
 		}
@@ -52,7 +54,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 
 			if( intruderProjectile.active && intruderProjectile.damage >= 1 ) {
-				this.ApplyRawHit( intruderProjectile.Center, intruderProjectile.damage, syncFromServer );
+				this.ApplyHitAgainstSelf( intruderProjectile.Center, intruderProjectile.damage, syncFromServer );
 
 				intruderProjectile.Kill();
 			}
@@ -62,6 +64,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
+
+			// No effect, by default
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.Player, intruderPlayer.whoAmI );
@@ -75,15 +79,18 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			// Is npc a "projectile"?
 			if( NPCID.Sets.ProjectileNPC[intruderNpc.type] ) {
-				this.ApplyRawHit( intruderNpc.Center, intruderNpc.damage, true );
+				this.ApplyHitAgainstSelf( intruderNpc.Center, intruderNpc.damage, true );
 
 				NPCLibraries.Kill( intruderNpc, Main.netMode != NetmodeID.MultiplayerClient );
+
+				Main.PlaySound( SoundID.NPCHit15, intruderNpc.Center );
 
 				if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, intruderNpc.whoAmI );
 				}
 			} else {
-				// Custom behavior I guess
+				// Non-"projectile" NPC? No effect, by default
+
 				if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 					BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.NPC, intruderNpc.whoAmI );
 				}

@@ -11,7 +11,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 			float chunksY = (float)this.WorldArea.Height / chunkSize;
 			float chunks = chunksX * chunksY;
 
-			return (int)((float)base.GetParticleCount() * (int)chunks * 2);
+			int count = (int)((float)base.GetParticleCount() * (int)chunks * 2);
+
+			return Math.Max( count, 100 );
 		}
 
 

@@ -64,7 +64,7 @@ namespace SoulBarriers.Packets {
 			}
 
 			if( this.Damage >= 1 ) {
-				barrier.ApplyRawHit(
+				barrier.ApplyHitAgainstSelf(
 					this.HasHitPosition ? this.HitPosition : (Vector2?)null,
 					this.Damage,
 					false

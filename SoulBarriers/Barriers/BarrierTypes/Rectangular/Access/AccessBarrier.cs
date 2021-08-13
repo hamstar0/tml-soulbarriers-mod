@@ -41,9 +41,15 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 						);
 					}
 				} else if( intruder is NPC ) {
-					var npcIntrud = intruder as NPC;
+					var intruderNpc = intruder as NPC;
 
-					NPCLibraries.Kill( npcIntrud, Main.netMode == NetmodeID.Server );
+					if( !intruderNpc.friendly && !intruderNpc.boss && intruderNpc.realLife == -1 ) {
+						var mynpc = intruderNpc.GetGlobalNPC<SoulBarriersNPC>();
+						mynpc.BlockLoot = true;
+
+						intruderNpc.HitEffect( 1 );
+						NPCLibraries.Kill( intruderNpc, Main.netMode == NetmodeID.Server );
+					}
 				} else if( intruder is Projectile ) {
 					var projIntrud = intruder as Projectile;
 
@@ -61,8 +67,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					: this.Strength;
 
 				if( damage >= 1 ) {
-					this.ApplyRawHit( null, damage, false );
-					otherBarrier.ApplyRawHit( null, damage, false );
+					this.ApplyHitAgainstSelf( null, damage, false );
+					otherBarrier.ApplyHitAgainstSelf( null, damage, false );
 				}
 			}
 

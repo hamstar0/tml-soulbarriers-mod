@@ -136,7 +136,10 @@ namespace SoulBarriers {
 			plrRect.Height += 120 * 16;
 
 			foreach( (Rectangle rect, Barrier barrier) in BarrierManager.Instance.GetWorldBarriers() ) {
-				if( !plrRect.Intersects( rect ) ) {
+				if( !barrier.IsActive ) {
+					continue;
+				}
+				if( !plrRect.Intersects(rect) ) {
 					continue;
 				}
 
