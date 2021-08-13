@@ -13,7 +13,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 			int count = (int)( (float)base.GetParticleCount() * (int)chunks * 2 );
 
-			return Math.Min( count, 200 );
+			return Math.Min( count, 300 );
 		}
 
 
