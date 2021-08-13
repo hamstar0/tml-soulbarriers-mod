@@ -13,7 +13,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 			int count = (int)( (float)base.GetParticleCount() * (int)chunks * 2 );
 
-			return Math.Max( count, 100 );
+			return Math.Min( count, 200 );
 		}
 
 
@@ -36,9 +36,11 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 		////////////////
 
-		public override Dust CreateBarrierParticleAt( Vector2 position, Vector2? velocity=null, float scale = 2f / 3f ) {
-			Dust dust = base.CreateBarrierParticleAt( position, default(Vector2), scale * 1.5f );
+		public override Dust CreateBarrierParticleAt( Vector2 position, Vector2? velocity=null, float scale = 1.5f ) {
+			Dust dust = base.CreateBarrierParticleAt( position, velocity, scale );
+			dust.velocity /= 2f;
 			dust.velocity += new Vector2( 0f, -1f );
+			dust.fadeIn = 2f;
 
 			return dust;
 		}

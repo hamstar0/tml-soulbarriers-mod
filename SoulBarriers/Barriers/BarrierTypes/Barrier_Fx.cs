@@ -110,7 +110,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////
 
-		public virtual Dust CreateBarrierParticleAt( Vector2 position, Vector2? velocity = null, float scale = 2f / 3f ) {
+		public virtual Dust CreateBarrierParticleAt( Vector2 position, Vector2? velocity = null, float scale = 1f ) {
 			Dust dust;
 			
 			if( velocity.HasValue ) {
@@ -129,6 +129,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 			dust.noGravity = true;
 			dust.noLight = true;
+
+			Entity host = this.Host;
+			if( host != null ) {
+				dust.velocity += host.velocity;
+			}
 
 			return dust;
 		}
