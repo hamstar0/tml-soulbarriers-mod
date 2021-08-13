@@ -59,7 +59,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return 0;
 			}
 
-			return 8 + (this.Strength / 4);
+			return 16 + (this.Strength / 3);
 		}
 
 
@@ -110,12 +110,23 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////
 
-		public virtual Dust CreateBarrierParticleAt( Vector2 position, float scale = 2f / 3f ) {
-			Dust dust = Dust.NewDustPerfect(
-				Position: position,
-				Type: (int)this.BarrierColor,
-				Scale: scale
-			);
+		public virtual Dust CreateBarrierParticleAt( Vector2 position, Vector2? velocity = null, float scale = 2f / 3f ) {
+			Dust dust;
+			
+			if( velocity.HasValue ) {
+				dust = Dust.NewDustPerfect(
+					Position: position,
+					Velocity: velocity.Value,
+					Type: (int)this.BarrierColor,
+					Scale: scale
+				);
+			} else {
+				dust = Dust.NewDustPerfect(
+					Position: position,
+					Type: (int)this.BarrierColor,
+					Scale: scale
+				);
+			}
 			dust.noGravity = true;
 			dust.noLight = true;
 
