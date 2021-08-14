@@ -91,7 +91,7 @@ namespace SoulBarriers {
 					Vector2 worldPos,
 					(string stats, Vector2 dim) stats,
 					BarrierColor color ) {
-DebugLibraries.Print( "barrier stats", worldPos.ToString()+", "+(worldPos-Main.screenPosition) );
+//DebugLibraries.Print( "barrier stats", worldPos.ToString()+", "+(worldPos-Main.screenPosition) );
 			Utils.DrawBorderStringFourWay(
 				sb: sb,
 				font: Main.fontMouseText,
