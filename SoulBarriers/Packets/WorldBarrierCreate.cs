@@ -32,11 +32,11 @@ namespace SoulBarriers.Packets {
 
 		public Rectangle WorldArea;
 
-		public int Strength;
+		public double Strength;
 
-		public int MaxRegenStrength;
+		public double MaxRegenStrength;
 
-		public float StrengthRegenPerTick;
+		public double StrengthRegenPerTick;
 
 		public int Color;
 
@@ -51,7 +51,7 @@ namespace SoulBarriers.Packets {
 			this.HostWhoAmI = barrier.HostWhoAmI;
 			this.WorldArea = barrier.WorldArea;
 			this.Strength = barrier.Strength;
-			this.MaxRegenStrength = barrier.MaxRegenStrength.HasValue ? -1 : barrier.MaxRegenStrength.Value;
+			this.MaxRegenStrength = barrier.MaxRegenStrength.HasValue ? -1d : barrier.MaxRegenStrength.Value;
 			this.StrengthRegenPerTick = barrier.StrengthRegenPerTick;
 			this.Color = (int)barrier.BarrierColor;
 		}
@@ -64,7 +64,7 @@ namespace SoulBarriers.Packets {
 				hostWhoAmI: this.HostWhoAmI,
 				worldArea: this.WorldArea,
 				strength: this.Strength,
-				maxRegenStrength: this.MaxRegenStrength == -1 ? (int?)null : (int?)this.MaxRegenStrength,
+				maxRegenStrength: this.MaxRegenStrength == -1d ? (double?)null : (double?)this.MaxRegenStrength,
 				strengthRegenPerTick: this.StrengthRegenPerTick,
 				color: (BarrierColor)this.Color,
 				isSaveable: true

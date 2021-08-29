@@ -5,7 +5,7 @@ using ModLibsCore.Libraries.Debug;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		private float BufferedStrengthRegen = 0f;
+		private double BufferedStrengthRegen = 0d;
 
 
 
@@ -17,7 +17,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		}
 
 		private void UpdateRegen() {
-			if( this.Strength >= 1 ) {
+			if( this.Strength > 0d ) {
 				this.UpdateRegenBuffered();
 			}
 		}
@@ -25,27 +25,27 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		private void UpdateRegenBuffered() {
 			if( this.MaxRegenStrength.HasValue
 						&& this.Strength >= this.MaxRegenStrength
-						&& this.StrengthRegenPerTick >= 0f ) {
-				this.BufferedStrengthRegen = 0f;
+						&& this.StrengthRegenPerTick >= 0d ) {
+				this.BufferedStrengthRegen = 0d;
 
 				return;
 			}
 
 			//
 
-			double nextRegen = (double)this.BufferedStrengthRegen + (double)this.StrengthRegenPerTick;
+			double nextRegen = this.BufferedStrengthRegen + this.StrengthRegenPerTick;
 			if( nextRegen > (double)Int32.MaxValue ) {
 				this.BufferedStrengthRegen = Int32.MaxValue;
 			} else {
 				this.BufferedStrengthRegen += this.StrengthRegenPerTick;
 			}
 
-			double nextStrength = (double)this.Strength + (double)this.BufferedStrengthRegen;
+			double nextStrength = this.Strength + this.BufferedStrengthRegen;
 			if( nextStrength > (double)Int32.MaxValue ) {
-				this.Strength = Int32.MaxValue;
-				this.BufferedStrengthRegen = 0f;
+				this.Strength = (double)Int32.MaxValue;
+				this.BufferedStrengthRegen = 0d;
 			} else {
-				int wholeNumberBufferedRegen = (int)this.BufferedStrengthRegen;
+				double wholeNumberBufferedRegen = this.BufferedStrengthRegen;
 
 				this.Strength += wholeNumberBufferedRegen;
 				this.BufferedStrengthRegen -= wholeNumberBufferedRegen;

@@ -19,7 +19,7 @@ namespace SoulBarriers.Buffs {
 		public override void ModifyBuffTip( ref string tip, ref int rare ) {
 			var myplayer = Main.LocalPlayer.GetModPlayer<SoulBarriersPlayer>();
 
-			tip += "\nCurrent barrier strength: " + myplayer.Barrier.Strength;
+			tip += "\nCurrent barrier strength: " + (int)myplayer.Barrier.Strength;
 		}
 
 

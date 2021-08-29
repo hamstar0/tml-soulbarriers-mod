@@ -28,11 +28,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////
 
-		public int Strength { get; protected set; } = 0;
+		public double Strength { get; protected set; } = 0;
 
-		public int? MaxRegenStrength { get; protected set; } = null;
+		public double? MaxRegenStrength { get; protected set; } = null;
 
-		public float StrengthRegenPerTick { get; protected set; } = 0;
+		public double StrengthRegenPerTick { get; protected set; } = 0d;
 
 		////
 
@@ -61,7 +61,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 		}
 
-		public bool IsActive => this.Strength >= 1;
+		public bool IsActive => this.Strength > 0d;
 
 
 
@@ -70,9 +70,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		public Barrier(
 					BarrierHostType barrierHostType,
 					int hostWhoAmI,
-					int strength,
-					int? maxRegenStrength,
-					float strengthRegenPerTick,
+					double strength,
+					double? maxRegenStrength,
+					double strengthRegenPerTick,
 					BarrierColor color ) {
 			this.ParticleOffsets = new ReadOnlyDictionary<Dust, Vector2>( this._ParticleOffsets );
 
@@ -111,9 +111,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public void SetStrength( int strength ) {
-			if( strength < 0 ) {
-				strength = 0;
+		public void SetStrength( double strength ) {
+			if( strength < 0d ) {
+				strength = 0d;
 			}
 
 			this.Strength = strength;
@@ -133,7 +133,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			int soulBuffType = ModContent.BuffType<SoulBarrierBuff>();
 			Player plr = (Player)this.Host;
 
-			if( this.Strength >= 1 ) {
+			if( this.Strength > 0d ) {
 				plr.AddBuff( soulBuffType, 2 );
 			} else {
 				plr.ClearBuff( soulBuffType );
@@ -144,7 +144,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			int soulBuffType = ModContent.BuffType<SoulBarrierBuff>();
 			NPC host = (NPC)this.Host;
 
-			if( this.Strength >= 1 ) {
+			if( this.Strength > 0d ) {
 				host.AddBuff( soulBuffType, 2 );
 			} else {
 				int buffIdx = host.FindBuffIndex( soulBuffType );

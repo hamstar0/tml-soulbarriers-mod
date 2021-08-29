@@ -15,7 +15,7 @@ namespace SoulBarriers.Packets {
 					Barrier barrier,
 					bool hasHitPosition,
 					Vector2 hitPosition,
-					int damage,
+					double damage,
 					int buffType = -1 ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
@@ -36,7 +36,7 @@ namespace SoulBarriers.Packets {
 
 		private Vector2 HitPosition;
 
-		private int Damage;
+		private double Damage;
 
 		private int BuffType;
 
@@ -46,7 +46,7 @@ namespace SoulBarriers.Packets {
 
 		private BarrierHitRawPacket() { }
 
-		private BarrierHitRawPacket( Barrier barrier, bool hasHitPosition, Vector2 hitPosition, int damage, int buffType ) {
+		private BarrierHitRawPacket( Barrier barrier, bool hasHitPosition, Vector2 hitPosition, double damage, int buffType ) {
 			this.BarrierID = barrier.GetID();
 			this.HasHitPosition = hasHitPosition;
 			this.HitPosition = hitPosition;
@@ -63,7 +63,7 @@ namespace SoulBarriers.Packets {
 				return;
 			}
 
-			if( this.Damage >= 1 ) {
+			if( this.Damage > 0d ) {
 				barrier.ApplyHitAgainstSelf(
 					this.HasHitPosition ? this.HitPosition : (Vector2?)null,
 					this.Damage,

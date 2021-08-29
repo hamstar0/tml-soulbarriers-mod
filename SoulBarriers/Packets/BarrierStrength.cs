@@ -51,10 +51,10 @@ namespace SoulBarriers.Packets {
 				return;
 			}
 
-			int damage = barrier.Strength - this.Strength;
+			double damage = barrier.Strength - this.Strength;
 
 			if( this.ApplyHitFx ) {
-				barrier.ApplyHitFx( damage >= 1 ? damage : 8 );
+				barrier.ApplyHitFx( damage > 0d ? damage : 8d );
 			}
 
 			barrier.SetStrength( this.Strength );

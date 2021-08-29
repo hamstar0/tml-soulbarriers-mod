@@ -51,8 +51,8 @@ namespace SoulBarriers {
 		public float DefaultPlayerBarrierRadius { get; set; } = 48f;
 
 
-		[Range(0, 500)]
-		[DefaultValue(20)]
-		public int BarrierDebuffRemovalCost { get; set; } = 20;
+		[Range(0f, 500f)]
+		[DefaultValue(20f)]
+		public float BarrierDebuffRemovalCost { get; set; } = 20f;
 	}
 }

@@ -29,8 +29,8 @@ namespace SoulBarriers {
 				int w = tag.GetInt( "barrier_"+i+"_area_w" );
 				int h = tag.GetInt( "barrier_"+i+"_area_h" );
 				int c = tag.GetInt( "barrier_"+i+"_color" );
-				int maxStr = tag.GetInt( "barrier_"+i+"_max_str" );
-				float strRegen = tag.GetFloat( "barrier_"+i+"_str_regen" );
+				double maxStr = tag.GetDouble( "barrier_"+i+"_max_str" );
+				double strRegen = tag.GetDouble( "barrier_"+i+"_str_regen" );
 				
 				var barrier = new AccessBarrier(
 					hostType: BarrierHostType.None,
@@ -62,8 +62,8 @@ namespace SoulBarriers {
 				tag[ "barrier_"+i+"_area_w" ] = (int)rect.Width;
 				tag[ "barrier_"+i+"_area_h" ] = (int)rect.Height;
 				tag[ "barrier_"+i+"_color" ] = (int)barrier.BarrierColor;
-				tag[ "barrier_"+i+"_max_str" ] = (int)barrier.MaxRegenStrength;
-				tag[ "barrier_"+i+"_str_regen" ] = (float)barrier.StrengthRegenPerTick;
+				tag[ "barrier_"+i+"_max_str" ] = (double)barrier.MaxRegenStrength;
+				tag[ "barrier_"+i+"_str_regen" ] = (double)barrier.StrengthRegenPerTick;
 				i++;
 			}
 
@@ -87,9 +87,9 @@ namespace SoulBarriers {
 					reader.ReadInt32(),
 					reader.ReadInt32()
 				);
-				int strength = reader.ReadInt32();
-				int maxRegenStrength = reader.ReadInt32();
-				float strengthRegen = reader.ReadSingle();
+				double strength = reader.ReadDouble();
+				double maxRegenStrength = reader.ReadDouble();
+				double strengthRegen = reader.ReadDouble();
 				int color = reader.ReadInt32();
 
 				var barrier = new AccessBarrier(
@@ -118,9 +118,9 @@ namespace SoulBarriers {
 				writer.Write( rect.Y );
 				writer.Write( rect.Width );
 				writer.Write( rect.Height );
-				writer.Write( barrier.Strength );
-				writer.Write( barrier.MaxRegenStrength.HasValue ? barrier.MaxRegenStrength.Value : -1 );;
-				writer.Write( barrier.StrengthRegenPerTick );
+				writer.Write( (double)barrier.Strength );
+				writer.Write( (double)(barrier.MaxRegenStrength.HasValue ? barrier.MaxRegenStrength.Value : -1d) );;
+				writer.Write( (double)barrier.StrengthRegenPerTick );
 				writer.Write( (int)barrier.BarrierColor );
 			}
 		}

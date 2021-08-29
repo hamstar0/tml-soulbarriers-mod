@@ -11,7 +11,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 	public partial class SphericalBarrier : Barrier {
 		protected override void Update() {
 			Entity host = this.Host;
-			if( host == null || !(host is Player) || this.Strength <= 0 ) {
+			if( host == null || !(host is Player) || this.Strength <= 0d ) {
 				return;
 			}
 

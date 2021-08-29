@@ -25,8 +25,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 		}
 
-		public static int GetHitParticleCount( int hitStrength ) {
-			int particles = 8 + ( hitStrength / 4 );
+		public static int GetHitParticleCount( double hitStrength ) {
+			int particles = 8 + (int)(hitStrength / 4d);
 			particles *= 2;
 
 			return particles;
@@ -36,7 +36,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public void ApplyHitFx( int damage ) {
+		public void ApplyHitFx( double damage ) {
 			int particles = Barrier.GetHitParticleCount( damage );
 
 			this.CreateHitParticlesForArea( particles, 4f );
@@ -44,7 +44,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			Main.PlaySound( SoundID.Item10, this.GetBarrierWorldCenter() );
 		}
 
-		public void ApplyHitFx( Vector2 hitAt, int damage ) {
+		public void ApplyHitFx( Vector2 hitAt, double damage ) {
 			int particles = Barrier.GetHitParticleCount( damage );
 
 			this.CreateHitParticlesAt( hitAt, particles, 4f );
@@ -59,7 +59,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return 0;
 			}
 
-			return 16 + (this.Strength / 3);
+			return 16 + (int)(this.Strength / 3d);
 		}
 
 

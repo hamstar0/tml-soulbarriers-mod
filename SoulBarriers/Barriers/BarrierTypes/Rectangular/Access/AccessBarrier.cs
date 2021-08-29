@@ -8,9 +8,9 @@ using ModLibsCore.Libraries.Debug;
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 	public partial class AccessBarrier : RectangularBarrier {
 		public AccessBarrier(
-					int strength,
-					int? maxRegenStrength,
-					float strengthRegenPerTick,
+					double strength,
+					double? maxRegenStrength,
+					double strengthRegenPerTick,
 					Rectangle worldArea,
 					BarrierColor color,
 					bool isSaveable,
@@ -57,7 +57,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					return;
 				}
 
-				int damage = this.Strength > otherBarrier.Strength
+				double damage = this.Strength > otherBarrier.Strength
 					? otherBarrier.Strength
 					: this.Strength;
 

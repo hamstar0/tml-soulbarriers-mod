@@ -17,9 +17,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 		////////////////
 
 		public RectangularBarrier(
-					int strength,
-					int? maxRegenStrength,
-					float strengthRegenPerTick,
+					double strength,
+					double? maxRegenStrength,
+					double strengthRegenPerTick,
 					Rectangle worldArea,
 					BarrierColor color,
 					bool isSaveable,

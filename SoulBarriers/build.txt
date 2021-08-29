@@ -1,6 +1,6 @@
 displayName = Soul Barriers
 author = hamstar
-version = 0.21.1
+version = 0.22.0
 modReferences = ModLibsCore@1.2.0, ModLibsGeneral@1.2.0
 buildIgnore = *.csproj, *.user, *.bat, obj\*, bin\*, .vs\*, .git\*
 homepage = https://github.com/hamstar0/tml-soulbarriers-mod

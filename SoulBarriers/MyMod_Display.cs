@@ -3,17 +3,18 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
+using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers.BarrierTypes.Spherical;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular;
-using ModLibsCore.Libraries.Debug;
+
 
 namespace SoulBarriers {
 	public partial class SoulBarriersMod : Mod {
 		public static (string stats, Vector2 dim) GetBarrierStatsData( Barrier barrier ) {
-			string stats = barrier.Strength + " hp";
+			string stats = (int)barrier.Strength + " hp";
 			Vector2 statsDim = Main.fontMouseText.MeasureString( stats );
 
 			return (stats, statsDim);
@@ -25,7 +26,7 @@ namespace SoulBarriers {
 
 		public override void PostDrawInterface( SpriteBatch sb ) {
 			foreach( (int plrWho, Barrier barrier) in BarrierManager.Instance.GetPlayerBarriers() ) {
-				if( barrier.Strength <= 0 ) {
+				if( barrier.Strength <= 0d ) {
 					continue;
 				}
 
@@ -37,7 +38,7 @@ namespace SoulBarriers {
 			}
 
 			foreach( Barrier barrier in BarrierManager.Instance.GetWorldBarriers().Values ) {
-				if( barrier.Strength <= 0 ) {
+				if( barrier.Strength <= 0d ) {
 					continue;
 				}
 

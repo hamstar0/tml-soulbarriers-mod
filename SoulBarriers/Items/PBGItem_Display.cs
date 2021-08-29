@@ -13,7 +13,7 @@ namespace SoulBarriers.Items {
 		public override void ModifyTooltips( List<TooltipLine> tooltips ) {
 			var myplayer = Main.LocalPlayer.GetModPlayer<SoulBarriersPlayer>();
 
-			int str = myplayer.Barrier.Strength;
+			double str = myplayer.Barrier.Strength;
 			/*int maxStr = myplayer.Barrier.MaxRegenStrength;
 
 			string msg = str.ToString();
@@ -27,20 +27,20 @@ namespace SoulBarriers.Items {
 			string colorCode;
 			if( str <= 0 ) {
 				colorCode = "444444";
-			} else if( str <= 50 ) {
-				Color c = Color.Lerp( Color.Red, Color.Yellow, (float)str / 50f );
+			} else if( str <= 50d ) {
+				Color c = Color.Lerp( Color.Red, Color.Yellow, (float)(str / 50d) );
 				colorCode = MiscLibraries.RenderColorHex( c );
-			} else if( str <= 100 ) {
-				float sStr = str - 50;
-				Color c = Color.Lerp( Color.Yellow, Color.Lime, sStr / 50f );
+			} else if( str <= 100d ) {
+				double sStr = str - 50d;
+				Color c = Color.Lerp( Color.Yellow, Color.Lime, (float)(sStr / 50d) );
 				colorCode = MiscLibraries.RenderColorHex( c );
 			} else if( str <= 150 ) {
-				float sStr = str - 100;
-				Color c = Color.Lerp( Color.Lime, Color.Blue, sStr / 50f );
+				double sStr = str - 100d;
+				Color c = Color.Lerp( Color.Lime, Color.Blue, (float)(sStr / 50d) );
 				colorCode = MiscLibraries.RenderColorHex( c );
 			} else if( str <= 200 ) {
-				float sStr = str - 150;
-				Color c = Color.Lerp( Color.Lime, Color.Magenta, sStr / 50f );
+				double sStr = str - 150d;
+				Color c = Color.Lerp( Color.Lime, Color.Magenta, (float)(sStr / 50d) );
 				colorCode = MiscLibraries.RenderColorHex( c );
 			} else {
 				colorCode = MiscLibraries.RenderColorHex( Color.Cyan );

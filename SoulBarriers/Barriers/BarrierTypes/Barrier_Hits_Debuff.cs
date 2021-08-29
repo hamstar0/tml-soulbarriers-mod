@@ -17,11 +17,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			hostPlayer.DelBuff( buffIdx );
 
-			int damage = config.Get<int>( nameof(config.BarrierDebuffRemovalCost) );
+			double damage = (double)config.Get<float>( nameof(config.BarrierDebuffRemovalCost) );
 
 			this.SetStrength( this.Strength - damage );
 
-			this.ApplyHitFx( damage * 4 );
+			this.ApplyHitFx( (int)(damage * 4d) );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitRawPacket.BroadcastToClients( this, false, default, damage, buffType );

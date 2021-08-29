@@ -36,7 +36,7 @@ namespace SoulBarriers {
 
 		public static bool DeclareWorldBarrier( RectangularBarrier barrier ) {
 					/*Rectangle worldArea,
-					int strength,
+					double strength,
 					int maxRegenStrength,
 					float strengthRegenPerTick,
 					BarrierColor color,
