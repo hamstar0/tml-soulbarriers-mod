@@ -13,17 +13,25 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
+			//
+
 			if( !this.OnPreBarrierRawHit.All( f=>f.Invoke(ref damage) ) ) {
 				return;
 			}
+
+			//
 
 			double oldStr = this.Strength;
 
 			this.SetStrength( this.Strength - damage );
 
+			//
+
 			foreach( BarrierRawHitEvent e in this.OnBarrierRawHit ) {
 				e.Invoke( oldStr, damage );
 			}
+
+			//
 
 			if( hitAt.HasValue ) {
 				this.ApplyHitFx( hitAt.Value, damage );

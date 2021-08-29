@@ -41,7 +41,10 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			this.CreateHitParticlesForArea( particles, 4f );
 
-			Main.PlaySound( SoundID.Item10, this.GetBarrierWorldCenter() );
+			Vector2 pos = this.GetBarrierWorldCenter();
+
+			this.ApplyHitFx_Sound( pos );
+			this.ApplyHitFx_Text( pos, damage );
 		}
 
 		public void ApplyHitFx( Vector2 hitAt, double damage ) {
@@ -49,8 +52,34 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			this.CreateHitParticlesAt( hitAt, particles, 4f );
 
+			this.ApplyHitFx_Sound( hitAt );
+			this.ApplyHitFx_Text( hitAt, damage );
+		}
+
+		////
+
+		private void ApplyHitFx_Sound( Vector2 hitAt ) {
 			Main.PlaySound( SoundID.Item10, hitAt );
 		}
+
+		private void ApplyHitFx_Text( Vector2 hitAt, double damage ) {
+			string fmtAmt = (int)(damage * 100f) + "%";
+
+			Color color = Barrier.GetColor( this.BarrierColor );
+
+			if( damage < 0f ) {
+				fmtAmt = "+" + fmtAmt;
+				color = Color.Lerp( color, Color.White, 0.25f );
+			} else {
+				fmtAmt = "-" + fmtAmt;
+				color = Color.Lerp( color, Color.Black, 0.25f );
+			}
+
+			var area = new Rectangle( (int)hitAt.X, (int)hitAt.Y, 1, 1 );
+
+			CombatText.NewText( area, color, fmtAmt );
+		}
+
 
 		////////////////
 

@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using ModLibsCore.Classes.Errors;
-using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers;
-using System.Linq;
+using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 
 
