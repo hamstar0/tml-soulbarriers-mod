@@ -42,7 +42,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			if( syncFromServerOnly && Main.netMode == NetmodeID.Server ) {
 				BarrierHitRawPacket.BroadcastToClients(
 					barrier: this,
-					hasHitPosition: hitAt.HasValue, hitAt ?? default,
+					hasHitPosition: hitAt.HasValue,
+					hitPosition: hitAt ?? default,
 					damage: damage
 				);
 			}

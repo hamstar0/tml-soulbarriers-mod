@@ -19,8 +19,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitMetaphysicalPacket.BroadcastToClients(
 					barrier: this,
-					hasHitPosition: false,
-					hitPosition: default,
+					hasHitPosition: hitAt.HasValue,
+					hitPosition: hitAt.HasValue ? hitAt.Value : default,
 					damage: damage
 				);
 			}
