@@ -1,12 +1,17 @@
 using System;
 using Terraria;
 using Terraria.ID;
+using ModLibsCore.Classes.Errors;
 using SoulBarriers.Packets;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
 		public void ApplyPlayerDebuffHit( int buffType, bool syncFromServer ) {
+			if( this.HostType != BarrierHostType.Player ) {
+				throw new ModLibsException( "Incorrect barrier type." );
+			}
+
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
@@ -24,7 +29,10 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			this.ApplyHitFx( (int)(damage * 4d) );
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitRawPacket.BroadcastToClients( this, false, default, damage, buffType );
+				BarrierHitDebuffPacket.BroadcastToClients(
+					barrier: this,
+					buffType: buffType
+				);
 
 				NetMessage.SendData( MessageID.SyncPlayer, -1, -1, null, hostPlayer.whoAmI );
 			}

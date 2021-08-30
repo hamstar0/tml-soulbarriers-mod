@@ -62,8 +62,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					: this.Strength;
 
 				if( damage >= 1 ) {
-					this.ApplyHitAgainstSelf( null, damage, false );
-					otherBarrier.ApplyHitAgainstSelf( null, damage, false );
+					this.ApplyRawHit( null, damage, false );
+					otherBarrier.ApplyRawHit( null, damage, false );
 				}
 			}
 

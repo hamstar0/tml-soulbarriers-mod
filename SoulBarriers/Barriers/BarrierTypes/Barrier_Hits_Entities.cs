@@ -40,7 +40,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 
 			if( intruderProjectile.active && intruderProjectile.damage >= 1 ) {
-				this.ApplyHitAgainstSelf( intruderProjectile.Center, intruderProjectile.damage, syncFromServer );
+				this.ApplyRawHit( intruderProjectile.Center, intruderProjectile.damage, syncFromServer );
 
 				intruderProjectile.Kill();
 			}
@@ -51,7 +51,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			// No effect, by default
+			// No effect, by default; (Pre)BarrierEntityCollision hook must implement behavior
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.Player, intruderPlayer.whoAmI );
@@ -65,7 +65,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			// Is npc a "projectile"?
 			if( NPCID.Sets.ProjectileNPC[intruderNpc.type] ) {
-				this.ApplyHitAgainstSelf( intruderNpc.Center, intruderNpc.damage, true );
+				this.ApplyRawHit( intruderNpc.Center, intruderNpc.damage, true );
 
 				NPCLibraries.Kill( intruderNpc, Main.netMode != NetmodeID.MultiplayerClient );
 

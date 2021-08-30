@@ -10,7 +10,7 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers.Packets {
-	class BarrierHitRawPacket : SimplePacketPayload {
+	class BarrierHitMetaphysicalPacket : SimplePacketPayload {
 		public static void BroadcastToClients(
 					Barrier barrier,
 					bool hasHitPosition,
@@ -20,7 +20,7 @@ namespace SoulBarriers.Packets {
 				throw new ModLibsException( "Not server." );
 			}
 
-			var packet = new BarrierHitRawPacket( barrier, hasHitPosition,  hitPosition, damage );
+			var packet = new BarrierHitMetaphysicalPacket( barrier, hasHitPosition,  hitPosition, damage );
 
 			SimplePacket.SendToServer( packet );
 		}
@@ -41,9 +41,9 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
-		private BarrierHitRawPacket() { }
+		private BarrierHitMetaphysicalPacket() { }
 
-		private BarrierHitRawPacket(
+		private BarrierHitMetaphysicalPacket(
 					Barrier barrier,
 					bool hasHitPosition,
 					Vector2 hitPosition,
@@ -63,13 +63,11 @@ namespace SoulBarriers.Packets {
 				return;
 			}
 
-			if( this.Damage > 0d ) {
-				barrier.ApplyRawHit(
-					this.HasHitPosition ? this.HitPosition : (Vector2?)null,
-					this.Damage,
-					false
-				);
-			}
+			barrier.ApplyMetaphysicalHit(
+				this.HasHitPosition ? this.HitPosition : (Vector2?)null,
+				this.Damage,
+				false
+			);
 		}
 
 		////

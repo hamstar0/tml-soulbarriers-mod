@@ -10,17 +10,13 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers.Packets {
-	class BarrierHitRawPacket : SimplePacketPayload {
-		public static void BroadcastToClients(
-					Barrier barrier,
-					bool hasHitPosition,
-					Vector2 hitPosition,
-					double damage ) {
+	class BarrierHitDebuffPacket : SimplePacketPayload {
+		public static void BroadcastToClients( Barrier barrier, int buffType ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
 
-			var packet = new BarrierHitRawPacket( barrier, hasHitPosition,  hitPosition, damage );
+			var packet = new BarrierHitDebuffPacket( barrier, buffType );
 
 			SimplePacket.SendToServer( packet );
 		}
@@ -31,27 +27,17 @@ namespace SoulBarriers.Packets {
 
 		private string BarrierID;
 
-		private bool HasHitPosition;
-
-		private Vector2 HitPosition;
-
-		private double Damage;
+		private int BuffType;
 
 
 
 		////////////////
 
-		private BarrierHitRawPacket() { }
+		private BarrierHitDebuffPacket() { }
 
-		private BarrierHitRawPacket(
-					Barrier barrier,
-					bool hasHitPosition,
-					Vector2 hitPosition,
-					double damage ) {
+		private BarrierHitDebuffPacket( Barrier barrier, int buffType ) {
 			this.BarrierID = barrier.GetID();
-			this.HasHitPosition = hasHitPosition;
-			this.HitPosition = hitPosition;
-			this.Damage = damage;
+			this.BuffType = buffType;
 		}
 
 		////////////////
@@ -59,17 +45,12 @@ namespace SoulBarriers.Packets {
 		private void Receive( int fromWho ) {
 			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
 			if( barrier == null ) {
-				LogLibraries.Warn( "No such barrier from "+Main.player[fromWho]+" ("+fromWho+") id'd: "+this.BarrierID );
+				LogLibraries.Warn( "No such barrier from "+Main.player[fromWho]+" ("+fromWho+")"
+					+" id'd: "+this.BarrierID );
 				return;
 			}
 
-			if( this.Damage > 0d ) {
-				barrier.ApplyRawHit(
-					this.HasHitPosition ? this.HitPosition : (Vector2?)null,
-					this.Damage,
-					false
-				);
-			}
+			barrier.ApplyPlayerDebuffHit( this.BuffType, false );
 		}
 
 		////
