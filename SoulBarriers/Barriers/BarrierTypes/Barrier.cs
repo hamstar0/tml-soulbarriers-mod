@@ -28,6 +28,10 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////
 
+		public double InitialStrength { get; protected set; }
+
+		////
+
 		public double Strength { get; protected set; } = 0;
 
 		public double? MaxRegenStrength { get; protected set; } = null;
@@ -82,6 +86,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			this.MaxRegenStrength = maxRegenStrength;
 			this.StrengthRegenPerTick = strengthRegenPerTick;
 			this.BarrierColor = color;
+
+			this.InitialStrength = strength;
 		}
 
 
@@ -98,14 +104,33 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		////////////////
 
 		public abstract Vector2 GetBarrierWorldCenter();
-		
-		public abstract Vector2 GetRandomOffsetForArea( Vector2 origin, bool isFxOnly, out bool isFarAway );
+
+		////
 
 		public Vector2 GetWorldPositionWithinBarrierArea( Vector2 offset, out bool isOoB ) {
 			Vector2 pos = this.GetBarrierWorldCenter() + offset;
-			isOoB = pos.X <= 0 || pos.X >= Main.maxTilesX*16
-				|| pos.Y <= 0 || pos.Y >= Main.maxTilesY*16;
+			isOoB = pos.X <= 0 || pos.X >= Main.maxTilesX * 16
+				|| pos.Y <= 0 || pos.Y >= Main.maxTilesY * 16;
 			return pos;
+		}
+
+		////
+
+		public abstract Vector2 GetRandomOffsetWithinAreaForFx( Vector2 origin, bool isFxOnly, out bool isFarAway );
+
+
+		////////////////
+
+		public double GetStrengthPercent( double? maxStrength = null ) {
+			if( this.MaxRegenStrength.HasValue && this.MaxRegenStrength > 0d ) {
+				return this.Strength / this.MaxRegenStrength.Value;
+			}
+
+			if( maxStrength.HasValue ) {
+				return this.Strength / maxStrength.Value;
+			}
+
+			return this.Strength / this.InitialStrength;
 		}
 
 

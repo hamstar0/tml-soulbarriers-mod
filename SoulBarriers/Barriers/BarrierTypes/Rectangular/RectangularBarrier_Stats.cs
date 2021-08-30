@@ -9,14 +9,14 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 			return this.WorldArea.Center.ToVector2();
 		}
 
-		public override Vector2 GetRandomOffsetForArea( Vector2 origin, bool isFxOnly, out bool isFarAway ) {
+		public override Vector2 GetRandomOffsetWithinAreaForFx( Vector2 origin, bool isFxOnly, out bool isFarAway ) {
 			var randOffset = new Vector2(
 				Main.rand.Next( -this.WorldArea.Width/2, this.WorldArea.Width/2 ),
 				Main.rand.Next( -this.WorldArea.Height/2, this.WorldArea.Height/2 )
 			);
 
 			if( isFxOnly ) {
-				isFarAway = this.DecideIfParticleTooFarAway( randOffset );
+				isFarAway = this.DecideIfParticleTooFarAwayForFx( randOffset );
 			} else {
 				isFarAway = false;
 			}

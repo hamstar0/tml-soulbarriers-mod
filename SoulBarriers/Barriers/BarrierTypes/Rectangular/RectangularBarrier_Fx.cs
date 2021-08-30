@@ -19,12 +19,13 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 		////////////////
 
-		public bool DecideIfParticleTooFarAway( Vector2 randOffset ) {
+		public bool DecideIfParticleTooFarAwayForFx( Vector2 offset ) {
+			// any distance is fine, 10% of the time
 			if( Main.rand.NextFloat() <= 0.1f ) {
 				return false;
 			}
 
-			Vector2 worldPos = randOffset + this.GetBarrierWorldCenter();
+			Vector2 worldPos = offset + this.GetBarrierWorldCenter();
 			float distSqr = (Main.LocalPlayer.MountedCenter - worldPos).LengthSquared();
 
 			float maxRandDist = 12f * 16f;

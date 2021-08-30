@@ -127,7 +127,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		////
 
 		public (Dust dust, Vector2 offset)? CreateBarrierParticleForArea( Vector2 worldCenterPos ) {
-			Vector2 offset = this.GetRandomOffsetForArea( worldCenterPos, true, out bool isFarAway );
+			Vector2 offset = this.GetRandomOffsetWithinAreaForFx( worldCenterPos, true, out bool isFarAway );
 			if( isFarAway ) {
 				return null;
 			}
@@ -174,7 +174,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			Vector2 pos = this.GetBarrierWorldCenter();
 
 			for( int i = 0; i < particles; i++ ) {
-				Vector2 offset = this.GetRandomOffsetForArea( pos, true, out bool isFarAway );
+				Vector2 offset = this.GetRandomOffsetWithinAreaForFx( pos, true, out bool isFarAway );
 				if( isFarAway ) {
 					continue;
 				}
