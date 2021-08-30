@@ -45,7 +45,9 @@ namespace SoulBarriers.Barriers {
 				if( plr?.active != true ) {
 					this.PlayerBarriers.Remove( plrWho );   // Garbage collection
 
-					this.BarriersByID.Remove( id );
+					if( this.BarriersByID.Remove(id) ) {
+						SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
+					}
 				} else {
 					barrier.Update_Internal();
 
@@ -55,6 +57,8 @@ namespace SoulBarriers.Barriers {
 					}
 				}
 			}
+
+			//
 
 			foreach( Rectangle rect in this.WorldBarriers.Keys.ToArray() ) {
 				Barrier barrier = this.WorldBarriers[ rect ];

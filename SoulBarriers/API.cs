@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using ModLibsCore.Classes.Errors;
+using ModLibsCore.Classes.Loadable;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 
 
 namespace SoulBarriers {
-	public static class SoulBarriersAPI {
+	public partial class SoulBarriersAPI : ILoadable {
 		public static Barrier GetPlayerBarrier( Player player ) {
 			var myplayer = player.GetModPlayer<SoulBarriersPlayer>();
 			return myplayer.Barrier;
@@ -66,5 +68,23 @@ namespace SoulBarriers {
 
 			BarrierManager.Instance.RemoveWorldBarrier( worldArea, true );
 		}
+
+
+
+		////////////////
+
+		private IList<Action<Barrier>> BarrierCreateHooks = new List<Action<Barrier>>();
+
+		private IList<Action<Barrier>> BarrierRemoveHooks = new List<Action<Barrier>>();
+
+
+
+		////////////////
+
+		void ILoadable.OnModsLoad() { }
+
+		void ILoadable.OnPostModsLoad() { }
+
+		void ILoadable.OnModsUnload() { }
 	}
 }
