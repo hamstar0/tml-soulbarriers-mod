@@ -15,7 +15,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 
 			if( this.OnPreBarrierEntityCollision.All( f=>f.Invoke(ref intruder) ) ) {
-				foreach( BarrierEntityCollisionEvent e in this.OnBarrierEntityCollision ) {
+				foreach( BarrierEntityCollisionHook e in this.OnBarrierEntityCollision ) {
 					e.Invoke(intruder);
 				}
 

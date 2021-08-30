@@ -27,7 +27,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			//
 
-			foreach( BarrierRawHitEvent e in this.OnBarrierRawHit ) {
+			foreach( BarrierRawHitHook e in this.OnBarrierRawHit ) {
 				e.Invoke( oldStr, damage );
 			}
 

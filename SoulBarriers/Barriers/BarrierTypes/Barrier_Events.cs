@@ -4,36 +4,66 @@ using Terraria;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
-	public delegate bool PreBarrierEntityCollisionEvent( ref Entity intruder );
+	public delegate bool PreBarrierEntityCollisionHook( ref Entity intruder );
 
-	public delegate void BarrierEntityCollisionEvent( Entity intruder );
+	public delegate void BarrierEntityCollisionHook( Entity intruder );
 
 
-	public delegate bool PreBarrierBarrierCollisionEvent( Barrier otherBarrier );
+	public delegate bool PreBarrierBarrierCollisionHook( Barrier otherBarrier );
 
-	public delegate void BarrierBarrierCollisionEvent( Barrier otherBarrier );
+	public delegate void BarrierBarrierCollisionHook( Barrier otherBarrier );
 
 	
-	public delegate bool PreBarrierRawHitEvent( ref double damage );
+	public delegate bool PreBarrierRawHitHook( ref double damage );
 	
-	public delegate void BarrierRawHitEvent( double previousStrength, double attemptedDamage );
+	public delegate void BarrierRawHitHook( double previousStrength, double attemptedDamage );
 
 
 
 
 	public abstract partial class Barrier {
-		protected ISet<PreBarrierEntityCollisionEvent> OnPreBarrierEntityCollision = new HashSet<PreBarrierEntityCollisionEvent>();
+		protected ISet<PreBarrierEntityCollisionHook> OnPreBarrierEntityCollision = new HashSet<PreBarrierEntityCollisionHook>();
 
-		protected ISet<BarrierEntityCollisionEvent> OnBarrierEntityCollision = new HashSet<BarrierEntityCollisionEvent>();
-
-
-		protected ISet<PreBarrierBarrierCollisionEvent> OnPreBarrierBarrierCollision = new HashSet<PreBarrierBarrierCollisionEvent>();
-
-		protected ISet<BarrierBarrierCollisionEvent> OnBarrierBarrierCollision = new HashSet<BarrierBarrierCollisionEvent>();
+		protected ISet<BarrierEntityCollisionHook> OnBarrierEntityCollision = new HashSet<BarrierEntityCollisionHook>();
 
 
-		protected ISet<PreBarrierRawHitEvent> OnPreBarrierRawHit = new HashSet<PreBarrierRawHitEvent>();
+		protected ISet<PreBarrierBarrierCollisionHook> OnPreBarrierBarrierCollision = new HashSet<PreBarrierBarrierCollisionHook>();
 
-		protected ISet<BarrierRawHitEvent> OnBarrierRawHit = new HashSet<BarrierRawHitEvent>();
+		protected ISet<BarrierBarrierCollisionHook> OnBarrierBarrierCollision = new HashSet<BarrierBarrierCollisionHook>();
+
+
+		protected ISet<PreBarrierRawHitHook> OnPreBarrierRawHit = new HashSet<PreBarrierRawHitHook>();
+
+		protected ISet<BarrierRawHitHook> OnBarrierRawHit = new HashSet<BarrierRawHitHook>();
+
+
+
+		////////////////
+
+		public void AddPreBarrierEntityCollisionHook( PreBarrierEntityCollisionHook hook ) {
+			this.OnPreBarrierEntityCollision.Add( hook );
+		}
+
+		public void AddBarrierEntityCollisionHook( BarrierEntityCollisionHook hook ) {
+			this.OnBarrierEntityCollision.Add( hook );
+		}
+
+
+		public void AddPreBarrierBarrierCollisionHook( PreBarrierBarrierCollisionHook hook ) {
+			this.OnPreBarrierBarrierCollision.Add( hook );
+		}
+
+		public void AddBarrierBarrierCollisionHook( BarrierBarrierCollisionHook hook ) {
+			this.OnBarrierBarrierCollision.Add( hook );
+		}
+
+
+		public void AddPreBarrierRawHitHook( PreBarrierRawHitHook hook ) {
+			this.OnPreBarrierRawHit.Add( hook );
+		}
+
+		public void AddBarrierRawHit( BarrierRawHitHook hook ) {
+			this.OnBarrierRawHit.Add( hook );
+		}
 	}
 }
