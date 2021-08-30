@@ -25,7 +25,7 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
-		private string BarrierID;
+		public string BarrierID;
 
 
 

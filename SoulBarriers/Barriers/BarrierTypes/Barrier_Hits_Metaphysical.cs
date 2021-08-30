@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using ModLibsCore.Libraries.Debug;
 using SoulBarriers.Packets;
 
 
@@ -12,9 +13,13 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			this.SetStrength( this.Strength - damage );
+			this.SetStrength( this.Strength - damage, false );
 
-			this.ApplyHitFx( (int)(damage * 4d) );
+			int particles = (int)( damage * 4d );
+			if( particles >= 1 ) {
+				this.ApplyHitFx( particles );
+//LogLibraries.Log( "ApplyMetaphysicalHit "+damage+" ("+(int)(damage * 4d)+")" );
+			}
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitMetaphysicalPacket.BroadcastToClients(

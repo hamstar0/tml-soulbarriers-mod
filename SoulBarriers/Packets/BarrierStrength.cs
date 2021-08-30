@@ -10,12 +10,16 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 namespace SoulBarriers.Packets {
 	class BarrierStrengthPacket : SimplePacketPayload {
-		public static void SyncToServerForEveryone( Barrier barrier, int strength, bool applyHitFx ) {
+		public static void SyncToServerForEveryone(
+					Barrier barrier,
+					int strength,
+					bool applyHitFx,
+					bool clearRegenBuffer ) {
 			if( Main.netMode != NetmodeID.MultiplayerClient ) {
 				throw new ModLibsException( "Not client." );
 			}
 
-			var packet = new BarrierStrengthPacket( barrier, strength, applyHitFx );
+			var packet = new BarrierStrengthPacket( barrier, strength, applyHitFx, clearRegenBuffer );
 
 			SimplePacket.SendToServer( packet );
 		}
@@ -24,11 +28,13 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
-		private string BarrierID;
+		public string BarrierID;
 
-		private int Strength;
+		public int Strength;
 
-		private bool ApplyHitFx;
+		public bool ApplyHitFx;
+
+		public bool ClearRegenBuffer;
 
 
 
@@ -36,10 +42,11 @@ namespace SoulBarriers.Packets {
 
 		private BarrierStrengthPacket() { }
 
-		private BarrierStrengthPacket( Barrier barrier, int strength, bool applyHitFx ) {
+		private BarrierStrengthPacket( Barrier barrier, int strength, bool applyHitFx, bool clearRegenBuffer ) {
 			this.BarrierID = barrier.GetID();
 			this.Strength = strength;
 			this.ApplyHitFx = applyHitFx;
+			this.ClearRegenBuffer = clearRegenBuffer;
 		}
 
 		////////////////
@@ -57,7 +64,7 @@ namespace SoulBarriers.Packets {
 				barrier.ApplyHitFx( damage > 0d ? damage : 8d );
 			}
 
-			barrier.SetStrength( this.Strength );
+			barrier.SetStrength( this.Strength, this.ClearRegenBuffer );
 		}
 
 		////

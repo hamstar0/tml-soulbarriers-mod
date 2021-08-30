@@ -29,13 +29,13 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
-		private string BarrierID;
+		public string BarrierID;
 
-		private bool HasHitPosition;
+		public bool HasHitPosition;
 
-		private Vector2 HitPosition;
+		public Vector2 HitPosition;
 
-		private double Damage;
+		public double Damage;
 
 
 

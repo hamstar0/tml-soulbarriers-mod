@@ -25,8 +25,12 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 		}
 
-		public static int GetHitParticleCount( double hitStrength ) {
-			int particles = 8 + (int)(hitStrength / 4d);
+		public static int GetHitParticleCount( double damage ) {
+			if( damage <= 0d ) {
+				return 0;
+			}
+
+			int particles = 8 + (int)(damage / 4d);
 			particles *= 2;
 
 			return particles;
@@ -38,22 +42,32 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		public void ApplyHitFx( double damage ) {
 			int particles = Barrier.GetHitParticleCount( damage );
+			if( particles >= 1 ) {
+				this.CreateHitParticlesForArea( particles, 4f );
+			}
 
-			this.CreateHitParticlesForArea( particles, 4f );
+			if( damage != 0d ) {
+				Vector2 pos = this.GetBarrierWorldCenter();
 
-			Vector2 pos = this.GetBarrierWorldCenter();
-
-			this.ApplyHitFx_Sound( pos );
-			this.ApplyHitFx_Text( pos, damage );
+				if( damage > 0d ) {
+					this.ApplyHitFx_Sound( pos );
+				}
+				this.ApplyHitFx_Text( pos, damage );
+			}
 		}
 
 		public void ApplyHitFx( Vector2 hitAt, double damage ) {
 			int particles = Barrier.GetHitParticleCount( damage );
-
-			this.CreateHitParticlesAt( hitAt, particles, 4f );
-
-			this.ApplyHitFx_Sound( hitAt );
-			this.ApplyHitFx_Text( hitAt, damage );
+			if( particles >= 1 ) {
+				this.CreateHitParticlesAt( hitAt, particles, 4f );
+			}
+			
+			if( damage != 0d ) {
+				if( damage > 0d ) {
+					this.ApplyHitFx_Sound( hitAt );
+				}
+				this.ApplyHitFx_Text( hitAt, damage );
+			}
 		}
 
 		////

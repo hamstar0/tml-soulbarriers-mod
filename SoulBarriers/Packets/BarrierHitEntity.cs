@@ -28,11 +28,11 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
-		private string BarrierID;
+		public string BarrierID;
 
-		private int EntityType;
+		public int EntityType;
 
-		private int EntityWhoAmI;
+		public int EntityWhoAmI;
 
 
 

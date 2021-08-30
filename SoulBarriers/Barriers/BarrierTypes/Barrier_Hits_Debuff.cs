@@ -24,9 +24,12 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			double damage = (double)config.Get<float>( nameof(config.BarrierDebuffRemovalCost) );
 
-			this.SetStrength( this.Strength - damage );
+			this.SetStrength( this.Strength - damage, false );
 
-			this.ApplyHitFx( (int)(damage * 4d) );
+			int particles = (int)( damage * 4d );
+			if( particles >= 1 ) {
+				this.ApplyHitFx( particles );
+			}
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitDebuffPacket.BroadcastToClients(

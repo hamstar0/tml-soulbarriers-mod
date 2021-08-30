@@ -13,7 +13,7 @@ namespace SoulBarriers {
 
 			if( this.player.dead ) {
 				if( this.Barrier.Strength > 0d ) {
-					this.Barrier.SetStrength( 0 );
+					this.Barrier.SetStrength( 0, true );
 				}
 			}
 		}

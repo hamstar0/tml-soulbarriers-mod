@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using ModLibsCore.Classes.Errors;
@@ -25,9 +24,9 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
-		private string BarrierID;
+		public string BarrierID;
 
-		private int BuffType;
+		public int BuffType;
 
 
 

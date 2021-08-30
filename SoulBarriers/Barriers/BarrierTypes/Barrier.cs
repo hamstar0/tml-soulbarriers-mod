@@ -136,14 +136,16 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public void SetStrength( double strength ) {
+		public void SetStrength( double strength, bool clearRegenBuffer ) {
 			if( strength < 0d ) {
 				strength = 0d;
 			}
 
 			this.Strength = strength;
 
-			this.BufferedStrengthRegen = 0f;
+			if( clearRegenBuffer ) {
+				this.BufferedStrengthRegen = 0f;
+			}
 
 			if( this.HostType == BarrierHostType.Player ) {
 				this.RefreshForPlayerHost();

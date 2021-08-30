@@ -18,10 +18,10 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 			this.UpdateForPlayerForBuffs( (Player)host, out bool hasSoulBuff );
 
 			if( !hasSoulBuff ) {
-				this.SetStrength( 0 );
+				this.SetStrength( 0, true );
 
 				if( Main.netMode == NetmodeID.MultiplayerClient ) {
-					BarrierStrengthPacket.SyncToServerForEveryone( this, 0, false );
+					BarrierStrengthPacket.SyncToServerForEveryone( this, 0, false, true );
 				}
 			}
 		}

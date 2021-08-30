@@ -20,7 +20,7 @@ namespace SoulBarriers.Items {
 			int barrierStr = (int)(barrierStrScale * (float)player.statMana);
 
 			var myplayer = player.GetModPlayer<SoulBarriersPlayer>();
-			myplayer.Barrier.SetStrength( barrierStr );
+			myplayer.Barrier.SetStrength( barrierStr, true );
 
 			player.statMana = 0;
 
