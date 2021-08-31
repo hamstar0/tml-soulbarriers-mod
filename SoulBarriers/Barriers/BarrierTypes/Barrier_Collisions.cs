@@ -4,7 +4,7 @@ using Terraria;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public bool CanCollide( Entity intruder ) {
+		public bool CanEntityCollide( Entity intruder ) {
 			if( !this.IsActive ) {
 				return false;
 			}
@@ -23,16 +23,16 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public bool IsColliding( Entity intruder ) {
-			if( !this.CanCollide( intruder ) ) {
+		public bool IsEntityColliding( Entity intruder ) {
+			if( !this.CanEntityCollide( intruder ) ) {
 				return false;
 			}
 
-			return this.IsCollidingDirectly( intruder );
+			return this.IsEntityCollidingPhysically( intruder );
 		}
 
 		////
 
-		public abstract bool IsCollidingDirectly( Entity intruder );
+		public abstract bool IsEntityCollidingPhysically( Entity intruder );
 	}
 }

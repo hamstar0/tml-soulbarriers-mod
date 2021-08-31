@@ -6,7 +6,7 @@ using SoulBarriers.Barriers.BarrierTypes.Spherical;
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 	public partial class RectangularBarrier : Barrier {
-		public override bool IsCollidingDirectly( Entity intruder ) {
+		public override bool IsEntityCollidingPhysically( Entity intruder ) {
 			var rect = new Rectangle(
 				(int)intruder.position.X,
 				(int)intruder.position.Y,

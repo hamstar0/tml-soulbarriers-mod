@@ -10,7 +10,7 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers.Barriers {
-	public partial class BarrierManager : ILoadable {
+	partial class BarrierManager : ILoadable {
 		public static BarrierManager Instance => ModContent.GetInstance<BarrierManager>();
 
 

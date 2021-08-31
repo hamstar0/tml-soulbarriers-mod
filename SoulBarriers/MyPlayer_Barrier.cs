@@ -8,7 +8,10 @@ namespace SoulBarriers {
 	partial class SoulBarriersPlayer : ModPlayer {
 		private void UpdatePersonalBarrier() {
 			if( this.Barrier == null ) {
-				this.Barrier = BarrierManager.Instance.CreateAndDeclarePlayerBarrier( this.player.whoAmI );
+				this.Barrier = BarrierManager.Instance.GetPlayerBarrier( this.player.whoAmI );
+				if( this.Barrier == null ) {
+					this.Barrier = BarrierManager.Instance.CreateAndDeclarePlayerBarrier( this.player.whoAmI );
+				}
 			}
 
 			if( this.player.dead ) {

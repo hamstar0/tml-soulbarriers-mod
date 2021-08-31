@@ -32,5 +32,12 @@ namespace SoulBarriers {
 		public override void PostUpdateEverything() {
 			BarrierManager.Instance.UpdateAllTrackedBarriers();
 		}
+
+
+		////////////////
+
+		public override void PreSaveAndQuit() {
+			BarrierManager.Instance.RemoveAllPlayerBarriers();
+		}
 	}
 }

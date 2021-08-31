@@ -8,7 +8,7 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers.Barriers {
-	public partial class BarrierManager : ILoadable {
+	partial class BarrierManager : ILoadable {
 		private void CheckCollisionsAgainstAllBarriers() {
 			if( Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
@@ -45,7 +45,7 @@ namespace SoulBarriers.Barriers {
 	"pb_v_e_"+barrier.GetID()+"_"+ent,
 	"collide? "+barrier.IsColliding(ent)
 );*/
-				if( barrier.IsColliding( ent ) ) {
+				if( barrier.IsEntityColliding( ent ) ) {
 					barrier.ApplyEntityCollisionHitIf( ent, true );
 				}
 			}
@@ -65,7 +65,7 @@ namespace SoulBarriers.Barriers {
 	ent.width,
 	ent.height
 ) );*/
-				if( barrier.IsColliding(ent) ) {
+				if( barrier.IsEntityColliding(ent) ) {
 					barrier.ApplyEntityCollisionHitIf( ent, true );
 				}
 			}

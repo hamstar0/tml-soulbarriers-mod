@@ -77,7 +77,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		}
 
 		private void ApplyHitFx_Text( Vector2 hitAt, double damage ) {
-			string fmtAmt = (int)(damage * 100f) + "%";
+			string fmtAmt = ((int)(damage * 100f)).ToString();
 
 			Color color = Barrier.GetColor( this.BarrierColor );
 
@@ -90,8 +90,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 
 			var area = new Rectangle( (int)hitAt.X, (int)hitAt.Y, 1, 1 );
+			area.Y += 24;
 
-			CombatText.NewText( area, color, fmtAmt );
+			CombatText.NewText( area, color, fmtAmt, false, true );
 		}
 
 

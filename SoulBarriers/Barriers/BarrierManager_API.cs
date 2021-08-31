@@ -14,7 +14,7 @@ using SoulBarriers.Packets;
 
 
 namespace SoulBarriers.Barriers {
-	public partial class BarrierManager : ILoadable {
+	partial class BarrierManager : ILoadable {
 		public int GetPlayerBarrierCount() {
 			return this.PlayerBarriers.Count();
 		}
@@ -146,6 +146,18 @@ namespace SoulBarriers.Barriers {
 
 
 		////////////////
+		
+		public void RemoveAllPlayerBarriers() {
+			foreach( string id in this.PlayerBarriers.Values.Select(b=>b.GetID()) ) {
+				Barrier barrier = this.BarriersByID[id];
+
+				if( this.BarriersByID.Remove(id) ) {
+					SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
+				}
+			}
+
+			this.PlayerBarriers.Clear();
+		}
 		
 		public void RemoveAllWorldBarriers() {
 			foreach( string id in this.WorldBarriers.Values.Select(b=>b.GetID()) ) {

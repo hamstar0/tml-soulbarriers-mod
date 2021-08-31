@@ -19,8 +19,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			float distanceY = circle.Y - closestY;
 
 			// If the distance is less than the circle's radius, an intersection occurs
-			float distanceSquared = ( distanceX * distanceX ) + ( distanceY * distanceY );
-			return distanceSquared < ( circle.R * circle.R );
+			float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+			return distanceSquared < (circle.R * circle.R);
 		}
 
 

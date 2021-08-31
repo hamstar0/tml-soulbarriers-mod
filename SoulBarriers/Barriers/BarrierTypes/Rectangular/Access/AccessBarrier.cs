@@ -25,7 +25,6 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					isSaveable: isSaveable,
 					hostType: hostType,
 					hostWhoAmI: hostWhoAmI ) {
-//LogLibraries.Log( "CREATED AccessBarrier " + this.GetID()+" str: "+strength+", area: "+worldArea );
 			void onBarrierEntityCollide( Entity intruder ) {
 //DebugLibraries.ChatOnce( "b_col_ent_"+this.GetID(), "ent: "+intruder );
 				if( intruder is Player ) {
@@ -60,8 +59,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 				double damage = this.Strength > otherBarrier.Strength
 					? otherBarrier.Strength
 					: this.Strength;
+				damage = Math.Round( damage );
 
-				if( damage >= 1 ) {
+				if( damage > 0d ) {
 					this.ApplyRawHit( null, damage, false );
 					otherBarrier.ApplyRawHit( null, damage, false );
 				}
