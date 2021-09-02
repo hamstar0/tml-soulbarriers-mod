@@ -15,7 +15,14 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 				return;
 			}
 
-			this.UpdateForPlayerForBuffs( (Player)host, out bool hasSoulBuff );
+			var plr = (Player)host;
+			if( plr.dead ) {
+				this.SetStrength( 0, true, true );
+
+				return;
+			}
+
+			this.UpdateForPlayerForBuffs( plr, out bool hasSoulBuff );
 
 			if( !hasSoulBuff ) {
 				this.SetStrength( 0, true, false );
@@ -26,6 +33,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 			}
 		}
 
+
+		////
 
 		private void UpdateForPlayerForBuffs( Player hostPlayer, out bool hasSoulBuff ) {
 			hasSoulBuff = false;
