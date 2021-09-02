@@ -7,12 +7,13 @@ using Terraria.ID;
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
 		public void ApplyHitFx( double damage, bool isCrit ) {
-			int maxParticles = this.GetMaxAnimationParticleCount();
+			int maxParticles = this.ComputeMaxAnimatableParticleCount();
 			int particles = Barrier.GetHitParticleCount(
 				maxParticles: maxParticles,
 				damage: isCrit ? maxParticles : damage,
 				barrierStrength: this.Strength
 			);
+//Main.NewText( "HIT FX "+particles+" ("+maxParticles+") - "+this.ToString() );
 
 			if( particles >= 1 ) {
 				this.CreateHitParticlesForArea( particles );
@@ -29,7 +30,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		}
 
 		public void ApplyHitFx( Vector2 hitAt, double damage, bool isCrit ) {
-			int maxParticles = this.GetMaxAnimationParticleCount();
+			int maxParticles = this.ComputeMaxAnimatableParticleCount();
 			int particles = Barrier.GetHitParticleCount(
 				maxParticles: maxParticles,
 				damage: isCrit ? maxParticles : damage,

@@ -11,7 +11,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 				position: position,
 				color: this.Color,
 				isHit: isHit,
-				durationPercentPerTick: BarrierDust.DefaultPercentDurationElapsedPerTick * 2f
+				durationPercentPerTick: isHit
+					? BarrierDust.DefaultPercentDurationElapsedPerTick
+					: BarrierDust.DefaultPercentDurationElapsedPerTick * 2f
 			);
 		}
 	}

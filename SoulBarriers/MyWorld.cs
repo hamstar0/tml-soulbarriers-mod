@@ -151,7 +151,7 @@ namespace SoulBarriers {
 					continue;
 				}
 
-				int particles = barrier.GetMaxAnimationParticleCount();
+				int particles = barrier.ComputeCurrentMaxAnimatedParticleCount();
 
 				barrier.Animate( particles );
 //DebugLibraries.Print( "worldbarrier "+rect, "has:"+barrier.ParticleOffsets.Count+", of:"+particles );

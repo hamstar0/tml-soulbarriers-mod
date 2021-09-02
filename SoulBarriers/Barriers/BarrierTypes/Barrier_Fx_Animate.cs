@@ -9,12 +9,20 @@ using SoulBarriers.Dusts;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public virtual int GetMaxAnimationParticleCount() {
+		public virtual int ComputeCurrentMaxAnimatedParticleCount() {
 			if( this.Strength <= 0 ) {
 				return 0;
 			}
 
 			return 24 + (int)(this.Strength / 3d);
+		}
+
+		public virtual int ComputeMaxAnimatableParticleCount() {
+			double max = !this.MaxRegenStrength.HasValue || this.MaxRegenStrength.Value <= 0d
+				? this.InitialStrength
+				: this.MaxRegenStrength.Value;
+
+			return 24 + (int)(max / 3d);
 		}
 
 

@@ -6,13 +6,25 @@ using SoulBarriers.Dusts;
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 	public partial class RectangularBarrier : Barrier {
-		public override int GetMaxAnimationParticleCount() {
+		public override int ComputeCurrentMaxAnimatedParticleCount() {
 			float chunkSize = 12f * 16f;
 			float chunksX = (float)this.WorldArea.Width / chunkSize;
 			float chunksY = (float)this.WorldArea.Height / chunkSize;
 			float chunks = chunksX * chunksY;
 
-			int count = (int)( (float)base.GetMaxAnimationParticleCount() * (int)chunks * 2 );
+			int count = (int)( (float)base.ComputeCurrentMaxAnimatedParticleCount() * chunks * 2f );
+
+			return Math.Min( count, 300 );
+		}
+
+		
+		public override int ComputeMaxAnimatableParticleCount() {
+			float chunkSize = 12f * 16f;
+			float chunksX = (float)this.WorldArea.Width / chunkSize;
+			float chunksY = (float)this.WorldArea.Height / chunkSize;
+			float chunks = chunksX * chunksY;
+
+			int count = (int)( (float)base.ComputeMaxAnimatableParticleCount() * chunks * 2f );
 
 			return Math.Min( count, 300 );
 		}
@@ -43,7 +55,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 				position: position,
 				color: this.Color,
 				isHit: isHit,
-				durationPercentPerTick: BarrierDust.DefaultPercentDurationElapsedPerTick * 0.5f
+				durationPercentPerTick: isHit
+					? BarrierDust.DefaultPercentDurationElapsedPerTick * 0.25f
+					: BarrierDust.DefaultPercentDurationElapsedPerTick * 0.5f
 			);
 		}
 	}

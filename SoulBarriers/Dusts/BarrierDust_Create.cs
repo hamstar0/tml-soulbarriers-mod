@@ -6,12 +6,6 @@ using Terraria.ModLoader;
 
 namespace SoulBarriers.Dusts {
 	public partial class BarrierDust : ModDust {
-		public const float HitMaxVelocity = 8f;
-
-
-
-		////////////////
-
 		public static Color ComputeAltColor( Color c ) {
 			if( c.R > c.G && c.R > c.B ) {
 				if( c.G > c.B ) {
@@ -44,9 +38,8 @@ namespace SoulBarriers.Dusts {
 				? 1.5f + (scaleScale * scaleScale)
 				: 0.5f + (scaleScale * scaleScale * scaleScale * 1.5f);
 
-			float hitVel = BarrierDust.HitMaxVelocity;
 			Vector2 vel = isHit
-				? new Vector2( Main.rand.NextFloat(-hitVel,hitVel), Main.rand.NextFloat(-hitVel,hitVel) )
+				? new Vector2( Main.rand.NextFloat(-2f,2f), Main.rand.NextFloat(-2f,2f) )
 				: new Vector2( 0f, scale * -0.6f );
 
 			Color altColor = BarrierDust.ComputeAltColor( color );
