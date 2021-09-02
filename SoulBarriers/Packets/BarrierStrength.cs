@@ -61,7 +61,7 @@ namespace SoulBarriers.Packets {
 			double damage = barrier.Strength - this.Strength;
 
 			if( this.ApplyHitFx ) {
-				barrier.ApplyHitFx( damage > 0d ? damage : 8d );
+				barrier.ApplyHitFx( damage > 0d ? damage : 8d, !barrier.IsActive );
 			}
 
 			barrier.SetStrength( this.Strength, this.ClearRegenBuffer, false );
