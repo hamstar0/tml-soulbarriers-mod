@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 
 
@@ -17,7 +18,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 					int? maxRegenStrength,
 					float strengthRegenPerTick,
 					float radius,
-					BarrierColor color
+					Color color
 				) : base( hostType, hostWhoAmI, strength, maxRegenStrength, strengthRegenPerTick, color ) {
 			this.Radius = radius;
 		}

@@ -3,37 +3,22 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
+using SoulBarriers.Dusts;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public static Color GetColor( BarrierColor color ) {
-			switch( color ) {
-			case BarrierColor.Red:
-				return Color.Red;
-			case BarrierColor.Green:
-				return Color.Lime;
-			case BarrierColor.Purple:
-				return Color.Purple;
-			case BarrierColor.Yellow:
-				return Color.Yellow;
-			case BarrierColor.BigBlue:
-				return Color.Blue;
-			case BarrierColor.White:
-			default:
-				return Color.White;
-			}
-		}
-
-		public static int GetHitParticleCount( double damage ) {
+		public static int GetHitParticleCount( double maxParticles, double damage, double barrierStrength ) {
 			if( damage <= 0d ) {
 				return 0;
 			}
 
-			int particles = 8 + (int)(damage / 4d);
-			particles *= 2;
+			double percent = Math.Min( 1d, damage / barrierStrength );
+			double minParticles = Math.Max( maxParticles / 8d, 6d );
+			double addParticles = percent * ((7d * maxParticles) / 8d);
 
-			return particles;
+			return (int)(minParticles + addParticles);
 		}
 
 
@@ -41,9 +26,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		////////////////
 
 		public void ApplyHitFx( double damage ) {
-			int particles = Barrier.GetHitParticleCount( damage );
+			int particles = Barrier.GetHitParticleCount( this.GetMaxAnimationParticleCount(), damage, this.Strength );
 			if( particles >= 1 ) {
-				this.CreateHitParticlesForArea( particles, 4f );
+				this.CreateHitParticlesForArea( particles );
 			}
 
 			if( damage != 0d ) {
@@ -57,9 +42,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		}
 
 		public void ApplyHitFx( Vector2 hitAt, double damage ) {
-			int particles = Barrier.GetHitParticleCount( damage );
+			int particles = Barrier.GetHitParticleCount( this.GetMaxAnimationParticleCount(), damage, this.Strength );
 			if( particles >= 1 ) {
-				this.CreateHitParticlesAt( hitAt, particles, 4f );
+				this.CreateHitParticlesAt( hitAt, particles );
 			}
 			
 			if( damage != 0d ) {
@@ -79,8 +64,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		private void ApplyHitFx_Text( Vector2 hitAt, double damage ) {
 			string fmtAmt = ((int)(damage * 100f)).ToString();
 
-			Color color = Barrier.GetColor( this.BarrierColor );
-
+			Color color = this.Color;
+			
 			if( damage < 0f ) {
 				fmtAmt = "+" + fmtAmt;
 				color = Color.Lerp( color, Color.White, 0.25f );
@@ -98,24 +83,37 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public virtual int GetParticleCount() {
+		public virtual int GetMaxAnimationParticleCount() {
 			if( this.Strength <= 0 ) {
 				return 0;
 			}
 
-			return 16 + (int)(this.Strength / 3d);
+			return 24 + (int)(this.Strength / 3d);
 		}
 
 
 		////////////////
 
 		internal void Animate( int maxParticles ) {
+			int dustType = ModContent.DustType<BarrierDust>();
 			Vector2 center = this.GetBarrierWorldCenter();
 
+			Entity host = null;
+			switch( this.HostType ) {
+			case BarrierHostType.NPC:
+				host = Main.npc[this.HostWhoAmI];
+				break;
+			case BarrierHostType.Player:
+				host = Main.player[this.HostWhoAmI];
+				break;
+			}
+			
 			foreach( Dust dust in this._ParticleOffsets.Keys.ToArray() ) {
-				if( dust.active && Enum.IsDefined(typeof(BarrierColor), dust.type) ) {
-					//dust.position = center + this._ParticleOffsets[ dust ];
-					//dust.velocity = this.Host?.velocity ?? (dust.velocity * 0.99f);
+				if( dust.active && dust.type == dustType ) {
+					if( host != null ) {
+						//dust.position += host.velocity;
+						dust.position += host.position - host.oldPosition;
+					}
 
 					maxParticles--;
 				} else {
@@ -123,8 +121,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				}
 			}
 
-			int particles = maxParticles;	//Math.Min( 5, maxParticles );
-			this.CreateBarrierParticlesForArea( center, particles  );
+			int particles = maxParticles / 4;
+			this.CreateBarrierParticlesForArea( center, particles );
 		}
 
 
@@ -147,45 +145,15 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return null;
 			}
 
-			Dust dust = this.CreateBarrierParticleAt( worldCenterPos + offset );
+			Dust dust = this.CreateBarrierParticleAt( worldCenterPos + offset, false );
 
 			return (dust, offset);
-		}
-
-		////
-
-		public virtual Dust CreateBarrierParticleAt( Vector2 position, Vector2? velocity = null, float scale = 1f ) {
-			Dust dust;
-			
-			if( velocity.HasValue ) {
-				dust = Dust.NewDustPerfect(
-					Position: position,
-					Velocity: velocity.Value,
-					Type: (int)this.BarrierColor,
-					Scale: scale
-				);
-			} else {
-				dust = Dust.NewDustPerfect(
-					Position: position,
-					Type: (int)this.BarrierColor,
-					Scale: scale
-				);
-			}
-			dust.noGravity = true;
-			dust.noLight = true;
-
-			Entity host = this.Host;
-			if( host != null ) {
-				dust.velocity += host.velocity;
-			}
-
-			return dust;
 		}
 
 
 		////////////////
 
-		public void CreateHitParticlesForArea( int particles, float dispersal ) {
+		public void CreateHitParticlesForArea( int particles ) {
 			Vector2 pos = this.GetBarrierWorldCenter();
 
 			for( int i = 0; i < particles; i++ ) {
@@ -194,39 +162,28 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					continue;
 				}
 
-				Dust dust = this.CreateHitParticle( pos + offset, dispersal );
+				Dust dust = this.CreateBarrierParticleAt( pos + offset, true );
 
 				this._ParticleOffsets[dust] = offset;
 			}
 		}
 		
-		public void CreateHitParticlesAt( Vector2 position, int particles, float dispersal ) {
+		public void CreateHitParticlesAt( Vector2 position, int particles ) {
 			Vector2 hitOffsetFromCenter = position - this.GetBarrierWorldCenter();
 
 			for( int i = 0; i < particles; i++ ) {
-				Dust dust = this.CreateHitParticle( position, dispersal );
+				Dust dust = this.CreateBarrierParticleAt( position, true );
 				this._ParticleOffsets[ dust ] = hitOffsetFromCenter;
 			}
 		}
 
-		////
-		
-		public virtual Dust CreateHitParticle( Vector2 position, float dispersal, float scale = 2f ) {
-			float dispersalDir = dispersal * 0.5f;
 
-			int dustIdx = Dust.NewDust(
-				Position: position,
-				Width: 0,
-				Height: 0,
-				SpeedX: dispersalDir > 0f ? Main.rand.NextFloat(-dispersalDir, dispersalDir) : 0f,
-				SpeedY: dispersalDir > 0f ? Main.rand.NextFloat(-dispersalDir, dispersalDir) : 0f,
-				Type: (int)this.BarrierColor,
-				Scale: scale
-			);
-			Main.dust[dustIdx].noGravity = true;
-			Main.dust[dustIdx].noLight = true;
+		////////////////
 
-			return Main.dust[dustIdx];
+		public virtual Dust CreateBarrierParticleAt( Vector2 position, bool isHit ) {
+			Dust dust = BarrierDust.Create( position, this.Color, isHit );
+
+			return dust;
 		}
 	}
 }

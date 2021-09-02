@@ -14,7 +14,7 @@ using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 namespace SoulBarriers {
 	public partial class SoulBarriersMod : Mod {
 		public static (string stats, Vector2 dim) GetBarrierStatsData( Barrier barrier ) {
-			string stats = (int)barrier.Strength + " hp";
+			string stats = (int)Math.Ceiling(barrier.Strength) + " hp";
 			Vector2 statsDim = Main.fontMouseText.MeasureString( stats );
 
 			return (stats, statsDim);
@@ -68,7 +68,7 @@ namespace SoulBarriers {
 			Vector2 worldPos = Main.MouseWorld + new Vector2(0f, -28f);
 			(string stats, Vector2 dim) stats = SoulBarriersMod.GetBarrierStatsData( barrier );
 
-			this.DisplayBarrierStats( sb, worldPos, stats, barrier.BarrierColor );
+			this.DisplayBarrierStats( sb, worldPos, stats, barrier.Color );
 		}
 
 
@@ -81,7 +81,7 @@ namespace SoulBarriers {
 			worldPos.Y -= barrier.Radius + (stats.dim.Y * 1.5f);
 			//pos.X -= statsDim.X * 0.5f;
 
-			this.DisplayBarrierStats( sb, worldPos, stats, barrier.BarrierColor );
+			this.DisplayBarrierStats( sb, worldPos, stats, barrier.Color );
 		}
 
 
@@ -91,15 +91,17 @@ namespace SoulBarriers {
 					SpriteBatch sb,
 					Vector2 worldPos,
 					(string stats, Vector2 dim) stats,
-					BarrierColor color ) {
+					Color color ) {
 //DebugLibraries.Print( "barrier stats", worldPos.ToString()+", "+(worldPos-Main.screenPosition) );
+			color = Color.Lerp( color, Color.White, 0.25f );
+
 			Utils.DrawBorderStringFourWay(
 				sb: sb,
 				font: Main.fontMouseText,
 				text: stats.stats,
 				x: worldPos.X - Main.screenPosition.X,
 				y: worldPos.Y - Main.screenPosition.Y,
-				textColor: Barrier.GetColor(color) * ((float)Main.mouseTextColor / 255f),
+				textColor: color * ((float)Main.mouseTextColor / 255f),
 				borderColor: Color.Black,
 				origin: stats.dim * 0.5f
 			);

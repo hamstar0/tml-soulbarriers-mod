@@ -21,7 +21,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 					double? maxRegenStrength,
 					double strengthRegenPerTick,
 					Rectangle worldArea,
-					BarrierColor color,
+					Color color,
 					bool isSaveable,
 					BarrierHostType hostType = BarrierHostType.None,
 					int hostWhoAmI = -1

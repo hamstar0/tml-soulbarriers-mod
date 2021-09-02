@@ -38,7 +38,9 @@ namespace SoulBarriers.Packets {
 
 		public double StrengthRegenPerTick;
 
-		public int Color;
+		public byte ColorR;
+		public byte ColorG;
+		public byte ColorB;
 
 
 
@@ -53,7 +55,9 @@ namespace SoulBarriers.Packets {
 			this.Strength = barrier.Strength;
 			this.MaxRegenStrength = barrier.MaxRegenStrength.HasValue ? -1d : barrier.MaxRegenStrength.Value;
 			this.StrengthRegenPerTick = barrier.StrengthRegenPerTick;
-			this.Color = (int)barrier.BarrierColor;
+			this.ColorR = barrier.Color.R;
+			this.ColorG = barrier.Color.G;
+			this.ColorB = barrier.Color.B;
 		}
 
 		////////////////
@@ -66,7 +70,7 @@ namespace SoulBarriers.Packets {
 				strength: this.Strength,
 				maxRegenStrength: this.MaxRegenStrength == -1d ? (double?)null : (double?)this.MaxRegenStrength,
 				strengthRegenPerTick: this.StrengthRegenPerTick,
-				color: (BarrierColor)this.Color,
+				color: new Color(this.ColorR, this.ColorG, this.ColorB),
 				isSaveable: true
 			);
 			BarrierManager.Instance.DeclareWorldBarrier( barrier, false );

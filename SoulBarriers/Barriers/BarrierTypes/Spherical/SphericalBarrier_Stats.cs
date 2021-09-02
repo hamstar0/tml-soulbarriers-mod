@@ -35,16 +35,14 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 
 			float distScale = Main.rand.NextFloat();
 			if( isFxOnly ) {
-				distScale = 1f - ( distScale * distScale * distScale * distScale * distScale );
+				distScale = 1f - (distScale * distScale * distScale * distScale * distScale);
 			} else {
 				distScale = 1f - distScale;
 			}
-			distScale *= this.Radius;
 
-			Vector2 offset = Vector2.One.RotatedByRandom( 2d * Math.PI );
-			offset *= distScale;
+			Vector2 randDir = Vector2.One.RotatedByRandom( 2d * Math.PI );
 
-			return offset;
+			return randDir * distScale * this.Radius;
 		}
 	}
 }

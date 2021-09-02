@@ -40,7 +40,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////
 
-		public BarrierColor BarrierColor { get; protected set; }
+		public Color Color { get; protected set; }
 
 
 		////////////////
@@ -77,7 +77,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					double strength,
 					double? maxRegenStrength,
 					double strengthRegenPerTick,
-					BarrierColor color ) {
+					Color color ) {
 			this.ParticleOffsets = new ReadOnlyDictionary<Dust, Vector2>( this._ParticleOffsets );
 
 			this.HostType = barrierHostType;
@@ -85,7 +85,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			this.Strength = strength;
 			this.MaxRegenStrength = maxRegenStrength;
 			this.StrengthRegenPerTick = strengthRegenPerTick;
-			this.BarrierColor = color;
+			this.Color = color;
 
 			this.InitialStrength = strength;
 		}

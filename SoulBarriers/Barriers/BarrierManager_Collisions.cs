@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using ModLibsCore.Classes.Loadable;
@@ -14,8 +16,11 @@ namespace SoulBarriers.Barriers {
 				return;
 			}
 
-			foreach( Barrier barrier in this.BarriersByID.Values ) {
-				barrier.CheckCollisionsAgainstBarriers( this.BarriersByID.Values );
+			IEnumerable<Barrier> activeBarriers = this.BarriersByID.Values
+				.Where( b => b.IsActive );
+
+			foreach( Barrier barrier in activeBarriers ) {
+				barrier.CheckCollisionsAgainstBarriers( activeBarriers );
 			}
 		}
 

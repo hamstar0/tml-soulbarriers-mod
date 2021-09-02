@@ -28,7 +28,9 @@ namespace SoulBarriers {
 				int y = tag.GetInt( "barrier_"+i+"_area_y" );
 				int w = tag.GetInt( "barrier_"+i+"_area_w" );
 				int h = tag.GetInt( "barrier_"+i+"_area_h" );
-				int c = tag.GetInt( "barrier_"+i+"_color" );
+				byte cR = tag.GetByte( "barrier_"+i+"_color_r" );
+				byte cG = tag.GetByte( "barrier_"+i+"_color_g" );
+				byte cB = tag.GetByte( "barrier_"+i+"_color_b" );
 				double maxStr = tag.GetDouble( "barrier_"+i+"_max_str" );
 				double strRegen = tag.GetDouble( "barrier_"+i+"_str_regen" );
 				
@@ -39,7 +41,7 @@ namespace SoulBarriers {
 					strength: maxStr,
 					maxRegenStrength: maxStr,
 					strengthRegenPerTick: strRegen,
-					color: (BarrierColor)c,
+					color: new Color(cR, cG, cB),
 					isSaveable: true
 				);
 				mngr.DeclareWorldBarrier( barrier, false );
@@ -61,7 +63,9 @@ namespace SoulBarriers {
 				tag[ "barrier_"+i+"_area_y" ] = (int)rect.Y;
 				tag[ "barrier_"+i+"_area_w" ] = (int)rect.Width;
 				tag[ "barrier_"+i+"_area_h" ] = (int)rect.Height;
-				tag[ "barrier_"+i+"_color" ] = (int)barrier.BarrierColor;
+				tag[ "barrier_"+i+"_color_r" ] = barrier.Color.R;
+				tag[ "barrier_"+i+"_color_g" ] = barrier.Color.G;
+				tag[ "barrier_"+i+"_color_b" ] = barrier.Color.B;
 				tag[ "barrier_"+i+"_max_str" ] = (double)barrier.MaxRegenStrength;
 				tag[ "barrier_"+i+"_str_regen" ] = (double)barrier.StrengthRegenPerTick;
 				i++;
@@ -90,14 +94,16 @@ namespace SoulBarriers {
 				double strength = reader.ReadDouble();
 				double maxRegenStrength = reader.ReadDouble();
 				double strengthRegen = reader.ReadDouble();
-				int color = reader.ReadInt32();
+				byte colorR = reader.ReadByte();
+				byte colorG = reader.ReadByte();
+				byte colorB = reader.ReadByte();
 
 				var barrier = new AccessBarrier(
 					worldArea: rect,
 					strength: strength,
 					maxRegenStrength: maxRegenStrength == -1 ? (int?)null : (int?)maxRegenStrength,
 					strengthRegenPerTick: strengthRegen,
-					color: ( BarrierColor)color,
+					color: new Color(colorR, colorG, colorB),
 					isSaveable: true,
 					hostType: BarrierHostType.None,
 					hostWhoAmI: -1
@@ -121,7 +127,9 @@ namespace SoulBarriers {
 				writer.Write( (double)barrier.Strength );
 				writer.Write( (double)(barrier.MaxRegenStrength.HasValue ? barrier.MaxRegenStrength.Value : -1d) );;
 				writer.Write( (double)barrier.StrengthRegenPerTick );
-				writer.Write( (int)barrier.BarrierColor );
+				writer.Write( barrier.Color.R );
+				writer.Write( barrier.Color.G );
+				writer.Write( barrier.Color.B );
 			}
 		}
 
@@ -143,7 +151,7 @@ namespace SoulBarriers {
 					continue;
 				}
 
-				int particles = barrier.GetParticleCount();
+				int particles = barrier.GetMaxAnimationParticleCount();
 
 				barrier.Animate( particles );
 //DebugLibraries.Print( "worldbarrier "+rect, "has:"+barrier.ParticleOffsets.Count+", of:"+particles );

@@ -46,7 +46,7 @@ namespace SoulBarriers.Commands {
 				maxRegenStrength: str,
 				strengthRegenPerTick: 5f / 60f,
 				worldArea: rect,
-				color: BarrierColor.Red,
+				color: Color.Red,
 				isSaveable: false
 			);
 

@@ -12,7 +12,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					double? maxRegenStrength,
 					double strengthRegenPerTick,
 					Rectangle worldArea,
-					BarrierColor color,
+					Color color,
 					bool isSaveable,
 					BarrierHostType hostType = BarrierHostType.None,
 					int hostWhoAmI = -1
@@ -26,6 +26,10 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					hostType: hostType,
 					hostWhoAmI: hostWhoAmI ) {
 			void onBarrierEntityCollide( Entity intruder ) {
+				if( !intruder.active ) {
+					return;
+				}
+
 //DebugLibraries.ChatOnce( "b_col_ent_"+this.GetID(), "ent: "+intruder );
 				if( intruder is Player ) {
 					var plrIntrud = intruder as Player;
@@ -52,7 +56,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 			}
 			
 			void onBarrierBarrierCollide( Barrier otherBarrier ) {
-				if( otherBarrier is AccessBarrier ) {
+				if( !otherBarrier.IsActive || otherBarrier is AccessBarrier ) {
 					return;
 				}
 

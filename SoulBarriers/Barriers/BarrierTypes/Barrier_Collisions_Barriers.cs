@@ -39,6 +39,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				if( barrier == this ) {
 					continue;
 				}
+				if( !barrier.IsActive ) {
+					continue;
+				}
 /*if( this is SphericalBarrier ) {
 	DebugLibraries.Print(
 		"b_v_b_"+this.GetID()+" v "+barrier.GetID(),

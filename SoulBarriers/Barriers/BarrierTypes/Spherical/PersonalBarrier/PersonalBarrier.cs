@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 
@@ -10,7 +11,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 					int hostWhoAmI,
 					int strength,
 					float radius,
-					BarrierColor color
+					Color color
 				) : base(
 					hostType: hostType,
 					hostWhoAmI: hostWhoAmI,
