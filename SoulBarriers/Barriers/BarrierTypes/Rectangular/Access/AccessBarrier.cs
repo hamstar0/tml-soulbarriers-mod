@@ -63,7 +63,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 				double damage = this.Strength > otherBarrier.Strength
 					? otherBarrier.Strength
 					: this.Strength;
-				damage = Math.Round( damage );
+				damage = Math.Ceiling( damage );
 
 				if( damage > 0d ) {
 					this.ApplyRawHit( null, damage, false );
