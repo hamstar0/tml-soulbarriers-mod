@@ -6,30 +6,32 @@ using Terraria.ModLoader;
 
 namespace SoulBarriers.Dusts {
 	public partial class BarrierDust : ModDust {
-		public const float PercentElapsedPerTick = 1f / 32f;
+		public const float DefaultPercentDurationElapsedPerTick = 1f / 32f;
 
 
 
 		////////////////
 		
-		public static (bool isBarrierHit, float percentDuration, float baseScale) GetCustomDataOrDefault( Dust dust ) {
-			if( dust.customData is ValueTuple<bool, float, float> ) {
-				return ((bool, float, float))dust.customData;
+		public static (bool isBarrierHit, float percentDuration, float durationPercentPerTick, float baseScale)
+					GetCustomDataOrDefault( Dust dust ) {
+			if( dust.customData is ValueTuple<bool, float, float, float> ) {
+				return ((bool, float, float, float))dust.customData;
 			}
-			return (false, 0f, 0f);
+			return (false, 0f, 0f, 0f);
 		}
 
 		public static void SetCustomData(
 					Dust dust,
 					bool isFromBarrierHit,
 					float percentDuration,
+					float durationPercentPerTick,
 					float? baseScale = null ) {
 			if( !baseScale.HasValue ) {
 				var data = BarrierDust.GetCustomDataOrDefault( dust );
 				baseScale = data.baseScale;
 			}
 
-			dust.customData = (isFromBarrierHit, percentDuration, baseScale.Value);
+			dust.customData = (isFromBarrierHit, percentDuration, durationPercentPerTick, baseScale.Value);
 		}
 
 

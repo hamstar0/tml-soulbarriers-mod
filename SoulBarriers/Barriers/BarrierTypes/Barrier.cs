@@ -136,7 +136,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public void SetStrength( double strength, bool clearRegenBuffer ) {
+		public void SetStrength( double strength, bool clearRegenBuffer, bool refreshHostBuffState ) {
 			if( strength < 0d ) {
 				strength = 0d;
 			}
@@ -147,36 +147,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				this.BufferedStrengthRegen = 0f;
 			}
 
-			if( this.HostType == BarrierHostType.Player ) {
-				this.RefreshForPlayerHost();
-			} else if( this.HostType == BarrierHostType.NPC ) {
-				this.RefreshForNpcHost();
-			}
-		}
-
-		////////////////
-
-		private void RefreshForPlayerHost() {
-			int soulBuffType = ModContent.BuffType<SoulBarrierBuff>();
-			Player plr = (Player)this.Host;
-
-			if( this.Strength > 0d ) {
-				plr.AddBuff( soulBuffType, 2 );
-			} else {
-				plr.ClearBuff( soulBuffType );
-			}
-		}
-
-		private void RefreshForNpcHost() {
-			int soulBuffType = ModContent.BuffType<SoulBarrierBuff>();
-			NPC host = (NPC)this.Host;
-
-			if( this.Strength > 0d ) {
-				host.AddBuff( soulBuffType, 2 );
-			} else {
-				int buffIdx = host.FindBuffIndex( soulBuffType );
-				if( buffIdx >= 0 ) {
-					host.DelBuff( buffIdx );
+			if( refreshHostBuffState ) {
+				if( this.HostType == BarrierHostType.Player ) {
+					this.RefreshBuffForPlayerHost();
+				} else if( this.HostType == BarrierHostType.NPC ) {
+					this.RefreshBuffForNpcHost();
 				}
 			}
 		}

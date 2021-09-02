@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using SoulBarriers.Dusts;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes.Spherical {

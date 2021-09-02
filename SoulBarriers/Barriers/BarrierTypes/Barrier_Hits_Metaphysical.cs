@@ -13,7 +13,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			this.SetStrength( this.Strength - damage, false );
+			this.SetStrength( this.Strength - damage, false, false );
 
 			int particles = (int)( damage * 4d );
 			if( particles >= 1 ) {

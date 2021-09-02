@@ -32,11 +32,11 @@ namespace SoulBarriers.Dusts {
 
 		////////////////
 
-		public static Dust Create( Vector2 position, Color color, bool isHit ) {
+		public static Dust Create( Vector2 position, Color color, bool isHit, float durationPercentPerTick ) {
 			float scaleScale = Main.rand.NextFloat();
 			float scale = isHit
 				? 1.5f + (scaleScale * scaleScale)
-				: 1f + (scaleScale * scaleScale * scaleScale * 2f);
+				: 0.5f + (scaleScale * scaleScale * scaleScale * 2f);
 
 			Vector2 vel = isHit
 				? new Vector2( Main.rand.NextFloat(-3f,3f), Main.rand.NextFloat(-3f,3f) )
@@ -58,6 +58,7 @@ namespace SoulBarriers.Dusts {
 			BarrierDust.SetCustomData(
 				dust: dust,
 				isFromBarrierHit: isHit,
+				durationPercentPerTick: durationPercentPerTick,
 				percentDuration: 1f - (Main.rand.NextFloat() * 0.2f),
 				baseScale: scale
 			);

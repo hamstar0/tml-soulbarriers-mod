@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using SoulBarriers.Dusts;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
@@ -32,6 +33,18 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 			float maxRandDistSqr = maxRandDist * maxRandDist;
 
 			return distSqr > Main.rand.NextFloat( maxRandDistSqr );
+		}
+
+
+		////////////////
+
+		public override Dust CreateBarrierParticleAt( Vector2 position, bool isHit ) {
+			return BarrierDust.Create(
+				position: position,
+				color: this.Color,
+				isHit: isHit,
+				durationPercentPerTick: BarrierDust.DefaultPercentDurationElapsedPerTick * 0.5f
+			);
 		}
 	}
 }

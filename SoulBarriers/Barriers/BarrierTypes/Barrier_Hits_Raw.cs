@@ -23,7 +23,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			double oldStr = this.Strength;
 
-			this.SetStrength( this.Strength - damage, false );
+			this.SetStrength( this.Strength - damage, false, false );
 
 			//
 

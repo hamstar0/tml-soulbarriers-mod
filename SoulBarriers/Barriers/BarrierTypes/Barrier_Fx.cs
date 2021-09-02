@@ -181,9 +181,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		////////////////
 
 		public virtual Dust CreateBarrierParticleAt( Vector2 position, bool isHit ) {
-			Dust dust = BarrierDust.Create( position, this.Color, isHit );
-
-			return dust;
+			return BarrierDust.Create( position, this.Color, isHit, BarrierDust.DefaultPercentDurationElapsedPerTick );
 		}
 	}
 }

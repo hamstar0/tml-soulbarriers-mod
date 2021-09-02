@@ -64,7 +64,7 @@ namespace SoulBarriers.Packets {
 				barrier.ApplyHitFx( damage > 0d ? damage : 8d );
 			}
 
-			barrier.SetStrength( this.Strength, this.ClearRegenBuffer );
+			barrier.SetStrength( this.Strength, this.ClearRegenBuffer, false );
 		}
 
 		////

@@ -6,14 +6,14 @@ using Terraria.ModLoader;
 namespace SoulBarriers.Dusts {
 	public partial class BarrierDust : ModDust {
 		public override bool Update( Dust dust ) {
-			(bool isBarrierHit, float percentDuration, float baseScale) data
+			(bool isBarrierHit, float percentDuration, float durationPercentPerTick, float baseScale) data
 					= BarrierDust.GetCustomDataOrDefault( dust );
 			if( data.percentDuration <= 0f ) {
 				dust.active = false;
 				return false;
 			}
 
-			data.percentDuration = data.percentDuration - BarrierDust.PercentElapsedPerTick;
+			data.percentDuration = data.percentDuration - data.durationPercentPerTick;
 			dust.customData = data;
 
 			//
