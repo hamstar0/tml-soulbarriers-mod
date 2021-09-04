@@ -63,7 +63,7 @@ namespace SoulBarriers.Items {
 			//
 
 			double dispStrength = (int)strength;
-			int percent = (int)( ( strength % 1d ) * 100d );
+			int percent = (int)( (strength % 1d) * 100d );
 			dispStrength += (double)percent / 100d;
 
 			return dispStrength;
@@ -77,10 +77,14 @@ namespace SoulBarriers.Items {
 
 			double strength = PBGItem.GetDisplayStrength( myplayer.Barrier.Strength, out string colorCode );
 
+			string strengthStr = strength == 0d
+				? "N/A"
+				: strength.ToString();//+"/"+myplayer.Barrier.InitialStrength;
+
 			return (
 				true,
 				"PlayerBarrierStrength",
-				" Barrier strength: [c/" + colorCode + ":" + strength + "]"
+				"- Barrier strength: [c/" + colorCode + ":" + strengthStr + "]"
 			);
 		}
 
@@ -90,18 +94,20 @@ namespace SoulBarriers.Items {
 				return (false, null, null);
 			}
 
-			int buffTime = Main.LocalPlayer.buffTime[buffIdx];
-			string buffTimeDisp = MiscLibraries.RenderTickDuration( buffTime );
+			int remainingTicks = Main.LocalPlayer.buffTime[buffIdx];
+			string buffTimeDisp = remainingTicks > 0
+				? MiscLibraries.RenderTickDuration( remainingTicks )
+				: "N/A";
 
 			var config = SoulBarriersConfig.Instance;
 			int seconds = config.Get<int>( nameof(config.PBGOverheatDurationSeconds) );
-			int ticks = seconds * 60;
-			string colorCode = PBGItem.GetColorCode( 1, (float)buffTime / (float)ticks );
+			int maxTicks = seconds * 60;
+			string colorCode = PBGItem.GetColorCode( 1, (float)remainingTicks / (float)maxTicks );
 
 			return (
 				true,
 				"PlayerBarrierCooldown",
-				" Barrier cooldown: [c/" + colorCode + ":" + buffTimeDisp + "]"
+				"- Barrier cooldown: [c/" + colorCode + ":" + buffTimeDisp + "]"
 			);
 		}
 
