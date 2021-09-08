@@ -91,6 +91,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 			if( intruder.realLife >= 1 ) {
 				return;
 			}
+			if( Main.invasionSize >= 1 ) {
+				return;
+			}
 			if( Main.npc.Any(n => n?.active == true && n.boss) ) {
 				return;
 			}
