@@ -72,7 +72,7 @@ namespace SoulBarriers.Packets {
 				color: new Color(this.ColorR, this.ColorG, this.ColorB),
 				isSaveable: true
 			);
-			BarrierManager.Instance.DeclareWorldAccessBarrier( barrier, false );
+			BarrierManager.Instance.DeclareWorldBarrierUnsynced( barrier );
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {

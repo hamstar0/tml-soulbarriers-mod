@@ -11,6 +11,7 @@ using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers.BarrierTypes.Spherical.Personal;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 using SoulBarriers.Packets;
+using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 
 
 namespace SoulBarriers.Barriers {
@@ -80,42 +81,12 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		public bool DeclareWorldAccessBarrier( AccessBarrier barrier, bool syncFromServer ) {
-					/*Rectangle worldArea,
-					int strength,
-					int maxRegenStrength,
-					float strengthRegenPerTick,
-					BarrierColor color,
-					bool isSaveable,
-					bool syncFromServer,
-					BarrierHostType hostType = BarrierHostType.None,
-					int hostWhoAmI = -1 ) {*/
-			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
-				return false;
-			}
-
-			/*var barrier = new AccessBarrier(
-				strength: strength,
-				maxRegenStrength: maxRegenStrength,
-				strengthRegenPerTick: strengthRegenPerTick,
-				worldArea: worldArea,
-				color: color,
-				isSaveable: isSaveable,
-				hostType: hostType,
-				hostWhoAmI: hostWhoAmI
-			);*/
-
-			this.WorldBarriers[ barrier.WorldArea ] = barrier;
+		public bool DeclareWorldBarrierUnsynced( RectangularBarrier barrier ) {
+			this.WorldBarriers[barrier.WorldArea] = barrier;
 
 			//
 
 			SoulBarriersAPI.RunBarrierCreateHooks( barrier );
-
-			//
-
-			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				AccessBarrierCreatePacket.BroadcastToClients( barrier );
-			}
 
 			return true;
 		}

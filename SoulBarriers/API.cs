@@ -8,7 +8,9 @@ using ModLibsCore.Classes.Errors;
 using ModLibsCore.Classes.Loadable;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
+using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
+using SoulBarriers.Packets;
 
 
 namespace SoulBarriers {
@@ -36,30 +38,27 @@ namespace SoulBarriers {
 
 		////
 
-		public static bool DeclareWorldAccessBarrier( AccessBarrier barrier, bool syncFromServer ) {
-					/*Rectangle worldArea,
-					double strength,
-					int maxRegenStrength,
-					float strengthRegenPerTick,
-					BarrierColor color,
-					bool isSaveable ) {*/
+		public static void DeclareWorldAccessBarrier( AccessBarrier barrier, bool syncFromServer ) {
 			if( Main.netMode == NetmodeID.MultiplayerClient ) {
 				throw new ModLibsException( "Not available for clients." );
 			}
 
-			/*return BarrierManager.Instance.CreateAndDeclareWorldBarrier(
-				hostType: BarrierHostType.None,
-				hostWhoAmI: -1,
-				worldArea: worldArea,
-				strength: strength,
-				maxRegenStrength: maxRegenStrength,
-				strengthRegenPerTick: strengthRegenPerTick,
-				color: color,
-				isSaveable: isSaveable,
-				syncFromServer: true
-			);*/
-			return BarrierManager.Instance.DeclareWorldAccessBarrier( barrier, syncFromServer );
+			BarrierManager.Instance.DeclareWorldBarrierUnsynced( barrier );
+
+			//
+
+			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
+				AccessBarrierCreatePacket.BroadcastToClients( barrier );
+			}
 		}
+
+		////
+		
+		public static void DeclareWorldBarrierUnsynced( RectangularBarrier barrier ) {
+			BarrierManager.Instance.DeclareWorldBarrierUnsynced( barrier );
+		}
+
+		////
 
 		public static void RemoveWorldBarrier( Rectangle worldArea ) {
 			if( Main.netMode == NetmodeID.MultiplayerClient ) {

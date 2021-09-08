@@ -44,7 +44,7 @@ namespace SoulBarriers {
 					color: new Color(cR, cG, cB),
 					isSaveable: true
 				);
-				mngr.DeclareWorldAccessBarrier( barrier, false );
+				mngr.DeclareWorldBarrierUnsynced( barrier );
 			}
 		}
 
@@ -108,7 +108,7 @@ namespace SoulBarriers {
 					hostType: BarrierHostType.None,
 					hostWhoAmI: -1
 				);
-				mngr.DeclareWorldAccessBarrier( barrier, false );
+				mngr.DeclareWorldBarrierUnsynced( barrier );
 			}
 		}
 
