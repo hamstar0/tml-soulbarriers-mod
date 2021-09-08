@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.DataStructures;
 using ModLibsCore.Libraries.Debug;
 
@@ -32,26 +33,11 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 
 //DebugLibraries.ChatOnce( "b_col_ent_"+this.GetID(), "ent: "+intruder );
 				if( intruder is Player ) {
-					var plrIntrud = intruder as Player;
-
-					if( !plrIntrud.dead ) {
-						plrIntrud.KillMe(
-							damageSource: PlayerDeathReason.ByCustomReason( "Access denied." ),
-							dmg: 999999999,
-							hitDirection: 0
-						);
-					}
+					this.ApplyAccessPlayerHit( intruder as Player );
 				} else if( intruder is NPC ) {
-					var intruderNpc = intruder as NPC;
-
-					if( !intruderNpc.friendly && !intruderNpc.boss && intruderNpc.realLife == -1 ) {
-						var mynpc = intruderNpc.GetGlobalNPC<SoulBarriersNPC>();
-						mynpc.KillFromBarrier = true;
-					}
+					this.ApplyAccessNpcHit( intruder as NPC );
 				} else if( intruder is Projectile ) {
-					var projIntrud = intruder as Projectile;
-
-					projIntrud.Kill();
+					this.ApplyAccessProjectileHit( intruder as Projectile );
 				}
 			}
 			
@@ -76,6 +62,48 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 			//this.OnPreBarrierEntityCollision += ( ref Entity intruder ) => true;
 			this.OnBarrierEntityCollision.Add( onBarrierEntityCollide );
 			this.OnBarrierBarrierCollision.Add( onBarrierBarrierCollide );
+		}
+
+
+		////
+
+		public void ApplyAccessPlayerHit( Player intruder ) {
+			if( intruder.dead ) {
+				return;
+			}
+
+			intruder.KillMe(
+				damageSource: PlayerDeathReason.ByCustomReason( "Access denied." ),
+				dmg: 999999999,
+				hitDirection: 0
+			);
+
+			if( Main.netMode == NetmodeID.Server ) {
+				NetMessage.SendData( MessageID.PlayerHealth, -1, -1, null, intruder.whoAmI );
+			}
+		}
+
+		public void ApplyAccessNpcHit( NPC intruder ) {
+			if( intruder.friendly ) {
+				return;
+			}
+			if( intruder.boss ) {
+				return;
+			}
+			if( intruder.realLife >= 1 ) {
+				return;
+			}
+
+			var mynpc = intruder.GetGlobalNPC<SoulBarriersNPC>();
+			mynpc.KillFromBarrier = true;
+		}
+
+		public void ApplyAccessProjectileHit( Projectile intruder ) {
+			intruder.Kill();
+
+			if( Main.netMode == NetmodeID.Server ) {
+				NetMessage.SendData( MessageID.KillProjectile, -1, -1, null, intruder.whoAmI );
+			}
 		}
 	}
 }

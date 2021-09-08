@@ -21,7 +21,7 @@ namespace SoulBarriers.Packets {
 
 			var packet = new BarrierStrengthPacket( barrier, strength, applyHitFx, clearRegenBuffer );
 
-			SimplePacket.SendToServer( packet );
+			SimplePacket.SendToClient( packet );
 		}
 
 

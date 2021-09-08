@@ -31,8 +31,13 @@ namespace SoulBarriers {
 			BarrierManager.Instance.CheckCollisionsAgainstEntity( npc );
 
 			if( this.KillFromBarrier ) {
-				npc.HitEffect( 1 );
-				NPCLibraries.Kill( npc, Main.netMode == NetmodeID.Server );
+				npc.HitEffect();
+				npc.life = 0;
+				npc.checkDead();
+				
+				if( Main.netMode == NetmodeID.Server ) {
+					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npc.whoAmI );
+				}
 			}
 
 			return !this.KillFromBarrier;

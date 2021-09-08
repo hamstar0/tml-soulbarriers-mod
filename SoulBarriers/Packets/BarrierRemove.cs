@@ -18,7 +18,7 @@ namespace SoulBarriers.Packets {
 
 			var packet = new BarrierRemovePacket( barrier );
 
-			SimplePacket.SendToServer( packet );
+			SimplePacket.SendToClient( packet );
 		}
 
 

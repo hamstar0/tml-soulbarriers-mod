@@ -22,7 +22,7 @@ namespace SoulBarriers.Packets {
 
 			var packet = new BarrierHitMetaphysicalPacket( barrier, hasHitPosition,  hitPosition, damage );
 
-			SimplePacket.SendToServer( packet );
+			SimplePacket.SendToClient( packet );
 		}
 
 

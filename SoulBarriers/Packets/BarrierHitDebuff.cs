@@ -17,7 +17,7 @@ namespace SoulBarriers.Packets {
 
 			var packet = new BarrierHitDebuffPacket( barrier, buffType );
 
-			SimplePacket.SendToServer( packet );
+			SimplePacket.SendToClient( packet );
 		}
 
 

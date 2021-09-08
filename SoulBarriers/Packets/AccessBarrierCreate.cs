@@ -11,15 +11,15 @@ using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 
 
 namespace SoulBarriers.Packets {
-	class WorldBarrierCreatePacket : SimplePacketPayload {
+	class AccessBarrierCreatePacket : SimplePacketPayload {
 		public static void BroadcastToClients( RectangularBarrier barrier ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
 
-			var packet = new WorldBarrierCreatePacket( barrier );
+			var packet = new AccessBarrierCreatePacket( barrier );
 
-			SimplePacket.SendToServer( packet );
+			SimplePacket.SendToClient( packet );
 		}
 
 
@@ -46,9 +46,9 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
-		private WorldBarrierCreatePacket() { }
+		private AccessBarrierCreatePacket() { }
 
-		private WorldBarrierCreatePacket( RectangularBarrier barrier ) {
+		private AccessBarrierCreatePacket( RectangularBarrier barrier ) {
 			this.HostType = (int)barrier.HostType;
 			this.HostWhoAmI = barrier.HostWhoAmI;
 			this.WorldArea = barrier.WorldArea;

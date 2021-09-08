@@ -21,7 +21,7 @@ namespace SoulBarriers.Packets {
 
 			var packet = new BarrierHitEntityPacket( barrier, entityType, entityWhoAmI );
 
-			SimplePacket.SendToServer( packet );
+			SimplePacket.SendToClient( packet );
 		}
 
 

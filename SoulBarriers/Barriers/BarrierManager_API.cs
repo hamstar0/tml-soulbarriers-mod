@@ -114,7 +114,7 @@ namespace SoulBarriers.Barriers {
 			//
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				WorldBarrierCreatePacket.BroadcastToClients( barrier );
+				AccessBarrierCreatePacket.BroadcastToClients( barrier );
 			}
 
 			return true;
