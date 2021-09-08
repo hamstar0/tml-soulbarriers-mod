@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -87,10 +88,10 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 			if( intruder.friendly ) {
 				return;
 			}
-			if( intruder.boss ) {
+			if( intruder.realLife >= 1 ) {
 				return;
 			}
-			if( intruder.realLife >= 1 ) {
+			if( Main.npc.Any(n => n?.active == true && n.boss) ) {
 				return;
 			}
 
