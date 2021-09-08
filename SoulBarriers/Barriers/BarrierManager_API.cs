@@ -8,8 +8,8 @@ using ModLibsCore.Classes.Errors;
 using ModLibsCore.Classes.Loadable;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers.BarrierTypes;
-using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 using SoulBarriers.Barriers.BarrierTypes.Spherical.Personal;
+using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 using SoulBarriers.Packets;
 
 
@@ -80,7 +80,7 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		public bool DeclareWorldBarrier( RectangularBarrier barrier, bool syncFromServer ) {
+		public bool DeclareWorldAccessBarrier( AccessBarrier barrier, bool syncFromServer ) {
 					/*Rectangle worldArea,
 					int strength,
 					int maxRegenStrength,

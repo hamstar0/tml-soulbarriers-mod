@@ -8,7 +8,7 @@ using ModLibsCore.Classes.Errors;
 using ModLibsCore.Classes.Loadable;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
-using SoulBarriers.Barriers.BarrierTypes.Rectangular;
+using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 
 
 namespace SoulBarriers {
@@ -36,7 +36,7 @@ namespace SoulBarriers {
 
 		////
 
-		public static bool DeclareWorldBarrier( RectangularBarrier barrier ) {
+		public static bool DeclareWorldAccessBarrier( AccessBarrier barrier, bool syncFromServer ) {
 					/*Rectangle worldArea,
 					double strength,
 					int maxRegenStrength,
@@ -58,7 +58,7 @@ namespace SoulBarriers {
 				isSaveable: isSaveable,
 				syncFromServer: true
 			);*/
-			return BarrierManager.Instance.DeclareWorldBarrier( barrier, true );
+			return BarrierManager.Instance.DeclareWorldAccessBarrier( barrier, syncFromServer );
 		}
 
 		public static void RemoveWorldBarrier( Rectangle worldArea ) {

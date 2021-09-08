@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsGeneral.Libraries.World;
 using SoulBarriers.Barriers;
@@ -50,7 +51,11 @@ namespace SoulBarriers.Commands {
 				isSaveable: false
 			);
 
-			SoulBarriersAPI.DeclareWorldBarrier( barrier );
+			if( Main.netMode != NetmodeID.MultiplayerClient ) {
+				SoulBarriersAPI.DeclareWorldAccessBarrier( barrier, true );
+			} else {
+				Main.NewText( "Cannot call command in MP?" );
+			}
 		}
 	}
 }

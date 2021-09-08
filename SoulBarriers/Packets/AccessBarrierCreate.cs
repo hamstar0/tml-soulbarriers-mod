@@ -6,13 +6,12 @@ using ModLibsCore.Classes.Errors;
 using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Services.Network.SimplePacket;
 using SoulBarriers.Barriers;
-using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 
 
 namespace SoulBarriers.Packets {
 	class AccessBarrierCreatePacket : SimplePacketPayload {
-		public static void BroadcastToClients( RectangularBarrier barrier ) {
+		public static void BroadcastToClients( AccessBarrier barrier ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
@@ -48,7 +47,7 @@ namespace SoulBarriers.Packets {
 
 		private AccessBarrierCreatePacket() { }
 
-		private AccessBarrierCreatePacket( RectangularBarrier barrier ) {
+		private AccessBarrierCreatePacket( AccessBarrier barrier ) {
 			this.HostType = (int)barrier.HostType;
 			this.HostWhoAmI = barrier.HostWhoAmI;
 			this.WorldArea = barrier.WorldArea;
@@ -73,7 +72,7 @@ namespace SoulBarriers.Packets {
 				color: new Color(this.ColorR, this.ColorG, this.ColorB),
 				isSaveable: true
 			);
-			BarrierManager.Instance.DeclareWorldBarrier( barrier, false );
+			BarrierManager.Instance.DeclareWorldAccessBarrier( barrier, false );
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {
