@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers.Dusts {
@@ -32,7 +33,12 @@ namespace SoulBarriers.Dusts {
 
 		////////////////
 		
-		public static Dust Create( Vector2 position, Color color, bool isHit, float durationPercentPerTick ) {
+		public static Dust Create(
+					Barrier source,
+					Vector2 position,
+					Color color,
+					bool isHit,
+					float durationPercentPerTick ) {
 			float scaleScale = Main.rand.NextFloat();
 			float scale = isHit
 				? 1.5f + (scaleScale * scaleScale)
@@ -57,6 +63,7 @@ namespace SoulBarriers.Dusts {
 
 			BarrierDust.SetCustomData(
 				dust: dust,
+				source: source,
 				isFromBarrierHit: isHit,
 				durationPercentPerTick: durationPercentPerTick,
 				percentDuration: 1f - (Main.rand.NextFloat() * 0.2f),

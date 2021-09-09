@@ -8,6 +8,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 	public partial class SphericalBarrier : Barrier {
 		public override Dust CreateBarrierParticleAt( Vector2 position, bool isHit ) {
 			return BarrierDust.Create(
+				source: this,
 				position: position,
 				color: this.Color,
 				isHit: isHit,

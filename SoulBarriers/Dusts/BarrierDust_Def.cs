@@ -2,9 +2,35 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers.Dusts {
+	public struct SoulBarrierDustData {
+		public Barrier Source;
+		public bool IsBarrierHit;
+		public float PercentDuration;
+		public float DurationPercentPerTick;
+		public float BaseScale;
+
+
+		public SoulBarrierDustData(
+					Barrier source,
+					bool isBarrierHit,
+					float percentDuration,
+					float durationPercentPerTick,
+					float baseScale ) {
+			this.Source = source;
+			this.IsBarrierHit = isBarrierHit;
+			this.PercentDuration = percentDuration;
+			this.DurationPercentPerTick = durationPercentPerTick;
+			this.BaseScale = baseScale;
+		}
+	}
+
+
+
+
 	public partial class BarrierDust : ModDust {
 		public const float DefaultPercentDurationElapsedPerTick = 1f / 32f;
 
@@ -12,26 +38,32 @@ namespace SoulBarriers.Dusts {
 
 		////////////////
 		
-		public static (bool isBarrierHit, float percentDuration, float durationPercentPerTick, float baseScale)
-					GetCustomDataOrDefault( Dust dust ) {
-			if( dust.customData is ValueTuple<bool, float, float, float> ) {
-				return ((bool, float, float, float))dust.customData;
+		public static SoulBarrierDustData GetCustomDataOrDefault( Dust dust ) {
+			if( dust.customData is SoulBarrierDustData ) {
+				return (SoulBarrierDustData)dust.customData;
 			}
-			return (false, 0f, 0f, 0f);
+			return default;
 		}
 
 		public static void SetCustomData(
 					Dust dust,
+					Barrier source,
 					bool isFromBarrierHit,
 					float percentDuration,
 					float durationPercentPerTick,
 					float? baseScale = null ) {
 			if( !baseScale.HasValue ) {
-				var data = BarrierDust.GetCustomDataOrDefault( dust );
-				baseScale = data.baseScale;
+				SoulBarrierDustData data = BarrierDust.GetCustomDataOrDefault( dust );
+				baseScale = data.BaseScale;
 			}
 
-			dust.customData = (isFromBarrierHit, percentDuration, durationPercentPerTick, baseScale.Value);
+			dust.customData = new SoulBarrierDustData(
+				source: source,
+				isBarrierHit: isFromBarrierHit,
+				percentDuration: percentDuration,
+				durationPercentPerTick: durationPercentPerTick,
+				baseScale: baseScale.Value
+			);
 		}
 
 

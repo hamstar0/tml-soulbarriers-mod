@@ -72,6 +72,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		public virtual Dust CreateBarrierParticleAt( Vector2 position, bool isHit ) {
 			return BarrierDust.Create(
+				source: this,
 				position: position,
 				color: this.Color,
 				isHit: isHit,

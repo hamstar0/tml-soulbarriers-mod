@@ -6,14 +6,13 @@ using Terraria.ModLoader;
 namespace SoulBarriers.Dusts {
 	public partial class BarrierDust : ModDust {
 		public override bool Update( Dust dust ) {
-			(bool isBarrierHit, float percentDuration, float durationPercentPerTick, float baseScale) data
-					= BarrierDust.GetCustomDataOrDefault( dust );
-			if( data.percentDuration <= 0f ) {
+			SoulBarrierDustData data = BarrierDust.GetCustomDataOrDefault( dust );
+			if( data.PercentDuration <= 0f ) {
 				dust.active = false;
 				return false;
 			}
 
-			data.percentDuration = data.percentDuration - data.durationPercentPerTick;
+			data.PercentDuration = data.PercentDuration - data.DurationPercentPerTick;
 			dust.customData = data;
 
 			//
@@ -21,7 +20,7 @@ namespace SoulBarriers.Dusts {
 			dust.position += dust.velocity;
 			//dust.rotation += Main.rand.NextFloat();
 
-			if( !data.isBarrierHit ) {
+			if( !data.IsBarrierHit ) {
 				dust.velocity.X *= 0.7f;
 
 				if( dust.velocity.Y > 0f ) {
@@ -29,7 +28,7 @@ namespace SoulBarriers.Dusts {
 				}
 			}
 
-			dust.scale = data.baseScale * data.percentDuration;
+			dust.scale = data.BaseScale * data.PercentDuration;
 
 			return false;
 		}
