@@ -15,10 +15,12 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			this.SetStrength( this.Strength - damage, false, false );
 
-			int particles = (int)( damage * 4d );
-			if( particles >= 1 ) {
-				this.ApplyHitFx( particles, !this.IsActive );
+			if( Main.netMode != NetmodeID.Server ) {
+				int particles = (int)( damage * 4d );
+				if( particles >= 1 ) {
+					this.ApplyHitFx( particles, !this.IsActive );
 //LogLibraries.Log( "ApplyMetaphysicalHit "+damage+" ("+(int)(damage * 4d)+")" );
+				}
 			}
 
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {

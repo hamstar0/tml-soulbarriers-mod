@@ -58,10 +58,12 @@ namespace SoulBarriers.Packets {
 				return;
 			}
 
-			double damage = barrier.Strength - this.Strength;
+			if( Main.netMode != NetmodeID.Server ) {
+				double damage = barrier.Strength - this.Strength;
 
-			if( this.ApplyHitFx ) {
-				barrier.ApplyHitFx( damage > 0d ? damage : 8d, !barrier.IsActive );
+				if( this.ApplyHitFx ) {
+					barrier.ApplyHitFx( damage > 0d ? damage : 8d, !barrier.IsActive );
+				}
 			}
 
 			barrier.SetStrength( this.Strength, this.ClearRegenBuffer, false );

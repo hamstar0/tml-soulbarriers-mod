@@ -32,11 +32,13 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 
 			//
-
-			if( hitAt.HasValue ) {
-				this.ApplyHitFx( hitAt.Value, damage, !this.IsActive );
-			} else {
-				this.ApplyHitFx( damage, !this.IsActive );
+			
+			if( Main.netMode != NetmodeID.Server ) {
+				if( hitAt.HasValue ) {
+					this.ApplyHitFx( hitAt.Value, damage, !this.IsActive );
+				} else {
+					this.ApplyHitFx( damage, !this.IsActive );
+				}
 			}
 
 			if( syncFromServerOnly && Main.netMode == NetmodeID.Server ) {

@@ -7,6 +7,10 @@ using Terraria.ID;
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
 		public void ApplyHitFx( double damage, bool isCrit ) {
+			if( Main.netMode == NetmodeID.Server ) {
+				return;
+			}
+
 			int maxParticles = this.ComputeMaxAnimatableParticleCount();
 			int particles = Barrier.GetHitParticleCount(
 				maxParticles: maxParticles,
@@ -15,8 +19,10 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			);
 //Main.NewText( "HIT FX "+particles+" ("+maxParticles+") - "+this.ToString() );
 
-			if( particles >= 1 ) {
-				this.CreateHitParticlesForArea( particles );
+			if( Main.netMode != NetmodeID.Server ) {
+				if( particles >= 1 ) {
+					this.CreateHitParticlesForArea( particles );
+				}
 			}
 
 			if( damage != 0d ) {

@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using ModLibsCore.Libraries.Debug;
 using Terraria;
 
 
@@ -15,6 +16,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 		public override Vector2 GetBarrierWorldCenter() {
 			if( this.HostType == BarrierHostType.Player ) {
 				Player plr = (Player)this.Host;
+//LogLibraries.LogOnce( "SphericalBarrier "+this.IsActive+", center: "+plr?.MountedCenter, false );
 				return plr?.MountedCenter ?? default;
 			} else {
 				return this.Host?.Center ?? default;
@@ -40,7 +42,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 				distScale = 1f - distScale;
 			}
 
-			Vector2 randDir = Vector2.One.RotatedByRandom( 2d * Math.PI );
+			Vector2 randDir = new Vector2(1f, 0f)
+				.RotatedByRandom( 2d * Math.PI );
 
 			return randDir * distScale * this.Radius;
 		}
