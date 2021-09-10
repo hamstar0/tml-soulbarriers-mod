@@ -1,5 +1,7 @@
 using System.ComponentModel;
+using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using ModLibsCore.Classes.UI.ModConfig;
@@ -54,5 +56,17 @@ namespace SoulBarriers {
 		[Range(0f, 500f)]
 		[DefaultValue(20f)]
 		public float BarrierDebuffRemovalCost { get; set; } = 20f;
+
+
+		public HashSet<ProjectileDefinition> BarrierProjectileWhitelist { get; set; }
+				= new HashSet<ProjectileDefinition> {
+			new ProjectileDefinition( ProjectileID.Boulder ),
+			new ProjectileDefinition( ProjectileID.SandBallFalling ),
+			new ProjectileDefinition( ProjectileID.PearlSandBallFalling ),
+			new ProjectileDefinition( ProjectileID.CrimsandBallFalling ),
+			new ProjectileDefinition( ProjectileID.EbonsandBallFalling ),
+			new ProjectileDefinition( ProjectileID.SiltBall ),
+			new ProjectileDefinition( ProjectileID.SlushBall ),
+		};
 	}
 }

@@ -82,7 +82,7 @@ namespace SoulBarriers.Items {
 				: strength.ToString();//+"/"+myplayer.Barrier.InitialStrength;
 
 			return (
-				true,
+				strength != 0d,
 				"PlayerBarrierStrength",
 				"- Barrier strength: [c/" + colorCode + ":" + strengthStr + "]"
 			);
@@ -105,7 +105,7 @@ namespace SoulBarriers.Items {
 			string colorCode = PBGItem.GetColorCode( 1, (float)remainingTicks / (float)maxTicks );
 
 			return (
-				true,
+				remainingTicks > 0,
 				"PlayerBarrierCooldown",
 				"- Barrier cooldown: [c/" + colorCode + ":" + buffTimeDisp + "]"
 			);

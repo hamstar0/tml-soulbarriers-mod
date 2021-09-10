@@ -1,10 +1,18 @@
 using System;
+using System.Collections.Generic;
 using Terraria;
+using Terraria.ModLoader.Config;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
 		private bool CanCollideVsProjectile( Projectile intruder ) {
+			var config = SoulBarriersConfig.Instance;
+			var wl = config.Get<HashSet<ProjectileDefinition>>( nameof(config.BarrierProjectileWhitelist) );
+			if( wl.Contains(new ProjectileDefinition(intruder.type)) ) {
+				return false;
+			}
+			
 			switch( this.HostType ) {
 			case BarrierHostType.None:
 				return this.CanCollideWorldVsProjectile( intruder );

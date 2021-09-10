@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.UI;
 using Terraria.ModLoader;
 using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Libraries.DotNET.Extensions;
@@ -24,7 +26,23 @@ namespace SoulBarriers {
 
 		////////////////
 
-		public override void PostDrawInterface( SpriteBatch sb ) {
+		public override void ModifyInterfaceLayers( List<GameInterfaceLayer> layers ) {
+			int idx = layers.FindIndex( layer => layer.Name.Equals( "Vanilla: Inventory" ) );
+			if( idx == -1 ) {
+				return;
+			}
+
+			var statsLayer = new LegacyGameInterfaceLayer(
+				"SoulBarriers: Barrier Stats Popup",
+				this.DrawBarrierStats,
+				InterfaceScaleType.Game
+			);
+			layers.Insert( idx, statsLayer );
+		}
+
+		////
+
+		private bool DrawBarrierStats() {
 			foreach( (int plrWho, Barrier barrier) in BarrierManager.Instance.GetPlayerBarriers() ) {
 				if( barrier.Strength <= 0d ) {
 					continue;
@@ -33,7 +51,7 @@ namespace SoulBarriers {
 				Player plr = Main.player[plrWho];
 
 				if( barrier is SphericalBarrier ) {
-					this.DisplayPlayerBarrierStatsIf( sb, barrier as SphericalBarrier, plr );
+					this.DisplayPlayerBarrierStatsIf( Main.spriteBatch, barrier as SphericalBarrier, plr );
 				}
 			}
 
@@ -43,9 +61,11 @@ namespace SoulBarriers {
 				}
 
 				if( barrier is RectangularBarrier ) {
-					this.DisplayRectangularBarrierStatsIf( sb, barrier as RectangularBarrier );
+					this.DisplayRectangularBarrierStatsIf( Main.spriteBatch, barrier as RectangularBarrier );
 				}
 			}
+
+			return true;
 		}
 
 
