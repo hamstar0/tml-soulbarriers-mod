@@ -62,6 +62,7 @@ namespace SoulBarriers.Packets {
 		////////////////
 
 		public override void ReceiveOnClient() {
+			var color = new Color( this.ColorR, this.ColorG, this.ColorB );
 			var barrier = new AccessBarrier(
 				hostType: (BarrierHostType)this.HostType,
 				hostWhoAmI: this.HostWhoAmI,
@@ -69,10 +70,21 @@ namespace SoulBarriers.Packets {
 				strength: this.Strength,
 				maxRegenStrength: this.MaxRegenStrength == -1d ? (double?)null : (double?)this.MaxRegenStrength,
 				strengthRegenPerTick: this.StrengthRegenPerTick,
-				color: new Color(this.ColorR, this.ColorG, this.ColorB),
+				color: color,
 				isSaveable: true
 			);
 			BarrierManager.Instance.DeclareWorldBarrierUnsynced( barrier );
+
+			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
+				LogLibraries.Alert( "Barrier created: "+ barrier.GetID()
+					+", Host:"+this.HostType+" ("+this.HostWhoAmI+")"
+					+", WorldArea:"+this.WorldArea
+					+", Strength:"+this.Strength
+					+", MaxRegenStrength:"+this.MaxRegenStrength
+					+", StrengthRegenPerTick:"+this.StrengthRegenPerTick
+					+", Color:"+color
+				);
+			}
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {

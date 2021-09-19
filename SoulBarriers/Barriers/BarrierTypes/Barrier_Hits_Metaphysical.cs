@@ -17,7 +17,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			if( Main.netMode != NetmodeID.Server ) {
 				if( damage > 0d ) {
-					this.ApplyHitFx( 1, 4f, damage, !this.IsActive );
+					this.ApplyHitFx( 0, 4f, damage, !this.IsActive );
 //LogLibraries.Log( "ApplyMetaphysicalHit "+damage+" ("+(int)(damage * 4d)+")" );
 				}
 			}

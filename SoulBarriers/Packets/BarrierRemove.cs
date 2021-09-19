@@ -51,6 +51,10 @@ namespace SoulBarriers.Packets {
 			} else {    //if( barrier is SphericalBarrier )
 				throw new NotImplementedException( "Removal of non-`RectangularBarrier`s not yet implemented." );
 			}
+
+			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
+				LogLibraries.Alert( "Barrier removed: "+ barrier.GetID() );
+			}
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {

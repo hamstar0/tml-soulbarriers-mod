@@ -21,7 +21,7 @@ namespace SoulBarriers.Packets {
 
 			var packet = new BarrierStrengthPacket( barrier, strength, applyHitFx, clearRegenBuffer );
 
-			SimplePacket.SendToClient( packet );
+			SimplePacket.SendToServer( packet );
 		}
 
 
@@ -72,6 +72,14 @@ namespace SoulBarriers.Packets {
 			}
 
 			barrier.SetStrength( this.Strength, this.ClearRegenBuffer, false );
+
+			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
+				LogLibraries.Alert( "Barrier strength set: "+barrier.GetID()
+					+", Strength:"+this.Strength
+					+", ApplyHitFx:"+this.ApplyHitFx
+					+", ClearRegenBuffer:"+this.ClearRegenBuffer
+				);
+			}
 		}
 
 		////

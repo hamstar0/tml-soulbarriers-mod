@@ -11,29 +11,25 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
+			int maxParticles = this.ComputeMaxAnimatableParticleCount();
+			int particles = Barrier.GetHitParticleCount(
+				maxParticles: maxParticles,
+				damage: isCrit ? maxParticles : damage,
+				barrierStrength: this.Strength
+			);
 
-			if( Main.netMode != NetmodeID.Server ) {
-				int maxParticles = this.ComputeMaxAnimatableParticleCount();
-				int particles = Barrier.GetHitParticleCount(
-					maxParticles: maxParticles,
-					damage: isCrit ? maxParticles : damage,
-					barrierStrength: this.Strength
-				);
-
-				particles = (int)((float)particles * particleQuantityScale);
-				particles = (int)MathHelper.Clamp( particles, minParticles, maxParticles );
+			particles = (int)((float)particles * particleQuantityScale);
+			particles = (int)MathHelper.Clamp( particles, minParticles, maxParticles );
 
 //Main.NewText( "HIT FX "+particles+" ("+maxParticles+") - "+this.ToString() );
-
-				if( particles >= 1 ) {
-					this.CreateHitParticlesForArea( particles );
-				}
+			if( particles >= 1 ) {
+				this.CreateHitParticlesForArea( particles );
 			}
 
-			if( damage != 0d ) {
-				Vector2 pos = this.GetBarrierWorldCenter();
+			Vector2 pos = this.GetBarrierWorldCenter();
 
-				if( damage > 0d ) {
+			if( damage >= 1d ) {
+				if( damage > 1d ) {
 					this.ApplyHitFx_Sound( pos );
 				}
 				this.ApplyHitFx_Text( pos, damage );
@@ -41,6 +37,10 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		}
 
 		public void ApplyHitFx( Vector2 hitAt, int minParticles, float particleQuantityScale, double damage, bool isCrit ) {
+			if( Main.netMode == NetmodeID.Server ) {
+				return;
+			}
+
 			int maxParticles = this.ComputeMaxAnimatableParticleCount();
 			int particles = Barrier.GetHitParticleCount(
 				maxParticles: maxParticles,
@@ -55,7 +55,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				this.CreateHitParticlesAt( hitAt, particles );
 			}
 			
-			if( damage != 0d ) {
+			if( Math.Abs(damage) > 1d ) {
 				if( damage > 0d ) {
 					this.ApplyHitFx_Sound( hitAt );
 				}

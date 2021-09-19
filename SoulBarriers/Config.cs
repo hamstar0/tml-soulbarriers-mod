@@ -27,6 +27,8 @@ namespace SoulBarriers {
 
 		public bool DebugModeInfo { get; set; } = false;
 
+		public bool DebugModeNetInfo { get; set; } = false;
+
 		public bool DebugModeWorldBarrierTest { get; set; } = false;
 		
 

@@ -56,11 +56,18 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
-		private void Receive( int fromWho ) {
+		private void Receive() {
 			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
 			if( barrier == null ) {
-				LogLibraries.Warn( "No such barrier from "+Main.player[fromWho]+" ("+fromWho+") id'd: "+this.BarrierID );
+				LogLibraries.Warn( "No such barrier id'd: "+this.BarrierID );
 				return;
+			}
+
+			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
+				LogLibraries.Alert( "Barrier hit: "+this.BarrierID
+					+", pos: "+(this.HasHitPosition ? this.HitPosition.ToString() : "none")
+					+", dmg: "+this.Damage
+				);
 			}
 
 			if( this.Damage > 0d ) {
@@ -75,7 +82,7 @@ namespace SoulBarriers.Packets {
 		////
 
 		public override void ReceiveOnClient() {
-			this.Receive( 255 );
+			this.Receive();
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {

@@ -28,6 +28,10 @@ namespace SoulBarriers.Packets {
 
 		public string OtherBarrierID;
 
+		public double BarrierStrength;
+
+		public double OtherBarrierStrength;
+
 
 
 		////////////////
@@ -37,21 +41,33 @@ namespace SoulBarriers.Packets {
 		private BarrierHitBarrierPacket( Barrier barrier, Barrier otherBarrier ) {
 			this.BarrierID = barrier.GetID();
 			this.OtherBarrierID = otherBarrier.GetID();
+			this.BarrierStrength = barrier.Strength;
+			this.OtherBarrierStrength = otherBarrier.Strength;
 		}
 
 		////////////////
 
-		private void Receive( int fromWho ) {
+		private void Receive() {
 			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
 			if( barrier == null ) {
-				LogLibraries.Warn( "No such barrier from "+Main.player[fromWho]+" ("+fromWho+") id'd: "+this.BarrierID );
+				LogLibraries.Warn( "No such barrier id'd: "+this.BarrierID );
 				return;
 			}
+
 			Barrier otherBarrier = BarrierManager.Instance.GetBarrierByID( this.OtherBarrierID );
 			if( barrier == null ) {
-				LogLibraries.Warn( "No such other barrier from "+Main.player[fromWho]+" ("+fromWho+") id'd: "+this.OtherBarrierID );
+				LogLibraries.Warn( "No such other barrier id'd: "+this.OtherBarrierID );
 				return;
 			}
+
+			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
+				LogLibraries.Alert( "Barrier hit: "+this.BarrierID+" ("+this.BarrierStrength+")"
+					+" vs "+this.OtherBarrierID+" ("+this.OtherBarrierStrength+")"
+				);
+			}
+
+			barrier.SetStrength( this.BarrierStrength, false, false );
+			otherBarrier.SetStrength( this.OtherBarrierStrength, false, false );
 
 			barrier.ApplyBarrierCollisionHitIf( otherBarrier, false );
 		}
@@ -59,7 +75,7 @@ namespace SoulBarriers.Packets {
 		////
 
 		public override void ReceiveOnClient() {
-			this.Receive( 255 );
+			this.Receive();
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {
