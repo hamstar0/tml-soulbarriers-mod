@@ -6,20 +6,25 @@ using Terraria.ID;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public void ApplyHitFx( double damage, bool isCrit ) {
+		public void ApplyHitFx( int minParticles, float particleQuantityScale, double damage, bool isCrit ) {
 			if( Main.netMode == NetmodeID.Server ) {
 				return;
 			}
 
-			int maxParticles = this.ComputeMaxAnimatableParticleCount();
-			int particles = Barrier.GetHitParticleCount(
-				maxParticles: maxParticles,
-				damage: isCrit ? maxParticles : damage,
-				barrierStrength: this.Strength
-			);
-//Main.NewText( "HIT FX "+particles+" ("+maxParticles+") - "+this.ToString() );
 
 			if( Main.netMode != NetmodeID.Server ) {
+				int maxParticles = this.ComputeMaxAnimatableParticleCount();
+				int particles = Barrier.GetHitParticleCount(
+					maxParticles: maxParticles,
+					damage: isCrit ? maxParticles : damage,
+					barrierStrength: this.Strength
+				);
+
+				particles = (int)((float)particles * particleQuantityScale);
+				particles = (int)MathHelper.Clamp( particles, minParticles, maxParticles );
+
+//Main.NewText( "HIT FX "+particles+" ("+maxParticles+") - "+this.ToString() );
+
 				if( particles >= 1 ) {
 					this.CreateHitParticlesForArea( particles );
 				}
@@ -35,13 +40,16 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 		}
 
-		public void ApplyHitFx( Vector2 hitAt, double damage, bool isCrit ) {
+		public void ApplyHitFx( Vector2 hitAt, int minParticles, float particleQuantityScale, double damage, bool isCrit ) {
 			int maxParticles = this.ComputeMaxAnimatableParticleCount();
 			int particles = Barrier.GetHitParticleCount(
 				maxParticles: maxParticles,
 				damage: isCrit ? maxParticles : damage,
 				barrierStrength: this.Strength
 			);
+
+			particles = (int)((float)particles * particleQuantityScale);
+			particles = (int)MathHelper.Clamp( particles, minParticles, maxParticles );
 
 			if( particles >= 1 ) {
 				this.CreateHitParticlesAt( hitAt, particles );
@@ -63,7 +71,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		}
 
 		private void ApplyHitFx_Text( Vector2 hitAt, double damage ) {
-			string fmtAmt = ((int)(damage * 100f)).ToString();
+			string fmtAmt = ((int)damage).ToString();
 
 			Color color = this.Color;
 			

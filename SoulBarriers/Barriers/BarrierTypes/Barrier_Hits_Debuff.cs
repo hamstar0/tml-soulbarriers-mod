@@ -27,9 +27,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			this.SetStrength( this.Strength - damage, false, false );
 
 			if( Main.netMode != NetmodeID.Server ) {
-				int particles = (int)( damage * 4d );
-				if( particles >= 1 ) {
-					this.ApplyHitFx( particles, !this.IsActive );
+				if( damage > 0d ) {
+					this.ApplyHitFx( 0, 4f, damage, !this.IsActive );
 				}
 			}
 

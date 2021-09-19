@@ -35,9 +35,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			
 			if( Main.netMode != NetmodeID.Server ) {
 				if( hitAt.HasValue ) {
-					this.ApplyHitFx( hitAt.Value, damage, !this.IsActive );
+					this.ApplyHitFx( hitAt.Value, 0, 1f, damage, !this.IsActive );
 				} else {
-					this.ApplyHitFx( damage, !this.IsActive );
+					this.ApplyHitFx( 0, 1f, damage, !this.IsActive );
 				}
 			}
 
