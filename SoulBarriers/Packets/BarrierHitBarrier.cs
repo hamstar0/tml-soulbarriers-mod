@@ -68,7 +68,7 @@ namespace SoulBarriers.Packets {
 
 			barrier.SetStrength( this.BarrierStrength, false, false );
 			otherBarrier.SetStrength( this.OtherBarrierStrength, false, false );
-
+			
 			barrier.ApplyBarrierCollisionHitIf( otherBarrier, false );
 		}
 

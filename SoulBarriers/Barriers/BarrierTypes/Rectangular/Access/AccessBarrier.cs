@@ -56,6 +56,11 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					this.ApplyRawHit( null, damage, false );
 					otherBarrier.ApplyRawHit( null, damage, false );
 				}
+				
+				if( this.Strength == 0d ) {
+					Main.NewText( "Access granted.", Color.Lime );
+					Main.PlaySound( SoundID.Item94 );
+				}
 			}
 
 			//
