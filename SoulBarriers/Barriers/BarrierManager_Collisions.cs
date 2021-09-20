@@ -42,7 +42,7 @@ namespace SoulBarriers.Barriers {
 				}
 
 				Player plr = Main.player[plrWho];
-				if( plr?.active != true ) {
+				if( plr?.active != true || plr.dead ) {
 					continue;
 				}
 

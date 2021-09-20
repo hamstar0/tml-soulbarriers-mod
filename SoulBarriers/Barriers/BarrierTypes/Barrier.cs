@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ModLoader;
-using SoulBarriers.Buffs;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes {
@@ -89,6 +87,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			this.InitialStrength = strength;
 		}
+
 
 
 		////////////////

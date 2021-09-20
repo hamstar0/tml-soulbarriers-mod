@@ -5,6 +5,10 @@ using Terraria;
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
 		private bool CanCollideVsPlayer( Player player ) {
+			if( player.dead ) {
+				return false;
+			}
+
 			switch( this.HostType ) {
 			case BarrierHostType.None:
 				return true;

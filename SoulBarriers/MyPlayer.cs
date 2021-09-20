@@ -38,7 +38,9 @@ namespace SoulBarriers {
 		public override void PreUpdate() {
 			this.UpdatePersonalBarrier();
 
-			BarrierManager.Instance.CheckCollisionsAgainstEntity( this.player );
+			if( !this.player.dead ) {
+				BarrierManager.Instance.CheckCollisionsAgainstEntity( this.player );
+			}
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -8,7 +7,7 @@ using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
-using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
+using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 
 
 namespace SoulBarriers {
@@ -17,34 +16,38 @@ namespace SoulBarriers {
 			var mngr = BarrierManager.Instance;
 			mngr.RemoveAllWorldBarriers();
 
-			if( !tag.ContainsKey("barrier_count") ) {
-				return;
-			}
+			if( !tag.ContainsKey("barrier_count2") ) {
+				int count = tag.GetInt( "barrier_count2" );
 
-			int count = tag.GetInt( "barrier_count" );
+				for( int i=0; i<count; i++ ) {
+					string typeName = tag.GetString( "barrier_"+i+"_type" );
+					int x = tag.GetInt( "barrier_"+i+"_area_x" );
+					int y = tag.GetInt( "barrier_"+i+"_area_y" );
+					int w = tag.GetInt( "barrier_"+i+"_area_w" );
+					int h = tag.GetInt( "barrier_"+i+"_area_h" );
+					byte cR = tag.GetByte( "barrier_"+i+"_color_r" );
+					byte cG = tag.GetByte( "barrier_"+i+"_color_g" );
+					byte cB = tag.GetByte( "barrier_"+i+"_color_b" );
+					double maxStr = tag.GetDouble( "barrier_"+i+"_max_str" );
+					double strRegen = tag.GetDouble( "barrier_"+i+"_str_regen" );
 
-			for( int i=0; i<count; i++ ) {
-				int x = tag.GetInt( "barrier_"+i+"_area_x" );
-				int y = tag.GetInt( "barrier_"+i+"_area_y" );
-				int w = tag.GetInt( "barrier_"+i+"_area_w" );
-				int h = tag.GetInt( "barrier_"+i+"_area_h" );
-				byte cR = tag.GetByte( "barrier_"+i+"_color_r" );
-				byte cG = tag.GetByte( "barrier_"+i+"_color_g" );
-				byte cB = tag.GetByte( "barrier_"+i+"_color_b" );
-				double maxStr = tag.GetDouble( "barrier_"+i+"_max_str" );
-				double strRegen = tag.GetDouble( "barrier_"+i+"_str_regen" );
-				
-				var barrier = new AccessBarrier(
-					hostType: BarrierHostType.None,
-					hostWhoAmI: -1,
-					worldArea: new Rectangle(x, y, w, h),
-					strength: maxStr,
-					maxRegenStrength: maxStr,
-					strengthRegenPerTick: strRegen,
-					color: new Color(cR, cG, cB),
-					isSaveable: true
-				);
-				mngr.DeclareWorldBarrierUnsynced( barrier );
+					Barrier barrier = BarrierManager.Instance.FactoryCreateBarrier(
+						barrierTypeName: typeName,
+						hostType: BarrierHostType.None,
+						hostWhoAmI: -1,
+						data: new Rectangle(x, y, w, h),
+						strength: maxStr,
+						maxRegenStrength: maxStr,
+						strengthRegenPerTick: strRegen,
+						color: new Color(cR, cG, cB),
+						isSaveable: true
+					);
+
+					// TODO
+					if( barrier is RectangularBarrier ) {
+						mngr.DeclareWorldBarrierUnsynced( barrier as RectangularBarrier );
+					}
+				}
 			}
 		}
 
@@ -59,6 +62,7 @@ namespace SoulBarriers {
 					continue;
 				}
 
+				tag[ "barrier_"+i+"_type" ] = barrier.GetType().FullName;
 				tag[ "barrier_"+i+"_area_x" ] = (int)rect.X;
 				tag[ "barrier_"+i+"_area_y" ] = (int)rect.Y;
 				tag[ "barrier_"+i+"_area_w" ] = (int)rect.Width;
@@ -71,7 +75,7 @@ namespace SoulBarriers {
 				i++;
 			}
 
-			tag["barrier_count"] = (int)i;
+			tag["barrier_count2"] = (int)i;
 
 			return tag;
 		}
@@ -79,6 +83,8 @@ namespace SoulBarriers {
 
 		////
 
+		/*	<- World barriers aren't yet 'generalized' for this use; manual sync required
+		
 		public override void NetReceive( BinaryReader reader ) {
 			var mngr = BarrierManager.Instance;
 
@@ -131,7 +137,7 @@ namespace SoulBarriers {
 				writer.Write( barrier.Color.G );
 				writer.Write( barrier.Color.B );
 			}
-		}
+		}*/
 
 
 		////////////////

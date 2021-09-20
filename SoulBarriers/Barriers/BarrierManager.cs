@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using ModLibsCore.Classes.Loadable;
 using ModLibsCore.Libraries.Debug;
+using ModLibsCore.Libraries.DotNET;
+using ModLibsCore.Libraries.DotNET.Extensions;
+using ModLibsCore.Libraries.TModLoader;
 using SoulBarriers.Barriers.BarrierTypes;
 
 
@@ -23,11 +26,17 @@ namespace SoulBarriers.Barriers {
 
 		private IDictionary<string, Barrier> BarriersByID = new Dictionary<string, Barrier>();
 
+		////
+
+		private IDictionary<string, IBarrierFactory> BarrierFactories = new Dictionary<string, IBarrierFactory>();
+
 
 
 		////////////////
 
-		void ILoadable.OnModsLoad() { }
+		void ILoadable.OnModsLoad() {
+			this.RegisterBarrierFactories();
+		}
 
 		void ILoadable.OnPostModsLoad() { }
 
@@ -35,67 +44,60 @@ namespace SoulBarriers.Barriers {
 
 
 		////////////////
-		
-		internal void UpdateAllTrackedBarriers() {
-			foreach( int plrWho in this.PlayerBarriers.Keys.ToArray() ) {
-				Barrier barrier = this.PlayerBarriers[plrWho];
-				Player plr = Main.player[plrWho];
-				string id = barrier.GetID();
 
-				if( plr?.active != true ) {
-					this.PlayerBarriers.Remove( plrWho );   // Garbage collection
+		private void RegisterBarrierFactories() {
+			Type iBarrierFactoryType = typeof( IBarrierFactory );
+			IEnumerable<Assembly> asses = ModLoader.Mods
+				.SafeSelect( mod => mod.Code )
+				.SafeWhere( code => code != null );
 
-					if( this.BarriersByID.Remove(id) ) {
-						SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
-					}
-				} else {
-					barrier.Update_Internal();
+			foreach( Assembly ass in asses ) {
+				foreach( Type classType in ass.GetTypes() ) {
+					try {
+						if( !classType.IsClass || classType.IsAbstract ) {
+							continue;
+						}
+						if( !iBarrierFactoryType.IsAssignableFrom(classType) ) {
+							continue;
+						}
 
-					// New barrier found
-					if( !this.BarriersByID.ContainsKey(id) ) {
-						this.BarriersByID[id] = barrier;
-					}
+						object obj = TmlLibraries.SafelyGetInstanceForType( classType );
+
+						if( obj is IBarrierFactory ) {
+							string objName = obj.GetType().FullName;
+
+							this.BarrierFactories[ objName ] = obj as IBarrierFactory;
+						}
+					} catch { }
 				}
 			}
+		}
 
-			//
 
-			foreach( Rectangle rect in this.WorldBarriers.Keys.ToArray() ) {
-				Barrier barrier = this.WorldBarriers[ rect ];
-				string id = barrier.GetID();
+		////////////////
 
-				barrier.Update_Internal();
+		public Barrier FactoryCreateBarrier(
+					string barrierTypeName,
+					BarrierHostType hostType,
+					int hostWhoAmI,
+					object data,
+					double strength,
+					double maxRegenStrength,
+					double strengthRegenPerTick,
+					Color color,
+					bool isSaveable ) {
+			IBarrierFactory factoryBarrier = this.BarrierFactories.GetOrDefault( barrierTypeName );
 
-				// New barrier found
-				if( !this.BarriersByID.ContainsKey(id) ) {
-					this.BarriersByID[id] = barrier;
-				}
-			}
-
-			//
-
-			this.CheckCollisionsAgainstAllBarriers();
-
-			//
-
-			if( SoulBarriersConfig.Instance.DebugModeInfo ) {
-				DebugLibraries.Print( "player pos", Main.LocalPlayer.position.ToPoint().ToString() ) ;
-
-				foreach( string id in this.BarriersByID.Keys ) {
-					Barrier barrier = this.BarriersByID[id];
-					double str = barrier.Strength;
-					string maxStrStr = barrier.MaxRegenStrength.HasValue
-						? ((int)barrier.MaxRegenStrength.Value).ToString()
-						: "null";
-
-					if( str > 0d ) {
-						DebugLibraries.Print( "barrier:["+id+"]",
-							"str:("+str+":"+maxStrStr+") - "
-							+"dusts:"+barrier.ParticleOffsets.Keys.Count( d=>d.active )
-						);
-					}
-				}
-			}
+			return factoryBarrier?.FactoryCreate(
+				hostType: hostType,
+				hostWhoAmI: hostWhoAmI,
+				data: data,
+				strength: strength,
+				maxRegenStrength: maxRegenStrength,
+				strengthRegenPerTick: strengthRegenPerTick,
+				color: color,
+				isSaveable: isSaveable
+			);
 		}
 	}
 }

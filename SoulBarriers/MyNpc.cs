@@ -28,7 +28,9 @@ namespace SoulBarriers {
 		////////////////
 
 		public override bool PreAI( NPC npc ) {
-			BarrierManager.Instance.CheckCollisionsAgainstEntity( npc );
+			if( npc.life > 0 ) {
+				BarrierManager.Instance.CheckCollisionsAgainstEntity( npc );
+			}
 
 			if( this.KillFromBarrier ) {
 				npc.HitEffect();

@@ -24,7 +24,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		////////////////
 
 		public bool IsEntityColliding( Entity intruder ) {
-			if( !this.CanEntityCollide( intruder ) ) {
+			if( !this.CanEntityCollide(intruder) ) {
 				return false;
 			}
 

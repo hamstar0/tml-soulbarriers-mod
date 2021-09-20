@@ -51,6 +51,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					? otherBarrier.Strength
 					: this.Strength;
 				damage = Math.Ceiling( damage );
+//LogLibraries.Log( "B V B OnBarrierBarrierCollision 1 - " + damage );
 
 				if( damage > 0d ) {
 					this.ApplyRawHit( null, damage, false );
@@ -60,6 +61,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 				if( this.Strength == 0d ) {
 					Main.NewText( "Access granted.", Color.Lime );
 					Main.PlaySound( SoundID.Item94 );
+				} else {
+					//Main.NewText( "Access denied.", Color.Red );
 				}
 			}
 

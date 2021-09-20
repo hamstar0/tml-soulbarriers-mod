@@ -10,12 +10,16 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 namespace SoulBarriers.Packets {
 	class BarrierHitBarrierPacket : SimplePacketPayload {
-		public static void BroadcastToClients( Barrier barrier, Barrier otherBarrier ) {
+		public static void BroadcastToClients(
+					Barrier barrier,
+					Barrier otherBarrier,
+					double prevBarrierStrength,
+					double prevIntruderBarrierStrength ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
 
-			var packet = new BarrierHitBarrierPacket( barrier, otherBarrier );
+			var packet = new BarrierHitBarrierPacket( barrier, otherBarrier, prevBarrierStrength, prevIntruderBarrierStrength );
 
 			SimplePacket.SendToClient( packet );
 		}
@@ -38,12 +42,20 @@ namespace SoulBarriers.Packets {
 
 		private BarrierHitBarrierPacket() { }
 
-		private BarrierHitBarrierPacket( Barrier barrier, Barrier otherBarrier ) {
+		private BarrierHitBarrierPacket(
+					Barrier barrier,
+					Barrier otherBarrier,
+					double prevBarrierStrength,
+					double prevIntruderBarrierStrength ) {
 			this.BarrierID = barrier.GetID();
 			this.OtherBarrierID = otherBarrier.GetID();
-			this.BarrierStrength = barrier.Strength;
-			this.OtherBarrierStrength = otherBarrier.Strength;
+
+			//this.BarrierStrength = barrier.Strength;
+			//this.OtherBarrierStrength = otherBarrier.Strength;
+			this.BarrierStrength = prevBarrierStrength;
+			this.OtherBarrierStrength = prevIntruderBarrierStrength;
 		}
+		
 
 		////////////////
 
@@ -68,7 +80,10 @@ namespace SoulBarriers.Packets {
 
 			barrier.SetStrength( this.BarrierStrength, false, false );
 			otherBarrier.SetStrength( this.OtherBarrierStrength, false, false );
-			
+
+//LogLibraries.Log( "BARRIER V BARRIER - "
+//	+ "barrier:" + this.BarrierID + " (" + this.BarrierStrength + ") vs "
+//	+ "barrier:" + this.OtherBarrierID + " (" + this.OtherBarrierStrength + ")" );
 			barrier.ApplyBarrierCollisionHitIf( otherBarrier, false );
 		}
 

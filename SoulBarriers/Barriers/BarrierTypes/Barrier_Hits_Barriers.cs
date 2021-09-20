@@ -12,26 +12,39 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
-
+			
 			if( this.OnPreBarrierBarrierCollision.All( f=>f.Invoke(intruder) ) ) {
+				double thisBarrierStrength = this.Strength;
+				double thatBarrierStrength = intruder.Strength;
+				
+//LogLibraries.Log( "B V B ApplyBarrierCollisionHitIf - "+this.GetType().Name+" - "+this.OnBarrierBarrierCollision.Count );
 				foreach( BarrierBarrierCollisionHook e in this.OnBarrierBarrierCollision ) {
-					e.Invoke(intruder);
+					e.Invoke( intruder );
 				}
-
-				this.ApplyBarrierCollisionHit( intruder, syncFromServer );
+				
+				this.ApplyBarrierCollisionHit( intruder, thisBarrierStrength, thatBarrierStrength, syncFromServer );
 			}
 		}
 
 
 		////////////////
 
-		private void ApplyBarrierCollisionHit( Barrier intruder, bool syncFromServer ) {
+		private void ApplyBarrierCollisionHit(
+					Barrier intruder,
+					double prevBarrierStrength,
+					double prevIntruderBarrierStrength,
+					bool syncFromServer ) {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
 			
 			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitBarrierPacket.BroadcastToClients( this, intruder );
+				BarrierHitBarrierPacket.BroadcastToClients(
+					this,
+					intruder,
+					prevBarrierStrength,
+					prevIntruderBarrierStrength
+				);
 			}
 		}
 	}
