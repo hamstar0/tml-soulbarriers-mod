@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
 
@@ -35,6 +36,24 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 		public override bool CanSave() {
 			return this.IsSaveable;
+		}
+
+
+		////////////////
+
+		public override ISet<(int tileX, int tileY)> GetTilesUponBarrier() {
+			var tiles = new HashSet<(int, int)>();
+
+			int right = this.WorldArea.Right;
+			int bot = this.WorldArea.Bottom;
+
+			for( int x=this.WorldArea.Left; x<right; x++ ) {
+				for( int y=this.WorldArea.Top; y<bot; y++ ) {
+					tiles.Add( (x, y) );
+				}
+			}
+
+			return tiles;
 		}
 
 

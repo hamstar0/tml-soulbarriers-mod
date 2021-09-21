@@ -3,7 +3,6 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsGeneral.Libraries.World;
-using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 
 
@@ -52,7 +51,7 @@ namespace SoulBarriers.Commands {
 			);
 
 			if( Main.netMode != NetmodeID.MultiplayerClient ) {
-				SoulBarriersAPI.DeclareWorldAccessBarrier( barrier, true );
+				SoulBarriersAPI.DeclareWorldAccessBarrier( barrier );
 			} else {
 				Main.NewText( "Cannot call command in MP?" );
 			}

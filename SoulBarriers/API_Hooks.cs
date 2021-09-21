@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using ModLibsCore.Classes.Errors;
@@ -32,5 +33,13 @@ namespace SoulBarriers {
 				hook.Invoke( barrier );
 			}
 		}
+
+
+
+		////////////////
+
+		private IList<Action<Barrier>> BarrierCreateHooks = new List<Action<Barrier>>();
+
+		private IList<Action<Barrier>> BarrierRemoveHooks = new List<Action<Barrier>>();
 	}
 }

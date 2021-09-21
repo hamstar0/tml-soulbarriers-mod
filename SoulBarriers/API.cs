@@ -38,16 +38,10 @@ namespace SoulBarriers {
 
 		////
 
-		public static void DeclareWorldAccessBarrier( AccessBarrier barrier, bool syncFromServer ) {
-			if( Main.netMode == NetmodeID.MultiplayerClient ) {
-				throw new ModLibsException( "Not available for clients." );
-			}
-
+		public static void DeclareWorldAccessBarrier( AccessBarrier barrier ) {
 			BarrierManager.Instance.DeclareWorldBarrierUnsynced( barrier );
 
-			//
-
-			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
+			if( Main.netMode == NetmodeID.Server ) {
 				AccessBarrierCreatePacket.BroadcastToClients( barrier );
 			}
 		}
@@ -69,12 +63,11 @@ namespace SoulBarriers {
 		}
 
 
-
 		////////////////
-
-		private IList<Action<Barrier>> BarrierCreateHooks = new List<Action<Barrier>>();
-
-		private IList<Action<Barrier>> BarrierRemoveHooks = new List<Action<Barrier>>();
+		
+		public static ISet<(int tileX, int tileY)> GetTilesUponBarrier( Barrier barrier ) {
+			return barrier.GetTilesUponBarrier();
+		}
 
 
 
