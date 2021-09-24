@@ -10,9 +10,25 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 namespace SoulBarriers.Packets {
 	class BarrierStrengthPacket : SimplePacketPayload {
+		public static void SendToClient(
+					int plrWho,
+					Barrier barrier,
+					double strength,
+					bool applyHitFx,
+					bool clearRegenBuffer ) {
+			if( Main.netMode != NetmodeID.Server ) {
+				throw new ModLibsException( "Not server." );
+			}
+
+			var packet = new BarrierStrengthPacket( barrier, strength, applyHitFx, clearRegenBuffer );
+
+			SimplePacket.SendToClient( packet, plrWho, -1 );
+		}
+
+
 		public static void SyncToServerForEveryone(
 					Barrier barrier,
-					int strength,
+					double strength,
 					bool applyHitFx,
 					bool clearRegenBuffer ) {
 			if( Main.netMode != NetmodeID.MultiplayerClient ) {
@@ -30,7 +46,7 @@ namespace SoulBarriers.Packets {
 
 		public string BarrierID;
 
-		public int Strength;
+		public double Strength;
 
 		public bool ApplyHitFx;
 
@@ -42,7 +58,7 @@ namespace SoulBarriers.Packets {
 
 		private BarrierStrengthPacket() { }
 
-		private BarrierStrengthPacket( Barrier barrier, int strength, bool applyHitFx, bool clearRegenBuffer ) {
+		private BarrierStrengthPacket( Barrier barrier, double strength, bool applyHitFx, bool clearRegenBuffer ) {
 			this.BarrierID = barrier.GetID();
 			this.Strength = strength;
 			this.ApplyHitFx = applyHitFx;

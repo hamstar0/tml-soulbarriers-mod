@@ -35,7 +35,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 			this.OnPreBarrierEntityCollision.Add( onPreBarrierEntityCollision );
 
 			//
-
+			
 			// Decays slowly (1 hp / 3s)
 			this.StrengthRegenPerTick = -1d / (60d * 3d);
 		}

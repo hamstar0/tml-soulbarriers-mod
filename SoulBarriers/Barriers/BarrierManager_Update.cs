@@ -3,48 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsCore.Classes.Loadable;
 using ModLibsCore.Libraries.Debug;
+using ModLibsCore.Services.Timers;
 using SoulBarriers.Barriers.BarrierTypes;
+using SoulBarriers.Packets;
 
 
 namespace SoulBarriers.Barriers {
 	partial class BarrierManager : ILoadable {
 		internal void UpdateAllTrackedBarriers() {
 			foreach( int plrWho in this.PlayerBarriers.Keys.ToArray() ) {
-				Barrier barrier = this.PlayerBarriers[plrWho];
-				Player plr = Main.player[plrWho];
-				string id = barrier.GetID();
-
-				if( plr?.active != true ) {
-					this.PlayerBarriers.Remove( plrWho );   // Garbage collection
-
-					if( this.BarriersByID.Remove(id) ) {
-						SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
-					}
-				} else {
-					barrier.Update_Internal();
-
-					// New barrier found
-					if( !this.BarriersByID.ContainsKey(id) ) {
-						this.BarriersByID[id] = barrier;
-					}
-				}
+				this.UpdatedTrackedBarrierOfPlayer( plrWho );
 			}
 
 			//
 
 			foreach( Rectangle rect in this.WorldBarriers.Keys.ToArray() ) {
-				Barrier barrier = this.WorldBarriers[ rect ];
-				string id = barrier.GetID();
-
-				barrier.Update_Internal();
-
-				// New barrier found
-				if( !this.BarriersByID.ContainsKey(id) ) {
-					this.BarriersByID[id] = barrier;
-				}
+				Barrier barrier = this.WorldBarriers[rect];
+				this.UpdateTrackedBarrierOfWorld( barrier );
 			}
 
 			//
@@ -70,6 +49,62 @@ namespace SoulBarriers.Barriers {
 						);
 					}
 				}
+			}
+		}
+
+		
+		////////////////
+
+		 private int _FailsafeSyncTimer = 0;
+
+		private void UpdatedTrackedBarrierOfPlayer( int plrWho ) {
+			Barrier barrier = this.PlayerBarriers[plrWho];
+			Player plr = Main.player[plrWho];
+			string id = barrier.GetID();
+
+			//
+
+			if( plr?.active != true ) {
+				this.PlayerBarriers.Remove( plrWho );   // Garbage collection
+
+				if( this.BarriersByID.Remove(id) ) {
+					SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
+				}
+
+				return;
+			}
+
+			//
+
+			barrier.Update_Internal();
+
+			//
+
+			// New barrier found
+			if( !this.BarriersByID.ContainsKey(id) ) {
+				this.BarriersByID[id] = barrier;
+			}
+
+			//
+
+			if( Main.netMode == NetmodeID.Server ) {
+				if( this._FailsafeSyncTimer-- <= 0 ) {
+					this._FailsafeSyncTimer = 60 * 30;
+
+					BarrierStrengthPacket.SendToClient( -1, barrier, barrier.Strength, false, false );
+				}
+			}
+		}
+
+
+		private void UpdateTrackedBarrierOfWorld( Barrier barrier ) {
+			string id = barrier.GetID();
+
+			barrier.Update_Internal();
+
+			// New barrier found
+			if( !this.BarriersByID.ContainsKey(id) ) {
+				this.BarriersByID[id] = barrier;
 			}
 		}
 	}
