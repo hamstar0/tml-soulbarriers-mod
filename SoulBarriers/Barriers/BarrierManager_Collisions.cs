@@ -28,10 +28,6 @@ namespace SoulBarriers.Barriers {
 		////////////////
 
 		internal void CheckCollisionsAgainstEntity( Entity ent ) {
-			if( Main.netMode == NetmodeID.MultiplayerClient ) {
-				return;
-			}
-
 			// Check for player barriers:
 			foreach( (int plrWho, Barrier barrier) in this.PlayerBarriers ) {
 				if( !barrier.IsActive ) {
@@ -50,8 +46,8 @@ namespace SoulBarriers.Barriers {
 	"pb_v_e_"+barrier.GetID()+"_"+ent,
 	"collide? "+barrier.IsColliding(ent)
 );*/
-				if( barrier.IsEntityColliding( ent ) ) {
-					barrier.ApplyEntityCollisionHitIf( ent, true );
+				if( barrier.IsEntityColliding(ent) ) {
+					barrier.ApplyEntityCollisionHitIf( ent, Main.netMode == NetmodeID.Server );
 				}
 			}
 
@@ -71,7 +67,7 @@ namespace SoulBarriers.Barriers {
 	ent.height
 ) );*/
 				if( barrier.IsEntityColliding(ent) ) {
-					barrier.ApplyEntityCollisionHitIf( ent, true );
+					barrier.ApplyEntityCollisionHitIf( ent, Main.netMode == NetmodeID.Server );
 				}
 			}
 		}
