@@ -37,28 +37,50 @@ namespace SoulBarriers {
 		[DefaultValue(true)]
 		public bool PBGRecipeEnabled { get; set; } = true;
 
+		////
 
 		[Range(0f, 10f)]
 		[DefaultValue(1f)]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float PBGBarrierStrengthScale { get; set; } = 10f;
+		public float PBGBarrierStrengthScale { get; set; } = 1f;
 
+		//
+		
+		[Range(0f, 1f)]
+		[DefaultValue(-1f / (60f * 3f))]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
+		public float PersonalBarrierDefaultDecayPercentPerTick { get; set; } = -1f / (60f * 3f);
+		
+		[Range(0f, 1f)]
+		[DefaultValue(-1f / 60f)]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
+		public float PersonalBarrierJungleDecayPercentPerTick { get; set; } = -1f / 60f;
+		
+		[Range(0f, 1f)]
+		[DefaultValue(-1f / 60f)]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
+		public float PersonalBarrierUnderworldDecayPercentPerTick { get; set; } = -1f / 60f;
+
+		//
 
 		[Range(0, 60 * 60)]
 		[DefaultValue( 20 )]
 		public int PBGOverheatDurationSeconds { get; set; } = 20;
 
+		////
 
 		[Range(10f, 500f)]
 		[DefaultValue(48f)]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float DefaultPlayerBarrierRadius { get; set; } = 48f;
 
+		////
 
 		[Range(0f, 500f)]
 		[DefaultValue(20f)]
 		public float BarrierDebuffRemovalCost { get; set; } = 20f;
 
+		////
 
 		public HashSet<ProjectileDefinition> BarrierProjectileWhitelist { get; set; }
 				= new HashSet<ProjectileDefinition> {

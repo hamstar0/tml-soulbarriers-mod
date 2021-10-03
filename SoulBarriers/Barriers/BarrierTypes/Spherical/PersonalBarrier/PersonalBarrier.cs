@@ -17,7 +17,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 					hostWhoAmI: hostWhoAmI,
 					strength: strength,
 					maxRegenStrength: null,
-					strengthRegenPerTick: -1f / (60f * 3f), // Decays slowly (1 hp / 3s)
+					strengthRegenPerTick: 0,
 					radius: radius,
 					color: color ) {
 			bool onPreBarrierEntityCollision( ref Entity intruder ) {
@@ -35,9 +35,11 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 			this.OnPreBarrierEntityCollision.Add( onPreBarrierEntityCollision );
 
 			//
+
+			var config = SoulBarriersConfig.Instance;
 			
 			// Decays slowly (1 hp / 3s)
-			this.StrengthRegenPerTick = -1d / (60d * 3d);
+			this.StrengthRegenPerTick = config.Get<float>( nameof(config.PersonalBarrierDefaultDecayPercentPerTick) );
 		}
 
 

@@ -19,6 +19,8 @@ namespace SoulBarriers {
 				if( this.Barrier.Strength > 0d ) {
 					this.Barrier.SetStrength( 0, true, true );
 				}
+			} else {
+				BarrierManager.Instance.CheckCollisionsAgainstEntity( this.player );
 			}
 		}
 	}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using ModLibsGeneral.Libraries.World;
 using SoulBarriers.Buffs;
 using SoulBarriers.Packets;
 
@@ -10,8 +11,12 @@ using SoulBarriers.Packets;
 namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 	public partial class PersonalBarrier : SphericalBarrier {
 		protected override void Update() {
+			if( this.Strength <= 0d ) {
+				return;
+			}
+
 			Entity host = this.Host;
-			if( host == null || !(host is Player) || this.Strength <= 0d ) {
+			if( host == null || !(host is Player) ) {
 				return;
 			}
 
@@ -22,6 +27,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 				return;
 			}
 
+			//
+
+			this.UpdateForBiomes( plr, out _ );
 			this.UpdateForPlayerForBuffs( plr, out bool hasSoulBuff );
 
 			if( !hasSoulBuff ) {
@@ -34,7 +42,26 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 		}
 
 
-		////
+		////////////////
+
+		protected virtual void UpdateForBiomes( Player hostPlayer, out bool isDefault ) {
+			var config = SoulBarriersConfig.Instance;
+			int tileY = (int)hostPlayer.position.Y / 16;
+
+			isDefault = false;
+			
+			if( hostPlayer.ZoneJungle ) {
+				this.StrengthRegenPerTick = config.Get<float>( nameof(config.PersonalBarrierJungleDecayPercentPerTick) );
+			} else if( tileY >= WorldLocationLibraries.UnderworldLayerTopTileY ) {
+				this.StrengthRegenPerTick = config.Get<float>( nameof(config.PersonalBarrierUnderworldDecayPercentPerTick) );
+			} else {
+				// Decays slowly (1 hp / 3s)
+				this.StrengthRegenPerTick = config.Get<float>( nameof(config.PersonalBarrierDefaultDecayPercentPerTick) );
+
+				isDefault = true;
+			}
+		}
+
 
 		private void UpdateForPlayerForBuffs( Player hostPlayer, out bool hasSoulBuff ) {
 			hasSoulBuff = false;
