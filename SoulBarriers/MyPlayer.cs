@@ -1,12 +1,21 @@
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
-using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
+using ModLibsCore.Services.Timers;
 
 
 namespace SoulBarriers {
 	partial class SoulBarriersPlayer : ModPlayer {
+		public static string GetGracePeriodTimerNAme( Player player ) {
+			return "SoulBarriers_PlayerSpawnGracePeriod_" + player.whoAmI;
+		}
+
+
+
+		////////////////
+
 		public Barrier Barrier { get; private set; }
 
 
@@ -14,6 +23,22 @@ namespace SoulBarriers {
 
 		public override bool CloneNewInstances => false;
 
+
+
+		////////////////
+
+		public override void SetupStartInventory( IList<Item> items, bool mediumcoreDeath ) {
+			string timerName = SoulBarriersPlayer.GetGracePeriodTimerNAme( this.player );
+
+			Timers.SetTimer( timerName, 60 * 3, false, () => false );
+		}
+
+
+		////////////////
+
+		public override void PreUpdate() {
+			this.UpdatePersonalBarrier();
+		}
 
 
 		////////////////
@@ -30,13 +55,6 @@ namespace SoulBarriers {
 
 				this.Barrier.Animate( particles );
 			}
-		}
-
-
-		////////////////
-
-		public override void PreUpdate() {
-			this.UpdatePersonalBarrier();
 		}
 	}
 }

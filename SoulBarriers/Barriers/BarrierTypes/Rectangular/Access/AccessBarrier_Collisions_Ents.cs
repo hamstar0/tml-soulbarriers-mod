@@ -4,13 +4,17 @@ using Terraria;
 using Terraria.ID;
 using Terraria.DataStructures;
 using ModLibsCore.Libraries.Debug;
+using ModLibsCore.Services.Timers;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 	public partial class AccessBarrier : RectangularBarrier {
 		public virtual bool CanHitPlayer( Player intruder ) {
-			return true;
+			string timerName = SoulBarriersPlayer.GetGracePeriodTimerNAme( intruder );
+
+			return Timers.GetTimerTickDuration(timerName) <= 0;
 		}
+
 
 		public virtual bool CanHitNPC( NPC intruder ) {
 			if( intruder.friendly ) {	// Townsfolk are fucking stupid and I can't be arsed to program a nanny for them
@@ -27,6 +31,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 			}
 			return true;
 		}
+
 
 		public virtual bool CanHitProjectile( Projectile intruder ) {
 			return true;
