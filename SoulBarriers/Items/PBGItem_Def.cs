@@ -17,7 +17,8 @@ namespace SoulBarriers.Items {
 			this.Tooltip.SetDefault(
 				"Erects a temporary magical protective barrier upon the wielder"
 				+ "\nBarriers protect against projectiles and spirital attacks"
-				+ "\nThe P.B.G can only be activated with full mana"
+				//+ "\nThe P.B.G can only be activated with full mana"
+				+ "\nThe P.B.G can only be activated with at least 10 mana"
 				+ "\nBarrier strength is determined by available mana"
 				+ "\nBarrier activation causes the P.B.G to overheat briefly"
 			);

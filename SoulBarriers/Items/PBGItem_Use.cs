@@ -1,6 +1,5 @@
 using System;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsCore.Libraries.Debug;
 using SoulBarriers.Buffs;
@@ -9,9 +8,19 @@ using SoulBarriers.Buffs;
 namespace SoulBarriers.Items {
 	public partial class PBGItem : ModItem {
 		public override bool CanUseItem( Player player ) {
-			return player.statMana >= player.statManaMax2
-				&& !player.HasBuff( ModContent.BuffType<PBGOverheatedDeBuff>() );
-				//&& !player.HasBuff( BuffID.ManaSickness );
+			if( player.statMana < 10 ) {
+				return false;
+			}
+			/*if( player.statMana < player.statManaMax2 ) {
+				return false;
+			}*/
+			if( player.HasBuff( ModContent.BuffType<PBGOverheatedDeBuff>() ) ) {
+				return false;
+			}
+			/*if( player.HasBuff( BuffID.ManaSickness ) ) {
+				return false;
+			}*/
+			return true;
 		}
 
 		public override bool UseItem( Player player ) {
