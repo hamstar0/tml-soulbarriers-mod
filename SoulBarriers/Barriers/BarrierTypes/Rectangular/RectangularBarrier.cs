@@ -11,7 +11,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 		////////////////
 
-		public Rectangle WorldArea { get; private set; }
+		public Rectangle TileArea { get; private set; }
 
 
 
@@ -21,13 +21,13 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 					double strength,
 					double? maxRegenStrength,
 					double strengthRegenPerTick,
-					Rectangle worldArea,
+					Rectangle tileArea,
 					Color color,
 					bool isSaveable,
 					BarrierHostType hostType = BarrierHostType.None,
 					int hostWhoAmI = -1
 				) : base( hostType, hostWhoAmI, strength, maxRegenStrength, strengthRegenPerTick, color ) {
-			this.WorldArea = worldArea;
+			this.TileArea = tileArea;
 			this.IsSaveable = isSaveable;
 		}
 
@@ -44,11 +44,11 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 		public override ISet<(int tileX, int tileY)> GetTilesUponBarrier() {
 			var tiles = new HashSet<(int, int)>();
 
-			int right = this.WorldArea.Right;
-			int bot = this.WorldArea.Bottom;
+			int right = this.TileArea.Right;
+			int bot = this.TileArea.Bottom;
 
-			for( int x=this.WorldArea.Left; x<right; x++ ) {
-				for( int y=this.WorldArea.Top; y<bot; y++ ) {
+			for( int x=this.TileArea.Left; x<right; x++ ) {
+				for( int y=this.TileArea.Top; y<bot; y++ ) {
 					tiles.Add( (x, y) );
 				}
 			}
@@ -60,7 +60,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 		////////////////
 
 		public override string GetID() {
-			return (int)this.HostType+":"+this.HostWhoAmI+","+this.WorldArea.ToString();
+			return (int)this.HostType+":"+this.HostWhoAmI+","+this.TileArea.ToString();
 		}
 	}
 }

@@ -81,7 +81,7 @@ namespace SoulBarriers {
 		}
 		
 		private void DisplayRectangularBarrierStatsIf( SpriteBatch sb, RectangularBarrier barrier ) {
-			if( !barrier.WorldArea.Contains(Main.MouseWorld.ToPoint()) ) {
+			if( !barrier.TileArea.Contains(Main.MouseWorld.ToPoint()) ) {
 				return;
 			}
 

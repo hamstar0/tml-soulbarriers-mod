@@ -29,7 +29,7 @@ namespace SoulBarriers.Packets {
 
 		public int HostWhoAmI;
 
-		public Rectangle WorldArea;
+		public Rectangle TileArea;
 
 		public double Strength;
 
@@ -50,7 +50,7 @@ namespace SoulBarriers.Packets {
 		private AccessBarrierCreatePacket( AccessBarrier barrier ) {
 			this.HostType = (int)barrier.HostType;
 			this.HostWhoAmI = barrier.HostWhoAmI;
-			this.WorldArea = barrier.WorldArea;
+			this.TileArea = barrier.TileArea;
 			this.Strength = barrier.Strength;
 			this.MaxRegenStrength = barrier.MaxRegenStrength.HasValue ? -1d : barrier.MaxRegenStrength.Value;
 			this.StrengthRegenPerTick = barrier.StrengthRegenPerTick;
@@ -66,7 +66,7 @@ namespace SoulBarriers.Packets {
 			var barrier = new AccessBarrier(
 				hostType: (BarrierHostType)this.HostType,
 				hostWhoAmI: this.HostWhoAmI,
-				worldArea: this.WorldArea,
+				tileArea: this.TileArea,
 				strength: this.Strength,
 				maxRegenStrength: this.MaxRegenStrength == -1d ? (double?)null : (double?)this.MaxRegenStrength,
 				strengthRegenPerTick: this.StrengthRegenPerTick,
@@ -78,7 +78,7 @@ namespace SoulBarriers.Packets {
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
 				LogLibraries.Alert( "Barrier created: "+ barrier.GetID()
 					+", Host:"+this.HostType+" ("+this.HostWhoAmI+")"
-					+", WorldArea:"+this.WorldArea
+					+", TileArea:"+this.TileArea
 					+", Strength:"+this.Strength
 					+", MaxRegenStrength:"+this.MaxRegenStrength
 					+", StrengthRegenPerTick:"+this.StrengthRegenPerTick

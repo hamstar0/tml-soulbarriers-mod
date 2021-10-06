@@ -14,13 +14,13 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 				intruder.height
 			);
 
-			return this.WorldArea.Intersects( rect );
+			return this.TileArea.Intersects( rect );
 		}
 
 		public override bool IsBarrierColliding( Barrier barrier ) {
 			if( barrier is RectangularBarrier ) {
-				return ((RectangularBarrier)barrier).WorldArea
-					.Intersects( this.WorldArea );
+				return ((RectangularBarrier)barrier).TileArea
+					.Intersects( this.TileArea );
 			}
 			
 			if( barrier is SphericalBarrier ) {
@@ -29,7 +29,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 				return Barrier.IsSphereCollidingRectangle(
 					(sphPos.X, sphPos.Y, sphBarrier.Radius),
-					this.WorldArea
+					this.TileArea
 				);
 			}
 

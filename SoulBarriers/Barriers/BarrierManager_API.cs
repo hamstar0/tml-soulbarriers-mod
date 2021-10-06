@@ -74,15 +74,15 @@ namespace SoulBarriers.Barriers {
 			return barrier;
 		}
 
-		public Barrier GetWorldBarrier( Rectangle worldArea ) {
-			return this.WorldBarriers.GetOrDefault( worldArea );
+		public Barrier GetWorldBarrier( Rectangle tileArea ) {
+			return this.WorldBarriers.GetOrDefault( tileArea );
 		}
 
 
 		////////////////
 
 		public bool DeclareWorldBarrierUnsynced( RectangularBarrier barrier ) {
-			this.WorldBarriers[barrier.WorldArea] = barrier;
+			this.WorldBarriers[barrier.TileArea] = barrier;
 
 			//
 
@@ -94,12 +94,12 @@ namespace SoulBarriers.Barriers {
 
 		////
 
-		public void RemoveWorldBarrier( Rectangle worldArea, bool syncFromServer ) {
+		public void RemoveWorldBarrier( Rectangle tileArea, bool syncFromServer ) {
 			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
 
-			Barrier barrier = this.WorldBarriers.GetOrDefault( worldArea );
+			Barrier barrier = this.WorldBarriers.GetOrDefault( tileArea );
 			if( barrier != null ) {
 				this.BarriersByID.Remove( barrier.GetID() );
 
@@ -108,7 +108,7 @@ namespace SoulBarriers.Barriers {
 				}
 			}
 
-			this.WorldBarriers.Remove( worldArea );
+			this.WorldBarriers.Remove( tileArea );
 
 			//
 			

@@ -47,7 +47,7 @@ namespace SoulBarriers.Packets {
 			}
 
 			if( barrier is RectangularBarrier ) {
-				barrierMngr.RemoveWorldBarrier( ((RectangularBarrier)barrier).WorldArea, false );
+				barrierMngr.RemoveWorldBarrier( ((RectangularBarrier)barrier).TileArea, false );
 			} else {    //if( barrier is SphericalBarrier )
 				throw new NotImplementedException( "Removal of non-`RectangularBarrier`s not yet implemented." );
 			}

@@ -105,7 +105,7 @@ namespace SoulBarriers {
 				byte colorB = reader.ReadByte();
 
 				var barrier = new AccessBarrier(
-					worldArea: rect,
+					tileArea: rect,
 					strength: strength,
 					maxRegenStrength: maxRegenStrength == -1 ? (int?)null : (int?)maxRegenStrength,
 					strengthRegenPerTick: strengthRegen,

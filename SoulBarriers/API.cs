@@ -22,8 +22,8 @@ namespace SoulBarriers {
 
 		//public static SphericalBarrier GetNpcBarrier( NPC npc ) { }
 
-		public static Barrier GetWorldBarrier( Rectangle worldArea ) {
-			return BarrierManager.Instance.GetWorldBarrier( worldArea );
+		public static Barrier GetWorldBarrier( Rectangle tileArea ) {
+			return BarrierManager.Instance.GetWorldBarrier( tileArea );
 		}
 
 
@@ -54,12 +54,12 @@ namespace SoulBarriers {
 
 		////
 
-		public static void RemoveWorldBarrier( Rectangle worldArea ) {
+		public static void RemoveWorldBarrier( Rectangle tileArea ) {
 			if( Main.netMode == NetmodeID.MultiplayerClient ) {
 				throw new ModLibsException( "Not available for clients." );
 			}
 
-			BarrierManager.Instance.RemoveWorldBarrier( worldArea, true );
+			BarrierManager.Instance.RemoveWorldBarrier( tileArea, true );
 		}
 
 

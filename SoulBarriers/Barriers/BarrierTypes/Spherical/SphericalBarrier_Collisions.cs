@@ -37,7 +37,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 			} else if( barrier is RectangularBarrier ) {
 				return Barrier.IsSphereCollidingRectangle(
 					(myPos.X, myPos.Y, this.Radius),
-					((RectangularBarrier)barrier).WorldArea
+					((RectangularBarrier)barrier).TileArea
 				);
 			}
 
