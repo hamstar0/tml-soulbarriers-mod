@@ -7,7 +7,7 @@ using SoulBarriers.Dusts;
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 	public partial class RectangularBarrier : Barrier {
 		public override int ComputeCurrentMaxAnimatedParticleCount() {
-			float chunkSize = 12f * 16f;
+			float chunkSize = 12f;
 			float chunksX = (float)this.TileArea.Width / chunkSize;
 			float chunksY = (float)this.TileArea.Height / chunkSize;
 			float chunks = chunksX * chunksY;
@@ -19,7 +19,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 		
 		public override int ComputeMaxAnimatableParticleCount() {
-			float chunkSize = 12f * 16f;
+			float chunkSize = 12f;
 			float chunksX = (float)this.TileArea.Width / chunkSize;
 			float chunksY = (float)this.TileArea.Height / chunkSize;
 			float chunks = chunksX * chunksY;

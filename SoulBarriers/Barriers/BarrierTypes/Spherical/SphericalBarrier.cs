@@ -85,7 +85,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 		////////////////
 
 		public override string GetID() {
-			return base.GetID()+" - "+this.Radius;
+			return base.GetID()+" - R"+this.Radius;
 		}
 	}
 }

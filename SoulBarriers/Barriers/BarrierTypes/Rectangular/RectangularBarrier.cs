@@ -13,6 +13,15 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 		public Rectangle TileArea { get; private set; }
 
+		////
+
+		public Rectangle WorldArea => new Rectangle(
+			this.TileArea.X*16,
+			this.TileArea.Y*16,
+			this.TileArea.Width*16,
+			this.TileArea.Height*16
+		);
+
 
 
 		////////////////
@@ -60,7 +69,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 		////////////////
 
 		public override string GetID() {
-			return base.GetID()+" - "+this.TileArea.ToString();
+			return base.GetID()+" - A"+this.TileArea.ToString();
 		}
 	}
 }
