@@ -60,7 +60,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 		////////////////
 
 		public override string GetID() {
-			return (int)this.HostType+":"+this.HostWhoAmI+","+this.TileArea.ToString();
+			return this.GetID()+" - "+this.TileArea.ToString();
 		}
 	}
 }

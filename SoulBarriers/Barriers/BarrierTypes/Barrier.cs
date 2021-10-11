@@ -33,7 +33,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		public double Strength { get; protected set; } = 0;
 
 		public double? MaxRegenStrength { get; protected set; } = null;
-
+		
 		public double StrengthRegenPerTick { get; protected set; } = 0d;
 
 		////
@@ -96,8 +96,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 
 		////////////////
-
-		public abstract string GetID();
+		
+		public virtual string GetID() {
+			return (int)this.HostType+":"+this.HostWhoAmI
+				+" ["+this.InitialStrength+":"+MaxRegenStrength+":"+StrengthRegenPerTick+"]";
+		}
 
 
 		////////////////
@@ -158,6 +161,13 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					this.RefreshBuffForNpcHost();
 				}
 			}
+		}
+
+
+		////////////////
+
+		public override string ToString() {
+			return this.GetID();
 		}
 	}
 }

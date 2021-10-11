@@ -85,7 +85,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 		////////////////
 
 		public override string GetID() {
-			return (int)this.HostType+":"+this.HostWhoAmI;
+			return this.GetID()+" - "+this.Radius;
 		}
 	}
 }

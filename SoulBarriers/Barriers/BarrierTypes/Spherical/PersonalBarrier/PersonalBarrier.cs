@@ -48,12 +48,5 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 		public override bool CanSave() {
 			return false;
 		}
-
-
-		////////////////
-
-		public override string GetID() {
-			return (int)this.HostType+":"+this.HostWhoAmI;
-		}
 	}
 }
