@@ -60,7 +60,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 		////////////////
 
 		public override string GetID() {
-			return this.GetID()+" - "+this.TileArea.ToString();
+			return base.GetID()+" - "+this.TileArea.ToString();
 		}
 	}
 }

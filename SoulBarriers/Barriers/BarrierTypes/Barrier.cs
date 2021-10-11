@@ -99,7 +99,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		
 		public virtual string GetID() {
 			return (int)this.HostType+":"+this.HostWhoAmI
-				+" ["+this.InitialStrength+":"+MaxRegenStrength+":"+StrengthRegenPerTick+"]";
+				+" ["+this.InitialStrength+":"+this.MaxRegenStrength+":"+this.StrengthRegenPerTick+"]";
 		}
 
 
