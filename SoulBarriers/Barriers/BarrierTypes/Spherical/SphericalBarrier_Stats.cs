@@ -23,7 +23,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 			}
 		}
 
-		public override Vector2 GetRandomOffsetWithinAreaForFx( Vector2 origin, bool isFxOnly, out bool isFarAway ) {
+		public override Vector2 GetRandomOffsetWithinArea( Vector2 origin, bool isFxOnly, out bool isFarAway ) {
 			isFarAway = false;
 
 			if( isFxOnly ) {

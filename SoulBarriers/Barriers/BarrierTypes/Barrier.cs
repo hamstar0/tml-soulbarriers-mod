@@ -118,7 +118,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////
 
-		public abstract Vector2 GetRandomOffsetWithinAreaForFx( Vector2 origin, bool isFxOnly, out bool isFarAway );
+		public abstract Vector2 GetRandomOffsetWithinArea( Vector2 origin, bool isFxOnly, out bool isFarAway );
 
 
 		////////////////

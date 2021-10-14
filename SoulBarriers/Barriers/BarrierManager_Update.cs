@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using ModLibsCore.Classes.Loadable;
 using ModLibsCore.Libraries.Debug;
-using ModLibsCore.Services.Timers;
 using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Packets;
 
@@ -21,8 +17,7 @@ namespace SoulBarriers.Barriers {
 
 			//
 
-			foreach( Rectangle rect in this.WorldBarriers.Keys.ToArray() ) {
-				Barrier barrier = this.WorldBarriers[rect];
+			foreach( Barrier barrier in this.TileBarriers.Values.ToArray() ) {
 				this.UpdateTrackedBarrierOfWorld( barrier );
 			}
 
@@ -43,9 +38,12 @@ namespace SoulBarriers.Barriers {
 						: "null";
 
 					if( str > 0d ) {
+						int dusts = barrier.ParticleOffsets.Keys.Count( d => d.active );
+						int maxDusts = barrier.ComputeNormalParticleCount();
+
 						DebugLibraries.Print( "barrier:["+id+"]",
 							"str:("+str+":"+maxStrStr+") - "
-							+"dusts:"+barrier.ParticleOffsets.Keys.Count( d=>d.active )
+							+"dusts:"+dusts+" of "+maxDusts
 						);
 					}
 				}

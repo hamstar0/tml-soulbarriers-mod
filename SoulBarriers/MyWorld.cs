@@ -57,16 +57,16 @@ namespace SoulBarriers {
 			var tag = new TagCompound();
 
 			int i = 0;
-			foreach( (Rectangle rect, Barrier barrier) in mngr.GetWorldBarriers() ) {
+			foreach( (Rectangle tileRect, Barrier barrier) in mngr.GetTileBarriers() ) {
 				if( !barrier.CanSave() ) {
 					continue;
 				}
 
 				tag[ "barrier_"+i+"_type" ] = barrier.GetType().FullName;
-				tag[ "barrier_"+i+"_area_x" ] = (int)rect.X;
-				tag[ "barrier_"+i+"_area_y" ] = (int)rect.Y;
-				tag[ "barrier_"+i+"_area_w" ] = (int)rect.Width;
-				tag[ "barrier_"+i+"_area_h" ] = (int)rect.Height;
+				tag[ "barrier_"+i+"_area_x" ] = (int)tileRect.X;
+				tag[ "barrier_"+i+"_area_y" ] = (int)tileRect.Y;
+				tag[ "barrier_"+i+"_area_w" ] = (int)tileRect.Width;
+				tag[ "barrier_"+i+"_area_h" ] = (int)tileRect.Height;
 				tag[ "barrier_"+i+"_color_r" ] = barrier.Color.R;
 				tag[ "barrier_"+i+"_color_g" ] = barrier.Color.G;
 				tag[ "barrier_"+i+"_color_b" ] = barrier.Color.B;
@@ -143,21 +143,30 @@ namespace SoulBarriers {
 		////////////////
 
 		public override void PostDrawTiles() {
-			var plrRect = Main.LocalPlayer.getRect();
-			plrRect.X -= 80 * 16;
-			plrRect.Y -= 60 * 16;
-			plrRect.Width += 160 * 16;
-			plrRect.Height += 120 * 16;
+			int tileDistBuffer = 8 * 16;
 
-			foreach( (Rectangle rect, Barrier barrier) in BarrierManager.Instance.GetWorldBarriers() ) {
+			Rectangle plrWldRect = Main.LocalPlayer.getRect();
+			plrWldRect.X -= 80 * 16 + tileDistBuffer;
+			plrWldRect.Y -= 60 * 16 + tileDistBuffer;
+			plrWldRect.Width += 160 * 16 + (tileDistBuffer * tileDistBuffer);
+			plrWldRect.Height += 120 * 16 + (tileDistBuffer * tileDistBuffer);
+
+			Rectangle plrTileRect = new Rectangle(
+				plrWldRect.X / 16,
+				plrWldRect.Y / 16,
+				plrWldRect.Width / 16,
+				plrWldRect.Height / 16
+			);
+
+			foreach( (Rectangle tileRect, Barrier barrier) in BarrierManager.Instance.GetTileBarriers() ) {
 				if( !barrier.IsActive ) {
 					continue;
 				}
-				if( !plrRect.Intersects(rect) ) {
+				if( !plrTileRect.Intersects(tileRect) ) {
 					continue;
 				}
 
-				int particles = barrier.ComputeCurrentMaxAnimatedParticleCount();
+				int particles = barrier.ComputeNormalParticleCount();
 
 				barrier.Animate( particles );
 //DebugLibraries.Print( "worldbarrier "+rect, "has:"+barrier.ParticleOffsets.Count+", of:"+particles );

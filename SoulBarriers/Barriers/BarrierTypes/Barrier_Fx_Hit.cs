@@ -11,7 +11,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			int maxParticles = this.ComputeMaxAnimatableParticleCount();
+			int maxParticles = this.ComputeHitParticleCount();
 			int particles = Barrier.GetHitParticleCount(
 				maxParticles: maxParticles,
 				damage: isCrit ? maxParticles : damage,
@@ -41,7 +41,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			int maxParticles = this.ComputeMaxAnimatableParticleCount();
+			int maxParticles = this.ComputeHitParticleCount();
 			int particles = Barrier.GetHitParticleCount(
 				maxParticles: maxParticles,
 				damage: isCrit ? maxParticles : damage,

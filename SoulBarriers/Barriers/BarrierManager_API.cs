@@ -9,7 +9,6 @@ using ModLibsCore.Classes.Loadable;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers.BarrierTypes.Spherical.Personal;
-using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 using SoulBarriers.Packets;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 
@@ -21,7 +20,7 @@ namespace SoulBarriers.Barriers {
 		}
 
 		public int GetWorldBarrierCount() {
-			return this.WorldBarriers.Count();
+			return this.TileBarriers.Count();
 		}
 
 
@@ -43,8 +42,8 @@ namespace SoulBarriers.Barriers {
 				.ToDictionary( kv => kv.Key, kv => kv.Value );
 		}
 
-		public IDictionary<Rectangle, Barrier> GetWorldBarriers() {
-			return this.WorldBarriers
+		public IDictionary<Rectangle, Barrier> GetTileBarriers() {
+			return this.TileBarriers
 				.ToDictionary( kv => kv.Key, kv => kv.Value );
 		}
 
@@ -75,14 +74,14 @@ namespace SoulBarriers.Barriers {
 		}
 
 		public Barrier GetWorldBarrier( Rectangle tileArea ) {
-			return this.WorldBarriers.GetOrDefault( tileArea );
+			return this.TileBarriers.GetOrDefault( tileArea );
 		}
 
 
 		////////////////
 
 		public bool DeclareWorldBarrierUnsynced( RectangularBarrier barrier ) {
-			this.WorldBarriers[barrier.TileArea] = barrier;
+			this.TileBarriers[barrier.TileArea] = barrier;
 
 			//
 
@@ -99,7 +98,7 @@ namespace SoulBarriers.Barriers {
 				return;
 			}
 
-			Barrier barrier = this.WorldBarriers.GetOrDefault( tileArea );
+			Barrier barrier = this.TileBarriers.GetOrDefault( tileArea );
 			if( barrier != null ) {
 				this.BarriersByID.Remove( barrier.GetID() );
 
@@ -108,7 +107,7 @@ namespace SoulBarriers.Barriers {
 				}
 			}
 
-			this.WorldBarriers.Remove( tileArea );
+			this.TileBarriers.Remove( tileArea );
 
 			//
 			
@@ -131,7 +130,7 @@ namespace SoulBarriers.Barriers {
 		}
 		
 		public void RemoveAllWorldBarriers() {
-			foreach( string id in this.WorldBarriers.Values.Select(b=>b.GetID()) ) {
+			foreach( string id in this.TileBarriers.Values.Select(b=>b.GetID()) ) {
 				Barrier barrier = this.BarriersByID[id];
 
 				if( this.BarriersByID.Remove(id) ) {
@@ -139,7 +138,7 @@ namespace SoulBarriers.Barriers {
 				}
 			}
 
-			this.WorldBarriers.Clear();
+			this.TileBarriers.Clear();
 		}
 	}
 }

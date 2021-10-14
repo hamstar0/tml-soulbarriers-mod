@@ -52,7 +52,7 @@ namespace SoulBarriers.Barriers {
 			}
 
 			// Check for world barriers:
-			foreach( Barrier barrier in this.WorldBarriers.Values ) {
+			foreach( Barrier barrier in this.TileBarriers.Values ) {
 				if( !barrier.IsActive ) {
 					continue;
 				}

@@ -51,7 +51,7 @@ namespace SoulBarriers {
 					ref float a,
 					ref bool fullBright ) {
 			if( this.Barrier != null && this.Barrier.IsActive ) {
-				int particles = this.Barrier.ComputeCurrentMaxAnimatedParticleCount();
+				int particles = this.Barrier.ComputeNormalParticleCount();
 
 				this.Barrier.Animate( particles );
 			}

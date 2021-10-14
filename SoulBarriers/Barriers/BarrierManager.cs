@@ -22,7 +22,7 @@ namespace SoulBarriers.Barriers {
 
 		private IDictionary<int, Barrier> PlayerBarriers = new Dictionary<int, Barrier>();
 
-		private IDictionary<Rectangle, Barrier> WorldBarriers = new Dictionary<Rectangle, Barrier>();
+		private IDictionary<Rectangle, Barrier> TileBarriers = new Dictionary<Rectangle, Barrier>();
 
 		private IDictionary<string, Barrier> BarriersByID = new Dictionary<string, Barrier>();
 

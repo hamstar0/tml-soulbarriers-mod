@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using ModLibsCore.Libraries.Debug;
 using SoulBarriers.Dusts;
 
 
@@ -27,7 +28,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		public void CreateBarrierParticlesForArea( Vector2 worldCenterPos, int particles ) {
 			for( int i=0; i<particles; i++ ) {
 				(Dust dust, Vector2 offset)? dustData = this.CreateBarrierParticleForArea( worldCenterPos );
-				if( !dustData.HasValue ) { continue; }
+				if( !dustData.HasValue ) {
+					continue;
+				}
 
 				this._ParticleOffsets[ dustData.Value.dust ] = dustData.Value.offset;
 			}
@@ -36,7 +39,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		////
 
 		public (Dust dust, Vector2 offset)? CreateBarrierParticleForArea( Vector2 worldCenterPos ) {
-			Vector2 offset = this.GetRandomOffsetWithinAreaForFx( worldCenterPos, true, out bool isFarAway );
+			Vector2 offset = this.GetRandomOffsetWithinArea( worldCenterPos, true, out bool isFarAway );
 			if( isFarAway ) {
 				return null;
 			}
@@ -53,7 +56,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			Vector2 pos = this.GetBarrierWorldCenter();
 
 			for( int i = 0; i < particles; i++ ) {
-				Vector2 offset = this.GetRandomOffsetWithinAreaForFx( pos, true, out bool isFarAway );
+				Vector2 offset = this.GetRandomOffsetWithinArea( pos, true, out bool isFarAway );
 				if( isFarAway ) {
 					i--;
 					continue;

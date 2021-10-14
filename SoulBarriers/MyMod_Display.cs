@@ -55,7 +55,7 @@ namespace SoulBarriers {
 				}
 			}
 
-			foreach( Barrier barrier in BarrierManager.Instance.GetWorldBarriers().Values ) {
+			foreach( Barrier barrier in BarrierManager.Instance.GetTileBarriers().Values ) {
 				if( barrier.Strength <= 0d ) {
 					continue;
 				}

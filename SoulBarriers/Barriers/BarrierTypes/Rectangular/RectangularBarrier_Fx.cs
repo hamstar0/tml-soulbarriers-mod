@@ -6,25 +6,29 @@ using SoulBarriers.Dusts;
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 	public partial class RectangularBarrier : Barrier {
-		public override int ComputeCurrentMaxAnimatedParticleCount() {
+		public override int ComputeNormalParticleCount() {
 			float chunkSize = 12f;
 			float chunksX = (float)this.TileArea.Width / chunkSize;
 			float chunksY = (float)this.TileArea.Height / chunkSize;
 			float chunks = chunksX * chunksY;
 
-			int count = (int)( (float)base.ComputeCurrentMaxAnimatedParticleCount() * chunks * 2f );
+			float strengthBasedAmt = (float)base.ComputeNormalParticleCount();
+
+			int count = (int)( strengthBasedAmt * chunks * 2f );
 
 			return Math.Min( count, 300 );
 		}
 
 		
-		public override int ComputeMaxAnimatableParticleCount() {
+		public override int ComputeHitParticleCount() {
 			float chunkSize = 12f;
 			float chunksX = (float)this.TileArea.Width / chunkSize;
 			float chunksY = (float)this.TileArea.Height / chunkSize;
 			float chunks = chunksX * chunksY;
 
-			int count = (int)( (float)base.ComputeMaxAnimatableParticleCount() * chunks * 2f );
+			float strengthBasedAmt = (float)base.ComputeHitParticleCount();
+
+			int count = (int)( strengthBasedAmt * chunks * 2f );
 
 			return Math.Min( count, 300 );
 		}
@@ -41,8 +45,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 			Vector2 worldPos = offset + this.GetBarrierWorldCenter();
 			float distSqr = (Main.LocalPlayer.MountedCenter - worldPos).LengthSquared();
 
-			float maxRandDist = 12f * 16f;
+			float maxRandDist = 12f * 16f;	// 12 tiles
 			float maxRandDistSqr = maxRandDist * maxRandDist;
+
 
 			return distSqr > Main.rand.NextFloat( maxRandDistSqr );
 		}
