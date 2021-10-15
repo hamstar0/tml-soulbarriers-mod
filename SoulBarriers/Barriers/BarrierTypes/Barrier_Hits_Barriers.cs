@@ -8,11 +8,7 @@ using SoulBarriers.Packets;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public void ApplyBarrierCollisionHitIf( Barrier intruder, bool syncFromServer ) {
-			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
-				return;
-			}
-			
+		public void ApplyBarrierCollisionHitIf( Barrier intruder, bool syncIfServer ) {
 			if( this.OnPreBarrierBarrierCollision.All( f=>f.Invoke(intruder) ) ) {
 				double thisBarrierStrength = this.Strength;
 				double thatBarrierStrength = intruder.Strength;
@@ -22,7 +18,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					e.Invoke( intruder );
 				}
 				
-				this.ApplyBarrierCollisionHit( intruder, thisBarrierStrength, thatBarrierStrength, syncFromServer );
+				this.ApplyBarrierCollisionHit( intruder, thisBarrierStrength, thatBarrierStrength, syncIfServer );
 			}
 		}
 
@@ -33,12 +29,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					Barrier intruder,
 					double prevBarrierStrength,
 					double prevIntruderBarrierStrength,
-					bool syncFromServer ) {
-			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
-				return;
-			}
-			
-			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
+					bool syncIfServer ) {
+			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitBarrierPacket.BroadcastToClients(
 					this,
 					intruder,

@@ -50,7 +50,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 
 			if( host != null ) {
-				//dust.position += host.velocity;
 				dust.position += host.position - host.oldPosition;
 			}
 

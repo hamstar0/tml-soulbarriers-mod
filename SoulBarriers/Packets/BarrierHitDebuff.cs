@@ -52,7 +52,7 @@ namespace SoulBarriers.Packets {
 				LogLibraries.Alert( "Barrier hit: "+this.BarrierID+", BuffType: "+this.BuffType );
 			}
 
-			barrier.ApplyPlayerDebuffHit( this.BuffType, false );
+			barrier.ApplyPlayerDebuffHitIf( this.BuffType, false );
 		}
 
 		////

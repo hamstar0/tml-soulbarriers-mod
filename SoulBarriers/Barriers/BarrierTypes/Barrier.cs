@@ -10,8 +10,10 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		public static Vector2 GetEntityBarrierOrigin( Entity host ) {
 			if( host is Player ) {
 				return ( (Player)host ).MountedCenter;
-			} else {
+			} else if( host != null ) {
 				return host.Center;
+			} else {
+				return default;
 			}
 		}
 
@@ -123,7 +125,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public abstract ISet<(int tileX, int tileY)> GetTilesUponBarrier();
+		public abstract ISet<(int tileX, int tileY)> GetTilesUponBarrier( float worldPadding );
 
 
 		////////////////

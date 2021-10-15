@@ -50,14 +50,17 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 		////////////////
 
-		public override ISet<(int tileX, int tileY)> GetTilesUponBarrier() {
+		public override ISet<(int tileX, int tileY)> GetTilesUponBarrier( float worldPadding ) {
 			var tiles = new HashSet<(int, int)>();
 
-			int right = this.TileArea.Right;
-			int bot = this.TileArea.Bottom;
+			int tilePadding = (int)worldPadding / 16;
+			int left = this.TileArea.Left - tilePadding;
+			int top = this.TileArea.Top - tilePadding;
+			int right = this.TileArea.Right + tilePadding;
+			int bot = this.TileArea.Bottom + tilePadding;
 
-			for( int x=this.TileArea.Left; x<right; x++ ) {
-				for( int y=this.TileArea.Top; y<bot; y++ ) {
+			for( int x=left; x<right; x++ ) {
+				for( int y=top; y<bot; y++ ) {
 					tiles.Add( (x, y) );
 				}
 			}

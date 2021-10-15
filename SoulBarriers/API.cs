@@ -65,8 +65,8 @@ namespace SoulBarriers {
 
 		////////////////
 		
-		public static ISet<(int tileX, int tileY)> GetTilesUponBarrier( Barrier barrier ) {
-			return barrier.GetTilesUponBarrier();
+		public static ISet<(int tileX, int tileY)> GetTilesUponBarrier( Barrier barrier, float padding ) {
+			return barrier.GetTilesUponBarrier( padding );
 		}
 
 

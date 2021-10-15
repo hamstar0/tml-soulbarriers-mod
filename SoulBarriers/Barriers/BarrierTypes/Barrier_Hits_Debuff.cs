@@ -7,18 +7,17 @@ using SoulBarriers.Packets;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public void ApplyPlayerDebuffHit( int buffType, bool syncFromServer ) {
+		public bool ApplyPlayerDebuffHitIf( int buffType, bool syncIfServer ) {
 			if( this.HostType != BarrierHostType.Player ) {
 				throw new ModLibsException( "Incorrect barrier type." );
-			}
-
-			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
-				return;
 			}
 
 			var config = SoulBarriersConfig.Instance;
 			var hostPlayer = (Player)this.Host;
 			int buffIdx = hostPlayer?.FindBuffIndex( buffType ) ?? -1;
+			if( buffIdx == -1 ) {
+				return false;
+			}
 
 			hostPlayer.DelBuff( buffIdx );
 
@@ -32,7 +31,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				}
 			}
 
-			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
+			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitDebuffPacket.BroadcastToClients(
 					barrier: this,
 					buffType: buffType
@@ -40,6 +39,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 				NetMessage.SendData( MessageID.SyncPlayer, -1, -1, null, hostPlayer.whoAmI );
 			}
+
+			return true;
 		}
 	}
 }

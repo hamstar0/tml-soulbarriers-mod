@@ -67,12 +67,13 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 
 		////////////////
 
-		public override ISet<(int tileX, int tileY)> GetTilesUponBarrier() {
+		public override ISet<(int tileX, int tileY)> GetTilesUponBarrier( float worldPadding ) {
 			Vector2 wldCenter = this.GetBarrierWorldCenter();
-			float wldLeft = wldCenter.X - this.Radius;
-			float wldRight = wldCenter.X + this.Radius;
-			float wldTop = wldCenter.Y - this.Radius;
-			float wldBot = wldCenter.Y + this.Radius;
+			float rad = this.Radius + worldPadding;
+			float wldLeft = wldCenter.X - rad;
+			float wldRight = wldCenter.X + rad;
+			float wldTop = wldCenter.Y - rad;
+			float wldBot = wldCenter.Y + rad;
 			int lTile = (int)Math.Ceiling( wldLeft / 16f );
 			int rTile = (int)Math.Floor( wldRight / 16f );
 			int tTile = (int)Math.Ceiling( wldTop / 16f );

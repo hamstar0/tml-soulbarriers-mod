@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using ModLibsCore.Libraries.Debug;
 using ModLibsGeneral.Libraries.World;
 using SoulBarriers.Buffs;
 using SoulBarriers.Packets;
@@ -91,7 +92,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 
 			if( hasSoulBuff ) {
 				foreach( int debuffIdx in badBuffIdxs ) {
-					this.ApplyPlayerDebuffHit( hostPlayer.buffType[debuffIdx], true );
+					if( !this.ApplyPlayerDebuffHitIf(hostPlayer.buffType[debuffIdx], true) ) {
+						LogLibraries.Alert( "Personal barrier failed to remove player debuff" );
+					}
 				}
 			}
 		}

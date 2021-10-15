@@ -93,16 +93,12 @@ namespace SoulBarriers.Barriers {
 
 		////
 
-		public void RemoveWorldBarrier( Rectangle tileArea, bool syncFromServer ) {
-			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
-				return;
-			}
-
+		public void RemoveWorldBarrier( Rectangle tileArea, bool syncIfServer ) {
 			Barrier barrier = this.TileBarriers.GetOrDefault( tileArea );
 			if( barrier != null ) {
 				this.BarriersByID.Remove( barrier.GetID() );
 
-				if( syncFromServer && Main.netMode == NetmodeID.Server ) {
+				if( syncIfServer && Main.netMode == NetmodeID.Server ) {
 					BarrierRemovePacket.BroadcastToClients( barrier );
 				}
 			}

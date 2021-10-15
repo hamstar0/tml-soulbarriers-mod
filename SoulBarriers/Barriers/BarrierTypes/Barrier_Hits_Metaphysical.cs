@@ -8,11 +8,7 @@ using SoulBarriers.Packets;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public void ApplyMetaphysicalHit( Vector2? hitAt, double damage, bool syncFromServer ) {
-			if( syncFromServer && Main.netMode == NetmodeID.MultiplayerClient ) {
-				return;
-			}
-
+		public void ApplyMetaphysicalHit( Vector2? hitAt, double damage, bool syncIfServer ) {
 			this.SetStrength( this.Strength - damage, false, false );
 
 			if( Main.netMode != NetmodeID.Server ) {
@@ -22,7 +18,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				}
 			}
 
-			if( syncFromServer && Main.netMode == NetmodeID.Server ) {
+			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitMetaphysicalPacket.BroadcastToClients(
 					barrier: this,
 					hasHitPosition: hitAt.HasValue,
