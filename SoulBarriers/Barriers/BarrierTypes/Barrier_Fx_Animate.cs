@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using SoulBarriers.Dusts;
 
 
@@ -64,15 +62,21 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return 0;
 			}
 
-			return 24 + (int)( this.Strength / 3d );
+			int particlesViaStr = (int)(this.Strength / 3d);
+			int maxParticles = Math.Min( particlesViaStr, Barrier.MaximumNormalParticles );
+
+			return Math.Max( Barrier.MinimumNormalParticles, maxParticles );
 		}
 
-		public virtual int ComputeHitParticleCount() {
-			double max = !this.MaxRegenStrength.HasValue || this.MaxRegenStrength.Value <= 0d
+		public virtual int ComputeHitParticleCountMax() {
+			double maxStr = !this.MaxRegenStrength.HasValue || this.MaxRegenStrength.Value <= 0d
 				? this.InitialStrength
 				: this.MaxRegenStrength.Value;
+			
+			int particlesViaStr = (int)(maxStr / 3d);
+			int maxParticles = Math.Min( particlesViaStr, Barrier.MaximumHitParticles );
 
-			return 24 + (int)( max / 3d );
+			return Math.Max( Barrier.MinimumHitParticles, maxParticles );
 		}
 	}
 }

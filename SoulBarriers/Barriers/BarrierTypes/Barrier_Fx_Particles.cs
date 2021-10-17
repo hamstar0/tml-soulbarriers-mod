@@ -7,18 +7,29 @@ using SoulBarriers.Dusts;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
+		public const int MinimumNormalParticles = 18;
+
+		public const int MinimumHitParticles = 24;
+
+		public const int MaximumNormalParticles = 300;
+
+		public const int MaximumHitParticles = 150;
+
+
+
+		////////////////
+
 		public static int GetHitParticleCount( double maxParticles, double damage, double barrierStrength ) {
 			if( damage <= 1d ) {
 				return 0;
 			}
 
-			double percent = Math.Min( 1d, damage / barrierStrength );
+			double percentDmg = Math.Min( 1d, damage / barrierStrength );
 
-			double minParticles = Math.Max( maxParticles / 8d, 6d );
+			double min = maxParticles / 12d;
+			double add = percentDmg * (11d * min);
 
-			double addParticles = percent * ((7d * maxParticles) / 8d);
-
-			return (int)(minParticles + addParticles);
+			return (int)Math.Max( min + add, Barrier.MinimumHitParticles );
 		}
 
 
