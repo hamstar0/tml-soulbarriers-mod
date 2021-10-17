@@ -1,13 +1,17 @@
 using System;
-using Microsoft.Xna.Framework;
 using Terraria;
-using SoulBarriers.Dusts;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 	public partial class RectangularBarrier : Barrier {
+		public const int BarrierAreaTileChunkSize = 12;
+
+
+
+		////////////////
+
 		public override int ComputeNormalParticleCount() {
-			float chunkSize = 12f;
+			float chunkSize = RectangularBarrier.BarrierAreaTileChunkSize;
 			float chunksX = (float)this.TileArea.Width / chunkSize;
 			float chunksY = (float)this.TileArea.Height / chunkSize;
 			float chunks = chunksX * chunksY;
@@ -19,14 +23,15 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 			return Math.Min( count, 300 );
 		}
 
+		////
 		
-		public override int ComputeHitParticleCountMax() {
-			float chunkSize = 12f;
+		public override int ComputeAreaHitParticleCountMax() {
+			float chunkSize = RectangularBarrier.BarrierAreaTileChunkSize;
 			float chunksX = (float)this.TileArea.Width / chunkSize;
 			float chunksY = (float)this.TileArea.Height / chunkSize;
 			float chunks = chunksX * chunksY;
 
-			float strengthBasedAmt = (float)base.ComputeHitParticleCountMax();
+			float strengthBasedAmt = (float)base.ComputeAreaHitParticleCountMax();
 
 			int count = (int)( strengthBasedAmt * chunks * 1f );
 

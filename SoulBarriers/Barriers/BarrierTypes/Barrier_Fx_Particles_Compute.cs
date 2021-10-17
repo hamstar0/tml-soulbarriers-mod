@@ -15,7 +15,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			return Math.Max( Barrier.MinimumNormalParticles, maxParticles );
 		}
 
-		public virtual int ComputeHitParticleCountMax() {
+		////
+
+		public virtual int ComputeAreaHitParticleCountMax() {
 			double maxStr = !this.MaxRegenStrength.HasValue || this.MaxRegenStrength.Value <= 0d
 				? this.InitialStrength
 				: this.MaxRegenStrength.Value;
@@ -24,6 +26,10 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			int maxParticles = Math.Min( particlesViaStr, Barrier.MaximumHitParticles );
 
 			return Math.Max( Barrier.MinimumHitParticles, maxParticles );
+		}
+
+		public virtual int ComputePointHitParticleCountMax() {
+			return this.ComputeAreaHitParticleCountMax();
 		}
 	}
 }
