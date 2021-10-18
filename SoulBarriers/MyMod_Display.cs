@@ -27,7 +27,7 @@ namespace SoulBarriers {
 		////////////////
 
 		public override void ModifyInterfaceLayers( List<GameInterfaceLayer> layers ) {
-			int idx = layers.FindIndex( layer => layer.Name.Equals( "Vanilla: Inventory" ) );
+			int idx = layers.FindIndex( layer => layer.Name.Equals("Vanilla: Inventory") );
 			if( idx == -1 ) {
 				return;
 			}
@@ -74,14 +74,16 @@ namespace SoulBarriers {
 		private void DisplayPlayerBarrierStatsIf( SpriteBatch sb, SphericalBarrier barrier, Player plr ) {
 			Vector2 barrierPos = barrier.GetBarrierWorldCenter();
 			float radius = ((SphericalBarrier)barrier).Radius;
+			float radSqr = radius * radius;
+			float distSqr = (barrierPos - Main.MouseWorld).LengthSquared();
 
-			if( (barrierPos - Main.MouseWorld).LengthSquared() < (radius * radius) ) {
+			if( distSqr < radSqr ) {
 				this.DisplayPlayerSphereBarrierStats( sb, plr, barrier );
 			}
 		}
 		
 		private void DisplayRectangularBarrierStatsIf( SpriteBatch sb, RectangularBarrier barrier ) {
-			if( !barrier.TileArea.Contains(Main.MouseWorld.ToPoint()) ) {
+			if( !barrier.WorldArea.Contains(Main.MouseWorld.ToPoint()) ) {
 				return;
 			}
 
