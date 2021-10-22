@@ -69,6 +69,20 @@ namespace SoulBarriers {
 
 		////
 
+
+		[Range( 0f, 100f )]
+		[DefaultValue( 8f )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
+		public float RectangleBarrierParticleMultiplier { get; set; } = 8f;
+
+		[Range( 0f, 100f )]
+		[DefaultValue( 4f )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
+		public float SphericalBarrierParticleMultiplier { get; set; } = 4f;
+
+
+		////
+
 		[Range(10f, 500f)]
 		[DefaultValue(48f)]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]

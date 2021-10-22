@@ -166,7 +166,7 @@ namespace SoulBarriers {
 					continue;
 				}
 
-				int particles = barrier.ComputeNormalParticleCount();
+				int particles = barrier.ComputeCappedNormalParticleCount();
 
 				barrier.Animate( particles );
 //DebugLibraries.Print( "worldbarrier "+rect, "has:"+barrier.ParticleOffsets.Count+", of:"+particles );

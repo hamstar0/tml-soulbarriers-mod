@@ -22,9 +22,12 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 			float chunksY = (float)this.TileArea.Height / chunkSize;
 			float chunks = chunksX * chunksY;
 
-			float strengthBasedAmt = (float)base.ComputeNormalParticleCount();
+			float strengthBasedAmt = (float)base.ComputeCappedNormalParticleCount();
+			
+			var config = SoulBarriersConfig.Instance;
+			float particleMulPerChunk = config.Get<float>( nameof(config.RectangleBarrierParticleMultiplier) );
 
-			int count = (int)( strengthBasedAmt * chunks * RectangularBarrier.NormalParticlesMultipliedPerChunk );
+			int count = (int)( strengthBasedAmt * chunks * particleMulPerChunk );
 
 			return Math.Min( count, 300 );
 		}
@@ -37,7 +40,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 			float chunksY = (float)this.TileArea.Height / chunkSize;
 			float chunks = chunksX * chunksY;
 
-			float strengthBasedAmt = (float)base.ComputeAreaHitParticleCountMax();
+			float strengthBasedAmt = (float)base.ComputeCappedAreaHitParticleCountMax();
 
 			int count = (int)( strengthBasedAmt * chunks * RectangularBarrier.AreaHitParticlesMultipliedPerChunk );
 

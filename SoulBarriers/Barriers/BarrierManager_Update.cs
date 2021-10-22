@@ -39,7 +39,7 @@ namespace SoulBarriers.Barriers {
 
 					if( str > 0d ) {
 						int dusts = barrier.ParticleOffsets.Keys.Count( d => d.active );
-						int maxDusts = barrier.ComputeNormalParticleCount();
+						int maxDusts = barrier.ComputeCappedNormalParticleCount();
 
 						DebugLibraries.Print( "barrier:["+id+"]",
 							"str:("+str+":"+maxStrStr+") - "

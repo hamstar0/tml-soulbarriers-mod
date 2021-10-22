@@ -20,15 +20,30 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
+		public int ComputeCappedNormalParticleCount() {
+			return Math.Min( Barrier.MaximumNormalParticles, this.ComputeNormalParticleCount() );
+		}
+
+		////
+
+		public int ComputeCappedAreaHitParticleCountMax() {
+			return Math.Min( Barrier.MaximumAreaHitParticles, this.ComputeAreaHitParticleCountMax() );
+		}
+
+		public int ComputeCappedPointHitParticleCountMax() {
+			return Math.Min( Barrier.MaximumAreaHitParticles, this.ComputePointHitParticleCountMax() );
+		}
+
+		////////////////
+
 		public virtual int ComputeNormalParticleCount() {
 			if( this.Strength <= 0 ) {
 				return 0;
 			}
 
 			int particlesViaStr = (int)(this.Strength * Barrier.ParticlesPerStrengthUnit );
-			int maxParticles = Math.Min( particlesViaStr, Barrier.MaximumNormalParticles );
 
-			return Math.Max( Barrier.MinimumNormalParticles, maxParticles );
+			return Math.Max( Barrier.MinimumNormalParticles, particlesViaStr );
 		}
 
 		////
@@ -39,9 +54,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				: this.MaxRegenStrength.Value;
 			
 			int particlesViaStr = (int)(maxStr * Barrier.ParticlesPerStrengthUnit);
-			int maxParticles = Math.Min( particlesViaStr, Barrier.MaximumAreaHitParticles );
 
-			return Math.Max( Barrier.MinimumAreaHitParticles, maxParticles );
+			return Math.Max( Barrier.MinimumAreaHitParticles, particlesViaStr );
 		}
 
 		public virtual int ComputePointHitParticleCountMax() {
