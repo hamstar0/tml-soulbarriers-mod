@@ -22,16 +22,19 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		public int ComputeCappedNormalParticleCount() {
 			return Math.Min( Barrier.MaximumNormalParticles, this.ComputeNormalParticleCount() );
+			//return this.ComputeNormalParticleCount();
 		}
 
 		////
 
 		public int ComputeCappedAreaHitParticleCountMax() {
 			return Math.Min( Barrier.MaximumAreaHitParticles, this.ComputeAreaHitParticleCountMax() );
+			//return this.ComputeAreaHitParticleCountMax();
 		}
 
 		public int ComputeCappedPointHitParticleCountMax() {
 			return Math.Min( Barrier.MaximumAreaHitParticles, this.ComputePointHitParticleCountMax() );
+			//return this.ComputePointHitParticleCountMax();
 		}
 
 		////////////////

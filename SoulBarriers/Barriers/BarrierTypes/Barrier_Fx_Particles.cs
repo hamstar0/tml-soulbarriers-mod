@@ -35,33 +35,33 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 		}
 
-		////
+
+		////////////////
 
 		public (Dust dust, Vector2 offset)? CreateBarrierParticleForArea( Vector2 worldCenterPos ) {
-			Vector2 offset = this.GetRandomOffsetWithinArea( worldCenterPos, true, out bool isFarAway );
-			if( isFarAway ) {
+			Vector2? pos = this.GetRandomWorldPositionWithinAreaOnScreen( worldCenterPos, true, out bool isFar );
+			if( !pos.HasValue || isFar ) {
 				return null;
 			}
 
-			Dust dust = this.CreateBarrierParticleAt( worldCenterPos + offset, false );
+			Dust dust = this.CreateBarrierParticleAt( pos.Value, false );
 
-			return (dust, offset);
+			return (dust, pos.Value);
 		}
 
 
 		////////////////
 
 		public void CreateHitParticlesForArea( int particles ) {
-			Vector2 pos = this.GetBarrierWorldCenter();
+			Vector2 wldPosCenter = this.GetBarrierWorldCenter();
 
 			for( int i = 0; i < particles; i++ ) {
-				Vector2 offset = this.GetRandomOffsetWithinArea( pos, true, out bool isFarAway );
-				if( isFarAway ) {
-					i--;
-					continue;
+				Vector2? pos = this.GetRandomWorldPositionWithinAreaOnScreen( wldPosCenter, false, out bool isFar );
+				if( !pos.HasValue || isFar ) {
+					break;
 				}
 
-				this.CreateBarrierParticleAt( pos + offset, true );
+				this.CreateBarrierParticleAt( pos.Value, true );
 			}
 		}
 		

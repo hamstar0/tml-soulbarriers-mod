@@ -28,7 +28,7 @@ namespace SoulBarriers.Barriers {
 			//
 
 			if( SoulBarriersConfig.Instance.DebugModeInfo ) {
-				DebugLibraries.Print( "player pos", Main.LocalPlayer.position.ToPoint().ToString() ) ;
+				//DebugLibraries.Print( "player pos", Main.LocalPlayer.position.ToPoint().ToString() ) ;
 
 				foreach( string id in this.BarriersByID.Keys ) {
 					Barrier barrier = this.BarriersByID[id];

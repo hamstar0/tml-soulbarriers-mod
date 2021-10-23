@@ -120,7 +120,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////
 
-		public abstract Vector2 GetRandomOffsetWithinArea( Vector2 origin, bool isFxOnly, out bool isFarAway );
+		public abstract Vector2 GetRandomWorldPositionWithinArea( Vector2 worldCenter, bool fxOnly );
+
+		public abstract Vector2? GetRandomWorldPositionWithinAreaOnScreen( Vector2 worldCenter, bool fxOnly, out bool isFarAway );
 
 
 		////////////////
