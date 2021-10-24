@@ -6,7 +6,7 @@ using SoulBarriers.Dusts;
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 	public partial class RectangularBarrier : Barrier {
-		public bool DecideIfParticleTooFarAwayForFx( Vector2 worldPos ) {
+		public bool DecideIfParticleTooFarAwayForFx( Vector2 worldCenter ) {
 			// any distance is fine, 10% of the time
 			if( Main.rand.NextFloat() <= 0.1f ) {
 				return false;
@@ -14,7 +14,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 			//
 
-			float distSqr = (Main.LocalPlayer.MountedCenter - worldPos).LengthSquared();
+			float distSqr = (Main.LocalPlayer.MountedCenter - worldCenter).LengthSquared();
 
 			float maxRandDist = 12f * 16f;	// 12 tiles
 			float maxRandDistSqr = maxRandDist * maxRandDist;

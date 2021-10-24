@@ -41,7 +41,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 					isFarAway = true;
 					return null;
 				}
-			} else if( maxX > scrMaxX ) {
+			}
+			if( maxX > scrMaxX ) {
 				if( maxX >= Main.screenPosition.X ) {
 					maxX = scrMaxX;
 				} else {
@@ -57,13 +58,19 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 					isFarAway = true;
 					return null;
 				}
-			} else if( maxY > scrMaxY ) {
+			}
+			if( maxY > scrMaxY ) {
 				if( maxY >= Main.screenPosition.Y ) {
 					maxY = scrMaxY;
 				} else {
 					isFarAway = true;
 					return null;
 				}
+			}
+
+			if( minX >= maxX || minY >= maxY ) {
+				isFarAway = true;
+				return null;
 			}
 
 			//

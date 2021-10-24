@@ -94,7 +94,7 @@ namespace SoulBarriers.Items {
 				return (false, null, null);
 			}
 
-			int remainingTicks = Main.LocalPlayer.buffTime[buffIdx];
+			int remainingTicks = Main.LocalPlayer.buffTime[ buffIdx ];
 			string buffTimeDisp = remainingTicks > 0
 				? MiscLibraries.RenderTickDuration( remainingTicks )
 				: "N/A";

@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
-using ModLibsCore.Libraries.Debug;
 using Terraria;
+using ModLibsCore.Libraries.Debug;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
@@ -25,10 +25,10 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 
 		////
 
-		public override Vector2 GetRandomWorldPositionWithinArea( Vector2 origin, bool fxOnly ) {
+		public override Vector2 GetRandomWorldPositionWithinArea( Vector2 worldCenter, bool fxOnly ) {
 			float distScale = Main.rand.NextFloat();
 			if( fxOnly ) {
-				distScale = 1f - ( distScale * distScale * distScale * distScale * distScale );
+				distScale = 1f - (distScale * distScale * distScale * distScale * distScale);
 			} else {
 				distScale = 1f - distScale;
 			}
@@ -36,7 +36,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 			Vector2 randDir = new Vector2(1f, 0f)
 				.RotatedByRandom( 2d * Math.PI );
 
-			return randDir * distScale * this.Radius;
+			return worldCenter + randDir * distScale * this.Radius;
 		}
 
 		public override Vector2? GetRandomWorldPositionWithinAreaOnScreen(
@@ -50,21 +50,22 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 				Main.screenHeight
 			);
 
-			int halfRad = (int)(this.Radius / 2f) - 1;
-			if( worldCenter.X <= (scrRect.Right-halfRad)
-					|| worldCenter.X >= (scrRect.Left+halfRad)
-					|| worldCenter.Y <= (scrRect.Top-halfRad)
-					|| worldCenter.Y >= (scrRect.Bottom+halfRad) ) {
+			int halfRad = (int)(this.Radius * 0.5f);	// approx
+			if( worldCenter.X < (scrRect.Left - halfRad)
+					|| worldCenter.X > (scrRect.Right + halfRad)
+					|| worldCenter.Y < (scrRect.Top - halfRad)
+					|| worldCenter.Y > (scrRect.Bottom + halfRad) ) {
+//DebugLibraries.Print( "SPHERE FAIL 1", "rect: "+scrRect+", wld: "+worldCenter+", halfRad: "+halfRad );
 				isFarAway = true;
 				return null;
 			}
 
-			Vector2 pos;
+			Vector2 pos, offset;
 
 			do {
 				float distScale = Main.rand.NextFloat();
 				if( fxOnly ) {
-					distScale = 1f - ( distScale * distScale * distScale * distScale * distScale );
+					distScale = 1f - (distScale * distScale * distScale * distScale * distScale);
 				} else {
 					distScale = 1f - distScale;
 				}
@@ -72,17 +73,20 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 				Vector2 randDir = new Vector2(1f, 0f)
 					.RotatedByRandom( 2d * Math.PI );
 
-				pos = randDir * distScale * this.Radius;
-			} while( !scrRect.Contains(pos.ToPoint()) );    // ugh
+				offset = randDir * distScale * this.Radius;
+				pos = worldCenter + offset;
+			} while( !scrRect.Contains( pos.ToPoint() ) );    // ugh
 
 			//
 
 			float maxDist = 256 * 16;	// 256 tiles = too far
 			float maxDistSqr = maxDist * maxDist;
-			isFarAway = (Main.LocalPlayer.MountedCenter - pos).LengthSquared() > maxDistSqr;
+			float distSqr = offset.LengthSquared();
+
+			isFarAway = distSqr > maxDistSqr;
 
 			//
-
+			
 			return pos;
 		}
 	}

@@ -56,8 +56,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			Vector2 wldPosCenter = this.GetBarrierWorldCenter();
 
 			for( int i = 0; i < particles; i++ ) {
-				Vector2? pos = this.GetRandomWorldPositionWithinAreaOnScreen( wldPosCenter, false, out bool isFar );
-				if( !pos.HasValue || isFar ) {
+				Vector2? pos = this.GetRandomWorldPositionWithinAreaOnScreen( wldPosCenter, false, out _ );
+				if( !pos.HasValue ) {
 					break;
 				}
 
