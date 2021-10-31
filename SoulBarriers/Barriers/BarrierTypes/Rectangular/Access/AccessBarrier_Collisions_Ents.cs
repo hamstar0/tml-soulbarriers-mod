@@ -4,15 +4,13 @@ using Terraria;
 using Terraria.ID;
 using Terraria.DataStructures;
 using ModLibsCore.Libraries.Debug;
-using ModLibsCore.Services.Timers;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 	public partial class AccessBarrier : RectangularBarrier {
 		public virtual bool CanHitPlayer( Player intruder ) {
-			string timerName = SoulBarriersPlayer.GetGracePeriodTimerNAme( intruder );
-
-			return Timers.GetTimerTickDuration(timerName) <= 0;
+			return intruder.GetModPlayer<SoulBarriersPlayer>()
+				.BarrierImmunityTimer <= 0;
 		}
 
 
@@ -53,6 +51,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 				dmg: 999999999,
 				hitDirection: 0
 			);
+
+			var myplayer = intruder.GetModPlayer<SoulBarriersPlayer>();
+			myplayer.BarrierImmunityTimer = 60 * 2;
 
 			if( Main.netMode == NetmodeID.Server ) {
 				NetMessage.SendData( MessageID.PlayerHealth, -1, -1, null, intruder.whoAmI );
