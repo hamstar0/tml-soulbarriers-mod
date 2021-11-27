@@ -40,6 +40,7 @@ namespace SoulBarriers {
 			layers.Insert( idx, statsLayer );
 		}
 
+
 		////
 
 		private bool DrawBarrierStats() {

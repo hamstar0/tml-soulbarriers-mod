@@ -18,7 +18,7 @@ namespace SoulBarriers {
 
 
 		////////////////
-
+		
 		public override void PreUpdate() {
 			this.UpdatePersonalBarrier();
 
@@ -27,18 +27,28 @@ namespace SoulBarriers {
 					this.BarrierImmunityTimer--;
 				}
 			}
+
+			this.AnimateBarrierFx();
 		}
 
 
 		////////////////
 
-		public override void DrawEffects(
+		/*public override void DrawEffects(
 					PlayerDrawInfo drawInfo,
 					ref float r,
 					ref float g,
 					ref float b,
 					ref float a,
 					ref bool fullBright ) {
+			if( this.Barrier != null && this.Barrier.IsActive ) {
+				int particles = this.Barrier.ComputeCappedNormalParticleCount();
+
+				this.Barrier.Animate( particles );
+			}
+		}*/
+
+		private void AnimateBarrierFx() {
 			if( this.Barrier != null && this.Barrier.IsActive ) {
 				int particles = this.Barrier.ComputeCappedNormalParticleCount();
 

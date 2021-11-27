@@ -38,6 +38,8 @@ namespace SoulBarriers {
 
 		public override void MidUpdateTimeWorld() {
 			BarrierManager.Instance.UpdateAllTrackedBarriers();
+
+			this.AnimateWorldBarrierFx();
 		}
 	}
 }

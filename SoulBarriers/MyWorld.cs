@@ -142,7 +142,7 @@ namespace SoulBarriers {
 
 		////////////////
 
-		public override void PostDrawTiles() {
+		/*public override void PostDrawTiles() {
 			int tileDistBuffer = 8 * 16;
 
 			Rectangle plrWldRect = Main.LocalPlayer.getRect();
@@ -171,6 +171,6 @@ namespace SoulBarriers {
 				barrier.Animate( particles );
 //DebugLibraries.Print( "worldbarrier "+rect, "has:"+barrier.ParticleOffsets.Count+", of:"+particles );
 			}
-		}
+		}*/
 	}
 }
