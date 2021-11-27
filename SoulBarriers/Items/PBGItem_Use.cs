@@ -1,8 +1,10 @@
 using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsCore.Libraries.Debug;
 using SoulBarriers.Buffs;
+using SoulBarriers.Packets;
 
 
 namespace SoulBarriers.Items {
@@ -39,6 +41,29 @@ namespace SoulBarriers.Items {
 			if( seconds >= 1 ) {
 				player.AddBuff( overheatDeBuff, seconds * 60 );
 			}
+
+			//
+
+			if( Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer ) {
+				NetMessage.SendData(
+					MessageID.AddPlayerBuff,
+					-1,
+					-1,
+					null,
+					player.whoAmI,
+					(float)overheatDeBuff,
+					(float)seconds * 60f
+				);
+
+				BarrierStrengthPacket.SyncToServerForEveryone(
+					barrier: myplayer.Barrier,
+					strength: barrierStr,
+					applyHitFx: false,
+					clearRegenBuffer: true
+				);
+			}
+
+			//
 
 			return true;
 		}
