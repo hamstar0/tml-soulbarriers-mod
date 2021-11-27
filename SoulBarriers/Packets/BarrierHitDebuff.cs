@@ -35,7 +35,7 @@ namespace SoulBarriers.Packets {
 		private BarrierHitDebuffPacket() { }
 
 		private BarrierHitDebuffPacket( Barrier barrier, int buffType ) {
-			this.BarrierID = barrier.GetID();
+			this.BarrierID = barrier.ID;
 			this.BuffType = buffType;
 		}
 

@@ -8,6 +8,12 @@ using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 
 namespace SoulBarriers.Commands {
 	public class CreateTestWorldBarrierCommand : ModCommand {
+		private static int TestBarrierCount = 0;
+
+
+
+		////////////////
+
 		public override CommandType Type => CommandType.World;
 
 		public override string Command => "sb-debugworldbarrier";
@@ -42,6 +48,7 @@ namespace SoulBarriers.Commands {
 			rect.Height = WorldLocationLibraries.RockLayerTopTileY * 16;	//128 * 16;
 
 			var barrier = new AccessBarrier(
+				id: "TestBarrier_"+(CreateTestWorldBarrierCommand.TestBarrierCount++),
 				strength: str,
 				maxRegenStrength: str,
 				strengthRegenPerTick: 5f / 60f,

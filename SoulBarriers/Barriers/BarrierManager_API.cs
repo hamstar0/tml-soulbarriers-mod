@@ -59,6 +59,7 @@ namespace SoulBarriers.Barriers {
 			float radius = config.Get<float>( nameof(config.DefaultPlayerBarrierRadius) );
 
 			Barrier barrier = new PersonalBarrier(
+				id: "PlayerPersonalBarrier_"+playerWho,
 				hostType: BarrierHostType.Player,
 				hostWhoAmI: playerWho,
 				strength: 0,
@@ -96,7 +97,7 @@ namespace SoulBarriers.Barriers {
 		public void RemoveWorldBarrier( Rectangle tileArea, bool syncIfServer ) {
 			Barrier barrier = this.TileBarriers.GetOrDefault( tileArea );
 			if( barrier != null ) {
-				this.BarriersByID.Remove( barrier.GetID() );
+				this.BarriersByID.Remove( barrier.ID );
 
 				if( syncIfServer && Main.netMode == NetmodeID.Server ) {
 					BarrierRemovePacket.BroadcastToClients( barrier );
@@ -114,7 +115,7 @@ namespace SoulBarriers.Barriers {
 		////////////////
 		
 		public void RemoveAllPlayerBarriers() {
-			foreach( string id in this.PlayerBarriers.Values.Select(b=>b.GetID()) ) {
+			foreach( string id in this.PlayerBarriers.Values.Select(b=>b.ID) ) {
 				Barrier barrier = this.BarriersByID[id];
 
 				if( this.BarriersByID.Remove(id) ) {
@@ -126,7 +127,7 @@ namespace SoulBarriers.Barriers {
 		}
 		
 		public void RemoveAllWorldBarriers() {
-			foreach( string id in this.TileBarriers.Values.Select(b=>b.GetID()) ) {
+			foreach( string id in this.TileBarriers.Values.Select(b=>b.ID) ) {
 				Barrier barrier = this.BarriersByID[id];
 
 				if( this.BarriersByID.Remove(id) ) {

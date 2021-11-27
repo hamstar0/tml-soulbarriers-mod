@@ -58,7 +58,7 @@ namespace SoulBarriers.Barriers {
 		private void UpdatedTrackedBarrierOfPlayer( int plrWho ) {
 			Barrier barrier = this.PlayerBarriers[plrWho];
 			Player plr = Main.player[plrWho];
-			string id = barrier.GetID();
+			string id = barrier.ID;
 
 			//
 
@@ -96,7 +96,7 @@ namespace SoulBarriers.Barriers {
 
 
 		private void UpdateTrackedBarrierOfWorld( Barrier barrier ) {
-			string id = barrier.GetID();
+			string id = barrier.ID;
 
 			barrier.Update_Internal();
 

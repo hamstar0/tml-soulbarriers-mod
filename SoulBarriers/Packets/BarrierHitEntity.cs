@@ -41,7 +41,7 @@ namespace SoulBarriers.Packets {
 		private BarrierHitEntityPacket() { }
 
 		private BarrierHitEntityPacket( Barrier barrier, BarrierIntruderType entityType, int entityWhoAmI ) {
-			this.BarrierID = barrier.GetID();
+			this.BarrierID = barrier.ID;
 			this.EntityType = (int)entityType;
 			this.EntityWhoAmI = entityWhoAmI;
 		}

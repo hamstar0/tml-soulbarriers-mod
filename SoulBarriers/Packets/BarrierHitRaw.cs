@@ -48,7 +48,7 @@ namespace SoulBarriers.Packets {
 					bool hasHitPosition,
 					Vector2 hitPosition,
 					double damage ) {
-			this.BarrierID = barrier.GetID();
+			this.BarrierID = barrier.ID;
 			this.HasHitPosition = hasHitPosition;
 			this.HitPosition = hitPosition;
 			this.Damage = damage;

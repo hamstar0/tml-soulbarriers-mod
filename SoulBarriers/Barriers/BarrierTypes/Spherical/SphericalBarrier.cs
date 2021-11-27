@@ -54,6 +54,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 		////////////////
 
 		public SphericalBarrier(
+					string id,
 					BarrierHostType hostType,
 					int hostWhoAmI,
 					int strength,
@@ -61,7 +62,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 					float strengthRegenPerTick,
 					float radius,
 					Color color
-				) : base( hostType, hostWhoAmI, strength, maxRegenStrength, strengthRegenPerTick, color ) {
+				) : base( id, hostType, hostWhoAmI, strength, maxRegenStrength, strengthRegenPerTick, color ) {
 			this.Radius = radius;
 		}
 
@@ -82,8 +83,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 
 		////////////////
 
-		public override string GetID() {
+		/*public override string GetID() {
 			return base.GetID()+" - R"+this.Radius;
-		}
+		}*/
 	}
 }

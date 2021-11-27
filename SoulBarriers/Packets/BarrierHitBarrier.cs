@@ -19,7 +19,12 @@ namespace SoulBarriers.Packets {
 				throw new ModLibsException( "Not server." );
 			}
 
-			var packet = new BarrierHitBarrierPacket( barrier, otherBarrier, prevBarrierStrength, prevIntruderBarrierStrength );
+			var packet = new BarrierHitBarrierPacket(
+				barrier,
+				otherBarrier,
+				prevBarrierStrength,
+				prevIntruderBarrierStrength
+			);
 
 			SimplePacket.SendToClient( packet );
 		}
@@ -47,8 +52,8 @@ namespace SoulBarriers.Packets {
 					Barrier otherBarrier,
 					double prevBarrierStrength,
 					double prevIntruderBarrierStrength ) {
-			this.BarrierID = barrier.GetID();
-			this.OtherBarrierID = otherBarrier.GetID();
+			this.BarrierID = barrier.ID;
+			this.OtherBarrierID = otherBarrier.ID;
 
 			//this.BarrierStrength = barrier.Strength;
 			//this.OtherBarrierStrength = otherBarrier.Strength;
@@ -67,7 +72,7 @@ namespace SoulBarriers.Packets {
 			}
 
 			Barrier otherBarrier = BarrierManager.Instance.GetBarrierByID( this.OtherBarrierID );
-			if( barrier == null ) {
+			if( otherBarrier == null ) {
 				LogLibraries.Warn( "No such other barrier id'd: "+this.OtherBarrierID );
 				return;
 			}

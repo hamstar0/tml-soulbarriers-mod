@@ -25,6 +25,8 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
+		public string ID;
+		
 		public int HostType;
 
 		public int HostWhoAmI;
@@ -48,6 +50,7 @@ namespace SoulBarriers.Packets {
 		private AccessBarrierCreatePacket() { }
 
 		private AccessBarrierCreatePacket( AccessBarrier barrier ) {
+			this.ID = barrier.ID;
 			this.HostType = (int)barrier.HostType;
 			this.HostWhoAmI = barrier.HostWhoAmI;
 			this.TileArea = barrier.TileArea;
@@ -64,6 +67,7 @@ namespace SoulBarriers.Packets {
 		public override void ReceiveOnClient() {
 			var color = new Color( this.ColorR, this.ColorG, this.ColorB );
 			var barrier = new AccessBarrier(
+				id: this.ID,
 				hostType: (BarrierHostType)this.HostType,
 				hostWhoAmI: this.HostWhoAmI,
 				tileArea: this.TileArea,
@@ -76,7 +80,7 @@ namespace SoulBarriers.Packets {
 			BarrierManager.Instance.DeclareWorldBarrierUnsynced( barrier );
 
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
-				LogLibraries.Alert( "Barrier created: "+ barrier.GetID()
+				LogLibraries.Alert( "Barrier created: "+ barrier.ID
 					+", Host:"+this.HostType+" ("+this.HostWhoAmI+")"
 					+", TileArea:"+this.TileArea
 					+", Strength:"+this.Strength

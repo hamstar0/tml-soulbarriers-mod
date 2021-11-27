@@ -7,12 +7,14 @@ using Terraria.ID;
 namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 	public partial class PersonalBarrier : SphericalBarrier {
 		public PersonalBarrier(
+					string id,
 					BarrierHostType hostType,
 					int hostWhoAmI,
 					int strength,
 					float radius,
 					Color color
 				) : base(
+					id: id,
 					hostType: hostType,
 					hostWhoAmI: hostWhoAmI,
 					strength: strength,

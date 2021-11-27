@@ -21,6 +21,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
+		public string ID { get; private set; }
+
+
+		////
+
 		protected IDictionary<Dust, Vector2> _ParticleOffsets { get; } = new Dictionary<Dust, Vector2>();
 
 		public IReadOnlyDictionary<Dust, Vector2> ParticleOffsets { get; private set; }
@@ -72,12 +77,15 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		////////////////
 
 		public Barrier(
+					string id,
 					BarrierHostType barrierHostType,
 					int hostWhoAmI,
 					double strength,
 					double? maxRegenStrength,
 					double strengthRegenPerTick,
 					Color color ) {
+			this.ID = id;
+
 			this.ParticleOffsets = new ReadOnlyDictionary<Dust, Vector2>( this._ParticleOffsets );
 
 			this.HostType = barrierHostType;
@@ -99,10 +107,10 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 		
-		public virtual string GetID() {
+		/*public virtual string GetID() {
 			return (int)this.HostType+":"+this.HostWhoAmI
 				+" ["+this.InitialStrength+":"+this.MaxRegenStrength+":"+this.StrengthRegenPerTick+"]";
-		}
+		}*/
 
 
 		////////////////
@@ -178,7 +186,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		////////////////
 
 		public override string ToString() {
-			return this.GetID();
+			return "Barrier "+this.ID;
 		}
 	}
 }

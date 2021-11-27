@@ -34,7 +34,7 @@ namespace SoulBarriers.Packets {
 		private BarrierRemovePacket() { }
 
 		private BarrierRemovePacket( Barrier barrier ) {
-			this.BarrierID = barrier.GetID();
+			this.BarrierID = barrier.ID;
 		}
 
 		////////////////
@@ -53,7 +53,7 @@ namespace SoulBarriers.Packets {
 			}
 
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
-				LogLibraries.Alert( "Barrier removed: "+ barrier.GetID() );
+				LogLibraries.Alert( "Barrier removed: "+ barrier.ID );
 			}
 		}
 

@@ -59,7 +59,7 @@ namespace SoulBarriers.Packets {
 		private BarrierStrengthPacket() { }
 
 		private BarrierStrengthPacket( Barrier barrier, double strength, bool applyHitFx, bool clearRegenBuffer ) {
-			this.BarrierID = barrier.GetID();
+			this.BarrierID = barrier.ID;
 			this.Strength = strength;
 			this.ApplyHitFx = applyHitFx;
 			this.ClearRegenBuffer = clearRegenBuffer;
@@ -90,7 +90,7 @@ namespace SoulBarriers.Packets {
 			barrier.SetStrength( this.Strength, this.ClearRegenBuffer, false );
 
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
-				LogLibraries.Alert( "Barrier strength set: "+barrier.GetID()
+				LogLibraries.Alert( "Barrier strength set: "+barrier.ID
 					+", Strength:"+this.Strength
 					+", ApplyHitFx:"+this.ApplyHitFx
 					+", ClearRegenBuffer:"+this.ClearRegenBuffer

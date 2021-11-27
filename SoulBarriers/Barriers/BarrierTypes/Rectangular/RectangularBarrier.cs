@@ -27,6 +27,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 		////////////////
 
 		public RectangularBarrier(
+					string id,
 					double strength,
 					double? maxRegenStrength,
 					double strengthRegenPerTick,
@@ -35,7 +36,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 					bool isSaveable,
 					BarrierHostType hostType = BarrierHostType.None,
 					int hostWhoAmI = -1
-				) : base( hostType, hostWhoAmI, strength, maxRegenStrength, strengthRegenPerTick, color ) {
+				) : base( id, hostType, hostWhoAmI, strength, maxRegenStrength, strengthRegenPerTick, color ) {
 			this.TileArea = tileArea;
 			this.IsSaveable = isSaveable;
 		}
@@ -71,8 +72,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 
 		////////////////
 
-		public override string GetID() {
+		/*public override string GetID() {
 			return base.GetID()+" - A"+this.TileArea.ToString();
-		}
+		}*/
 	}
 }
