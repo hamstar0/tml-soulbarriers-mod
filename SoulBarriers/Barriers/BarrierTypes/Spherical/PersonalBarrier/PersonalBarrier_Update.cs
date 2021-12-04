@@ -17,11 +17,19 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 			}
 
 			Entity host = this.Host;
-			if( host == null || !(host is Player) ) {
-				return;
+			if( host != null ) {
+				if( host is Player ) {
+					this.UpdateForPlayer( this.Host as Player );
+				} else if( host is NPC ) {
+					this.UpdateForNPC( this.Host as NPC );
+				}
 			}
+		}
 
-			var plr = (Player)host;
+
+		////////////////
+
+		private void UpdateForPlayer( Player plr ) {
 			if( plr.dead ) {
 				this.SetStrength( 0, true, true );
 
@@ -39,6 +47,14 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 				if( Main.netMode == NetmodeID.MultiplayerClient ) {
 					BarrierStrengthPacket.SyncToServerForEveryone( this, 0, false, true );
 				}
+			}
+		}
+
+		private void UpdateForNPC( NPC npc ) {
+			if( npc.life <= 0 || !npc.active ) {
+				this.SetStrength( 0, true, true );
+
+				return;
 			}
 		}
 

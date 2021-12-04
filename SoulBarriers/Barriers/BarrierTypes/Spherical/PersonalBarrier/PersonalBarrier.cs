@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using ModLibsCore.Services.ProjectileOwner;
 using Terraria;
 using Terraria.ID;
 
@@ -11,6 +12,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 					BarrierHostType hostType,
 					int hostWhoAmI,
 					int strength,
+					float strengthRegenPerTick,
 					float radius,
 					Color color
 				) : base(
@@ -19,29 +21,33 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 					hostWhoAmI: hostWhoAmI,
 					strength: strength,
 					maxRegenStrength: null,
-					strengthRegenPerTick: 0,
+					strengthRegenPerTick: strengthRegenPerTick,
 					radius: radius,
 					color: color ) {
 			bool onPreBarrierEntityCollision( ref Entity intruder ) {
-				if( intruder is Player ) {
-					return false;
+				switch( hostType ) {
+				case BarrierHostType.Player:
+					if( intruder is Player ) {
+						return false;
+					} else if( intruder is NPC ) {
+						return NPCID.Sets.ProjectileNPC[( (NPC)intruder ).type];
+					} else if( intruder is Projectile ) {
+						return ((Projectile)intruder).GetOwner() is NPC;
+					}
+					break;
+				case BarrierHostType.NPC:
+					if( intruder is Projectile ) {
+						return ((Projectile)intruder).GetOwner() is Player;
+					}
+					break;
 				}
-				if( intruder is NPC ) {
-					return NPCID.Sets.ProjectileNPC[ ((NPC)intruder).type ];
-				}
-				return intruder is Projectile;
+
+				return false;
 			}
 
 			//
 
 			this.OnPreBarrierEntityCollision.Add( onPreBarrierEntityCollision );
-
-			//
-
-			var config = SoulBarriersConfig.Instance;
-			
-			// Decays slowly (1 hp / 3s)
-			this.StrengthRegenPerTick = config.Get<float>( nameof(config.PersonalBarrierDefaultDecayPercentPerTick) );
 		}
 
 

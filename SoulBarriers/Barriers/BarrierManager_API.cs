@@ -57,12 +57,15 @@ namespace SoulBarriers.Barriers {
 
 			var config = SoulBarriersConfig.Instance;
 			float radius = config.Get<float>( nameof(config.DefaultPlayerBarrierRadius) );
+			// Decays slowly (1 hp / 3s)
+			float strengthRegenPerTick = config.Get<float>( nameof(config.PersonalBarrierDefaultDecayPercentPerTick) );
 
 			Barrier barrier = new PersonalBarrier(
 				id: "PlayerPersonalBarrier_"+playerWho,
 				hostType: BarrierHostType.Player,
 				hostWhoAmI: playerWho,
 				strength: 0,
+				strengthRegenPerTick: strengthRegenPerTick,
 				radius: radius,
 				color: Color.Lime
 			);
