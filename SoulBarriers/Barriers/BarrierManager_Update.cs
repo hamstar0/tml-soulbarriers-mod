@@ -5,7 +5,6 @@ using Terraria.ID;
 using ModLibsCore.Classes.Loadable;
 using ModLibsCore.Libraries.Debug;
 using SoulBarriers.Barriers.BarrierTypes;
-using SoulBarriers.Packets;
 
 
 namespace SoulBarriers.Barriers {
@@ -53,56 +52,6 @@ namespace SoulBarriers.Barriers {
 
 			foreach( Barrier barrier in this.TileBarriers.Values.ToArray() ) {
 				this.UpdateTrackedBarrierOfWorld( barrier );
-			}
-		}
-
-		
-		////////////////
-
-		 private int _FailsafeSyncTimer = 0;
-
-		private void UpdatedTrackedBarrierOfEntity( Entity entity ) {
-			if( entity?.active != true ) {
-				this.RemoveEntityBarrier( entity, true );	// Garbage collection
-
-				return;
-			}
-
-			//
-
-			Barrier barrier = this.GetBarrierOfEntity( entity );
-
-			barrier.Update_Internal();
-
-			//
-
-			string id = barrier.ID;
-
-			// New barrier found
-			if( !this.BarriersByID.ContainsKey(id) ) {
-				this.BarriersByID[id] = barrier;
-			}
-
-			//
-
-			if( Main.netMode == NetmodeID.Server ) {
-				if( this._FailsafeSyncTimer-- <= 0 ) {
-					this._FailsafeSyncTimer = 60 * 30;
-
-					BarrierStrengthPacket.SendToClient( -1, barrier, barrier.Strength, false, false );
-				}
-			}
-		}
-
-
-		private void UpdateTrackedBarrierOfWorld( Barrier barrier ) {
-			string id = barrier.ID;
-
-			barrier.Update_Internal();
-
-			// New barrier found
-			if( !this.BarriersByID.ContainsKey(id) ) {
-				this.BarriersByID[id] = barrier;
 			}
 		}
 	}

@@ -3,7 +3,6 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using SoulBarriers.Barriers;
-using SoulBarriers.Barriers.BarrierTypes;
 
 
 namespace SoulBarriers {
@@ -41,12 +40,27 @@ namespace SoulBarriers {
 				* (float)Math.Sqrt( (double)(npc.width * npc.width) + (double)(npc.height * npc.height) )
 				* 2f;
 
-			Barrier barrier = BarrierManager.Instance.CreateAndDeclareActiveNPCBarrier(
+			var mynpc = npc.GetGlobalNPC<SoulBarriersNPC>();
+			mynpc.Barrier = BarrierManager.Instance.CreateAndDeclareActiveNPCBarrier(
 				npcWho,
 				strength,
 				strengthRegenPerTick,
 				radius
 			);
+		}
+
+
+		////////////////
+
+		private void AnimateBarrierFxIf() {
+			if( this.Barrier == null || !this.Barrier.IsActive ) {
+				return;
+			}
+
+
+			int particles = this.Barrier.ComputeCappedNormalParticleCount();
+
+			this.Barrier.Animate( particles );
 		}
 	}
 }

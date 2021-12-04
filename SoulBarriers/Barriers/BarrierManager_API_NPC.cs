@@ -48,7 +48,7 @@ namespace SoulBarriers.Barriers {
 				strength: strength,
 				strengthRegenPerTick: strengthRegenPerTick,
 				radius: radius,
-				color: Color.Lime
+				color: Color.Magenta
 			);
 
 			this.NPCBarriers[npcWho] = barrier;

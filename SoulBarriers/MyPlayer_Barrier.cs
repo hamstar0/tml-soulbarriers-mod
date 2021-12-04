@@ -23,5 +23,19 @@ namespace SoulBarriers {
 				BarrierManager.Instance.CheckCollisionsAgainstEntity( this.player );
 			}
 		}
+
+
+		////////////////
+
+		private void AnimateBarrierFxIf() {
+			if( this.Barrier == null || !this.Barrier.IsActive ) {
+				return;
+			}
+
+
+			int particles = this.Barrier.ComputeCappedNormalParticleCount();
+
+			this.Barrier.Animate( particles );
+		}
 	}
 }

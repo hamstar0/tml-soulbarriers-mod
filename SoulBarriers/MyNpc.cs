@@ -12,6 +12,11 @@ namespace SoulBarriers {
 
 
 		////////////////
+
+		public Barrier Barrier { get; private set; }
+
+
+		////////////////
 		
 		public override bool InstancePerEntity => true;
 
@@ -41,6 +46,8 @@ namespace SoulBarriers {
 					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npc.whoAmI );
 				}
 			}
+
+			this.AnimateBarrierFxIf();
 
 			return !this.KillFromBarrier;
 		}
