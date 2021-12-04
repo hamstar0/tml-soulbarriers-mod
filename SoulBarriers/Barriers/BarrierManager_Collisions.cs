@@ -51,6 +51,25 @@ namespace SoulBarriers.Barriers {
 				}
 			}
 
+			// Check for npc barriers:
+			foreach( (int npcWho, Barrier barrier) in this.NPCBarriers ) {
+				if( !barrier.IsActive ) {
+					continue;
+				}
+				if( barrier.Host != null && barrier.Host == ent ) {
+					continue;
+				}
+
+				NPC npc = Main.npc[npcWho];
+				if( npc?.active != true ) {
+					continue;
+				}
+
+				if( barrier.IsEntityColliding(ent) ) {
+					barrier.ApplyEntityCollisionHitIf( ent, Main.netMode == NetmodeID.Server );
+				}
+			}
+
 			// Check for world barriers:
 			foreach( Barrier barrier in this.TileBarriers.Values ) {
 				if( !barrier.IsActive ) {

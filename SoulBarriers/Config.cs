@@ -49,17 +49,24 @@ namespace SoulBarriers {
 		[Range(0f, 1f)]
 		[DefaultValue(-1f / (60f * 3f))]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float PersonalBarrierDefaultDecayPercentPerTick { get; set; } = -1f / (60f * 3f);
+		public float PBGBarrierDefaultRegenPercentPerTick { get; set; } = -1f / (60f * 3f);
 		
 		[Range(0f, 1f)]
 		[DefaultValue(-1f / 60f)]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float PersonalBarrierJungleDecayPercentPerTick { get; set; } = -1f / 60f;
+		public float PBGBarrierJungleRegenPercentPerTick { get; set; } = -1f / 60f;
 		
 		[Range(0f, 1f)]
 		[DefaultValue(-1f / 60f)]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float PersonalBarrierUnderworldDecayPercentPerTick { get; set; } = -1f / 60f;
+		public float PBGBarrierUnderworldRegenPercentPerTick { get; set; } = -1f / 60f;
+
+		//
+		
+		[Range(0f, 1f)]
+		[DefaultValue(1f / 60f)]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
+		public float NPCBarrierDefaultRegenPercentPerTick { get; set; } = 1f / 60f;
 
 		//
 

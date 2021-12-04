@@ -68,12 +68,12 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 			isDefault = false;
 			
 			if( hostPlayer.ZoneJungle ) {
-				this.StrengthRegenPerTick = config.Get<float>( nameof(config.PersonalBarrierJungleDecayPercentPerTick) );
+				this.StrengthRegenPerTick = config.Get<float>( nameof(config.PBGBarrierJungleRegenPercentPerTick) );
 			} else if( tileY >= WorldLocationLibraries.UnderworldLayerTopTileY ) {
-				this.StrengthRegenPerTick = config.Get<float>( nameof(config.PersonalBarrierUnderworldDecayPercentPerTick) );
+				this.StrengthRegenPerTick = config.Get<float>( nameof(config.PBGBarrierUnderworldRegenPercentPerTick) );
 			} else {
 				// Decays slowly (1 hp / 3s)
-				this.StrengthRegenPerTick = config.Get<float>( nameof(config.PersonalBarrierDefaultDecayPercentPerTick) );
+				this.StrengthRegenPerTick = config.Get<float>( nameof(config.PBGBarrierDefaultRegenPercentPerTick) );
 
 				isDefault = true;
 			}

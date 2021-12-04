@@ -1,6 +1,7 @@
 using System;
 using Terraria;
 using Terraria.ModLoader;
+using ModLibsCore.Services.Hooks.NPCHooks;
 using SoulBarriers.Barriers;
 
 
@@ -12,18 +13,14 @@ namespace SoulBarriers {
 
 		////////////////
 
-		public static SoulBarriersMod Instance { get; private set; }
+		public static SoulBarriersMod Instance => ModContent.GetInstance<SoulBarriersMod>();
 
 
 
 		////////////////
 
-		public override void Load() {
-			SoulBarriersMod.Instance = this;
-		}
-
-		public override void Unload() {
-			SoulBarriersMod.Instance = null;
+		public override void PostSetupContent() {
+			NPCHooks.AddSpawnNPCHook( SoulBarriersNPC.ApplySpawnBarrierIf );
 		}
 
 

@@ -22,6 +22,8 @@ namespace SoulBarriers.Barriers {
 
 		private IDictionary<int, Barrier> PlayerBarriers = new Dictionary<int, Barrier>();
 
+		private IDictionary<int, Barrier> NPCBarriers = new Dictionary<int, Barrier>();
+
 		private IDictionary<Rectangle, Barrier> TileBarriers = new Dictionary<Rectangle, Barrier>();
 
 		private IDictionary<string, Barrier> BarriersByID = new Dictionary<string, Barrier>();
