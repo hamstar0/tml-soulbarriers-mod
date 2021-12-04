@@ -14,7 +14,7 @@ namespace SoulBarriers {
 	class SoulBarriersWorld : ModWorld {
 		public override void Load( TagCompound tag ) {
 			var mngr = BarrierManager.Instance;
-			mngr.RemoveAllWorldBarriers();
+			mngr.RemoveAllWorldBarriersNoSync();
 
 			if( !tag.ContainsKey("barrier_count2") ) {
 				int count = tag.GetInt( "barrier_count2" );

@@ -11,15 +11,7 @@ using SoulBarriers.Packets;
 namespace SoulBarriers.Barriers {
 	partial class BarrierManager : ILoadable {
 		internal void UpdateAllTrackedBarriers() {
-			foreach( int plrWho in this.PlayerBarriers.Keys.ToArray() ) {
-				this.UpdatedTrackedBarrierOfPlayer( plrWho );
-			}
-
-			//
-
-			foreach( Barrier barrier in this.TileBarriers.Values.ToArray() ) {
-				this.UpdateTrackedBarrierOfWorld( barrier );
-			}
+			this.UpdateAllTrackedBarriersOfEachContext();
 
 			//
 
@@ -50,33 +42,41 @@ namespace SoulBarriers.Barriers {
 			}
 		}
 
+		private void UpdateAllTrackedBarriersOfEachContext() {
+			foreach( int plrWho in this.PlayerBarriers.Keys.ToArray() ) {
+				this.UpdatedTrackedBarrierOfEntity( Main.player[plrWho] );
+			}
+
+			foreach( int npcWho in this.NPCBarriers.Keys.ToArray() ) {
+				this.UpdatedTrackedBarrierOfEntity( Main.npc[npcWho] );
+			}
+
+			foreach( Barrier barrier in this.TileBarriers.Values.ToArray() ) {
+				this.UpdateTrackedBarrierOfWorld( barrier );
+			}
+		}
+
 		
 		////////////////
 
 		 private int _FailsafeSyncTimer = 0;
 
-		private void UpdatedTrackedBarrierOfPlayer( int plrWho ) {
-			Barrier barrier = this.PlayerBarriers[plrWho];
-			Player plr = Main.player[plrWho];
-			string id = barrier.ID;
-
-			//
-
-			if( plr?.active != true ) {
-				this.PlayerBarriers.Remove( plrWho );   // Garbage collection
-
-				if( this.BarriersByID.Remove(id) ) {
-					SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
-				}
+		private void UpdatedTrackedBarrierOfEntity( Entity entity ) {
+			if( entity?.active != true ) {
+				this.RemoveEntityBarrier( entity, true );	// Garbage collection
 
 				return;
 			}
 
 			//
 
+			Barrier barrier = this.GetBarrierOfEntity( entity );
+
 			barrier.Update_Internal();
 
 			//
+
+			string id = barrier.ID;
 
 			// New barrier found
 			if( !this.BarriersByID.ContainsKey(id) ) {

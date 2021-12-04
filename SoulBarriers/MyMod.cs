@@ -27,7 +27,8 @@ namespace SoulBarriers {
 		////////////////
 
 		public override void PreSaveAndQuit() {
-			BarrierManager.Instance.RemoveAllPlayerBarriers();
+			BarrierManager.Instance.RemoveAllNPCBarriersNoSync();
+			BarrierManager.Instance.RemoveAllPlayerBarriersNoSync();
 		}
 
 

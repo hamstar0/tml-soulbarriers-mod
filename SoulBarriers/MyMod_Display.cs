@@ -49,12 +49,28 @@ namespace SoulBarriers {
 					continue;
 				}
 
-				Player plr = Main.player[plrWho];
-
 				if( barrier is SphericalBarrier ) {
-					this.DisplayPlayerBarrierStatsIf( Main.spriteBatch, barrier as SphericalBarrier, plr );
+					Player plr = Main.player[plrWho];
+
+					this.DisplayEntityBarrierStatsIf( Main.spriteBatch, barrier as SphericalBarrier, plr );
 				}
 			}
+
+			//
+			
+			foreach( (int npcWho, Barrier barrier) in BarrierManager.Instance.GetNPCBarriers() ) {
+				if( barrier.Strength <= 0d ) {
+					continue;
+				}
+
+				if( barrier is SphericalBarrier ) {
+					NPC npc = Main.npc[npcWho];
+
+					this.DisplayEntityBarrierStatsIf( Main.spriteBatch, barrier as SphericalBarrier, npc );
+				}
+			}
+
+			//
 
 			foreach( Barrier barrier in BarrierManager.Instance.GetTileBarriers().Values ) {
 				if( barrier.Strength <= 0d ) {
@@ -72,14 +88,14 @@ namespace SoulBarriers {
 
 		////////////////
 
-		private void DisplayPlayerBarrierStatsIf( SpriteBatch sb, SphericalBarrier barrier, Player plr ) {
+		private void DisplayEntityBarrierStatsIf( SpriteBatch sb, SphericalBarrier barrier, Entity ent ) {
 			Vector2 barrierPos = barrier.GetBarrierWorldCenter();
 			float radius = ((SphericalBarrier)barrier).Radius;
 			float radSqr = radius * radius;
 			float distSqr = (barrierPos - Main.MouseWorld).LengthSquared();
 
 			if( distSqr < radSqr ) {
-				this.DisplayPlayerSphereBarrierStats( sb, plr, barrier );
+				this.DisplayEntitySphereBarrierStats( sb, ent, barrier );
 			}
 		}
 		
@@ -97,10 +113,10 @@ namespace SoulBarriers {
 
 		////////////////
 
-		private void DisplayPlayerSphereBarrierStats( SpriteBatch sb, Player player, SphericalBarrier barrier ) {
+		private void DisplayEntitySphereBarrierStats( SpriteBatch sb, Entity ent, SphericalBarrier barrier ) {
 			(string stats, Vector2 dim) stats = SoulBarriersMod.GetBarrierStatsData( barrier );
 
-			Vector2 worldPos = player.MountedCenter;
+			Vector2 worldPos = ent is Player ? ((Player)ent).MountedCenter : ent.Center;
 			worldPos.Y -= barrier.Radius + (stats.dim.Y * 1.5f);
 			//pos.X -= statsDim.X * 0.5f;
 

@@ -47,10 +47,11 @@ namespace SoulBarriers.Barriers {
 		}
 
 
-		////
+		////////////////
 
 		public void RemoveWorldBarrier( Rectangle tileArea, bool syncIfServer ) {
 			Barrier barrier = this.TileBarriers.GetOrDefault( tileArea );
+
 			if( barrier != null ) {
 				this.BarriersByID.Remove( barrier.ID );
 
@@ -66,10 +67,9 @@ namespace SoulBarriers.Barriers {
 			SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
 		}
 
+		////
 
-		////////////////
-		
-		public void RemoveAllWorldBarriers() {
+		public void RemoveAllWorldBarriersNoSync() {
 			foreach( string id in this.TileBarriers.Values.Select(b=>b.ID) ) {
 				Barrier barrier = this.BarriersByID[id];
 

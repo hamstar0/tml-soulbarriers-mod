@@ -9,6 +9,7 @@ using ModLibsCore.Classes.Loadable;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers.BarrierTypes.Spherical.Personal;
+using SoulBarriers.Packets;
 
 
 namespace SoulBarriers.Barriers {
@@ -60,7 +61,27 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		public void RemoveAllNPCBarriers() {
+		public void RemoveNPCBarrier( int npcWho, bool syncIfServer ) {
+			Barrier barrier = this.NPCBarriers.GetOrDefault( npcWho );
+
+			if( barrier != null ) {
+				this.BarriersByID.Remove( barrier.ID );
+
+				if( syncIfServer && Main.netMode == NetmodeID.Server ) {
+					BarrierRemovePacket.BroadcastToClients( barrier );
+				}
+			}
+
+			this.NPCBarriers.Remove( npcWho );
+
+			//
+
+			SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
+		}
+
+		////
+
+		public void RemoveAllNPCBarriersNoSync() {
 			foreach( string id in this.NPCBarriers.Values.Select(b=>b.ID) ) {
 				Barrier barrier = this.BarriersByID[id];
 
