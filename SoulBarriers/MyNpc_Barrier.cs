@@ -7,36 +7,52 @@ using SoulBarriers.Barriers;
 
 namespace SoulBarriers {
 	partial class SoulBarriersNPC : GlobalNPC {
-		public static void ApplySpawnBarrierIf( int npcWho ) {
-			NPC npc = Main.npc[ npcWho ];
+		public static bool CanSpawnWithBarrier( int npcWho ) {
+			NPC npc = Main.npc[npcWho];
 			if( npc?.active != true ) {
-				return;
+				return false;
 			}
 
-			if( npc.lifeMax <= 5 ) {	// i guess critter failsafe
-				return;
-			}
-			if( npc.friendly ) {
-				return;
-			}
-			if( npc.realLife >= 0 ) {	// only the main part
-				return;
-			}
-			if( npc.immortal || npc.dontTakeDamage ) {
-				return;
-			}
-			if( npc.aiStyle == 14 ) {	// bats
-				return;
-			}
-			if( NPCID.Sets.ProjectileNPC[npc.type] ) {
-				return;
-			}
+			return npc.lifeMax > 5    // i guess critter failsafe
+				&& !npc.friendly
+				&& npc.realLife < 0	// only the main part
+				&& !npc.immortal 
+				&& !npc.dontTakeDamage
+				&& npc.aiStyle != 14	// no bats
+				&& !NPCID.Sets.ProjectileNPC[npc.type];
+		}
 
-			//
 
+		public static bool RollBarrierSpawnChance() {
 			var config = SoulBarriersConfig.Instance;
+			float perc = config.Get<float>( nameof(config.NPCBarrierRandomPercentChance) );
 
-			int strength = npc.lifeMax + 50;
+			return Main.rand.NextFloat() < perc;
+		}
+
+
+		////////////////
+
+		public static bool ApplySpawnBarrierIf( int npcWho ) {
+			if( SoulBarriersNPC.CanSpawnWithBarrier(npcWho) ) {
+				if( SoulBarriersNPC.RollBarrierSpawnChance() ) {
+					SoulBarriersNPC.ApplySpawnBarrier( npcWho );
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+
+		public static void ApplySpawnBarrier( int npcWho ) {
+			NPC npc = Main.npc[npcWho];
+			var config = SoulBarriersConfig.Instance;
+			
+			int strength = npc.lifeMax * config.Get<int>( nameof(config.NPCBarrierLifeToStrengthScale) );
+			strength += config.Get<int>( nameof(config.NPCBarrierStrengthAdded) );
+
 			float strengthRegenPerTick = config.Get<float>( nameof( config.NPCBarrierDefaultRegenPercentPerTick ) );
 			//float radius = config.Get<float>( nameof( config.DefaultNPCBarrierRadius ) );
 			float radius = npc.scale
@@ -51,6 +67,7 @@ namespace SoulBarriers {
 				radius
 			);
 		}
+
 
 
 		////////////////

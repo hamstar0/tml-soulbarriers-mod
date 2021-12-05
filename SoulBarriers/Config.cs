@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Collections.Generic;
 using Terraria;
@@ -62,6 +63,22 @@ namespace SoulBarriers {
 		public float PBGBarrierUnderworldRegenPercentPerTick { get; set; } = -1f / 60f;
 
 		//
+
+		[Range(0, 60 * 60)]
+		[DefaultValue( 20 )]
+		public int PBGOverheatDurationSeconds { get; set; } = 20;
+
+
+		////
+		
+		[Range(0f, 100f)]
+		[DefaultValue( 0.5f )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
+		public float NPCBarrierLifeToStrengthScale { get; set; } = 0.5f;
+		
+		[Range(0, (Int32.MaxValue / 2))]
+		[DefaultValue( 100 )]
+		public int NPCBarrierStrengthAdded { get; set; } = 100;
 		
 		[Range(0f, 1f)]
 		[DefaultValue(1f / 60f)]
@@ -69,10 +86,11 @@ namespace SoulBarriers {
 		public float NPCBarrierDefaultRegenPercentPerTick { get; set; } = 1f / 60f;
 
 		//
-
-		[Range(0, 60 * 60)]
-		[DefaultValue( 20 )]
-		public int PBGOverheatDurationSeconds { get; set; } = 20;
+		
+		[Range(0f, 1f)]
+		[DefaultValue( 0.05f )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
+		public float NPCBarrierRandomPercentChance { get; set; } = 0.05f;
 
 		////
 
