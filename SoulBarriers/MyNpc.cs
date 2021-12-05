@@ -37,6 +37,8 @@ namespace SoulBarriers {
 				BarrierManager.Instance.CheckCollisionsAgainstEntity( npc );
 			}
 
+			//
+
 			if( this.KillFromBarrier ) {
 				npc.HitEffect();
 				npc.life = 0;
@@ -47,7 +49,11 @@ namespace SoulBarriers {
 				}
 			}
 
+			//
+
 			this.AnimateBarrierFxIf();
+
+			//
 
 			return !this.KillFromBarrier;
 		}

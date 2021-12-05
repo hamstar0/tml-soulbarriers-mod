@@ -32,6 +32,20 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					double prevBarrierStrength,
 					double prevIntruderBarrierStrength,
 					bool syncIfServer ) {
+			double damage = this.Strength > intruder.Strength
+				? intruder.Strength
+				: this.Strength;
+			damage = Math.Ceiling( damage );
+
+			//
+
+			if( damage > 0d ) {
+				this.ApplyRawHit( null, damage, false );
+				intruder.ApplyRawHit( null, damage, false );
+			}
+
+			//
+
 			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitBarrierPacket.BroadcastToClients(
 					this,

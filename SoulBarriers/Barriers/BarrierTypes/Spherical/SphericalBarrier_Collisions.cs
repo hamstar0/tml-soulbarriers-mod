@@ -34,7 +34,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 				float joinedRadii = this.Radius + ((SphericalBarrier)barrier).Radius;
 
 				return diff.LengthSquared() < (joinedRadii * joinedRadii);
-			} else if( barrier is RectangularBarrier ) {
+			}
+			if( barrier is RectangularBarrier ) {
 				return Barrier.IsSphereCollidingRectangle(
 					(myPos.X, myPos.Y, this.Radius),
 					((RectangularBarrier)barrier).TileArea

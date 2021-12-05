@@ -12,7 +12,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 				return;
 			}
 
-			//DebugLibraries.ChatOnce( "b_col_ent_"+this.GetID(), "ent: "+intruder );
+//DebugLibraries.ChatOnce( "b_col_ent_"+this.GetID(), "ent: "+intruder );
 			if( intruder is Player ) {
 				this.ApplyAccessPlayerHit( intruder as Player );
 			} else if( intruder is NPC ) {
@@ -32,7 +32,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 				? otherBarrier.Strength
 				: this.Strength;
 			damage = Math.Ceiling( damage );
-			//LogLibraries.Log( "B V B OnBarrierBarrierCollision 1 - " + damage );
+//LogLibraries.Log( "B V B OnBarrierBarrierCollision 1 - " + damage );
 
 			if( damage > 0d ) {
 				this.ApplyRawHit( null, damage, false );

@@ -29,7 +29,7 @@ namespace SoulBarriers.Barriers {
 
 		internal void CheckCollisionsAgainstEntity( Entity ent ) {
 			// Check for player barriers:
-			foreach( (int plrWho, Barrier barrier) in this.PlayerBarriers ) {
+			foreach( Barrier barrier in this.PlayerBarriers.Values ) {
 				if( !barrier.IsActive ) {
 					continue;
 				}
@@ -37,22 +37,21 @@ namespace SoulBarriers.Barriers {
 					continue;
 				}
 
-				Player plr = Main.player[plrWho];
-				if( plr?.active != true || plr.dead ) {
+				if( barrier.Host?.active != true || ((Player)barrier.Host).dead ) {
 					continue;
 				}
 
-/*DebugLibraries.Print(
-	"pb_v_e_"+barrier.GetID()+"_"+ent,
-	"collide? "+barrier.IsColliding(ent)
-);*/
+//DebugLibraries.Print(
+//	"pb_v_e_"+barrier.ID+"_"+ent,
+//	"collide? "+barrier.IsEntityColliding( ent)
+//);
 				if( barrier.IsEntityColliding(ent) ) {
-					barrier.ApplyEntityCollisionHitIf( ent, Main.netMode == NetmodeID.Server );
+					barrier.ApplyEntityCollisionHitIf( ent, true );
 				}
 			}
 
 			// Check for npc barriers:
-			foreach( (int npcWho, Barrier barrier) in this.NPCBarriers ) {
+			foreach( Barrier barrier in this.NPCBarriers.Values ) {
 				if( !barrier.IsActive ) {
 					continue;
 				}
@@ -60,13 +59,12 @@ namespace SoulBarriers.Barriers {
 					continue;
 				}
 
-				NPC npc = Main.npc[npcWho];
-				if( npc?.active != true ) {
+				if( barrier.Host?.active != true ) {
 					continue;
 				}
 
 				if( barrier.IsEntityColliding(ent) ) {
-					barrier.ApplyEntityCollisionHitIf( ent, Main.netMode == NetmodeID.Server );
+					barrier.ApplyEntityCollisionHitIf( ent, true );
 				}
 			}
 

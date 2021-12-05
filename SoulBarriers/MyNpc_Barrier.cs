@@ -13,6 +13,9 @@ namespace SoulBarriers {
 				return;
 			}
 
+			if( npc.lifeMax <= 5 ) {	// i guess critter failsafe
+				return;
+			}
 			if( npc.friendly ) {
 				return;
 			}
@@ -37,8 +40,8 @@ namespace SoulBarriers {
 			float strengthRegenPerTick = config.Get<float>( nameof( config.NPCBarrierDefaultRegenPercentPerTick ) );
 			//float radius = config.Get<float>( nameof( config.DefaultNPCBarrierRadius ) );
 			float radius = npc.scale
-				* (float)Math.Sqrt( (double)(npc.width * npc.width) + (double)(npc.height * npc.height) )
-				* 2f;
+				* (float)Math.Sqrt( (double)((npc.width * npc.width) + (npc.height * npc.height)) )
+				* 1.25f;
 
 			var mynpc = npc.GetGlobalNPC<SoulBarriersNPC>();
 			mynpc.Barrier = BarrierManager.Instance.CreateAndDeclareActiveNPCBarrier(
@@ -56,7 +59,6 @@ namespace SoulBarriers {
 			if( this.Barrier == null || !this.Barrier.IsActive ) {
 				return;
 			}
-
 
 			int particles = this.Barrier.ComputeCappedNormalParticleCount();
 

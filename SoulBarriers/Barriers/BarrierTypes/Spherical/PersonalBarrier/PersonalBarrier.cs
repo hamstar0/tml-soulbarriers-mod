@@ -1,8 +1,8 @@
 using System;
 using Microsoft.Xna.Framework;
-using ModLibsCore.Services.ProjectileOwner;
 using Terraria;
 using Terraria.ID;
+using ModLibsCore.Services.ProjectileOwner;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
@@ -24,36 +24,54 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 					strengthRegenPerTick: strengthRegenPerTick,
 					radius: radius,
 					color: color ) {
-			bool onPreBarrierEntityCollision( ref Entity intruder ) {
-				switch( hostType ) {
-				case BarrierHostType.Player:
-					if( intruder is Player ) {
-						return false;
-					} else if( intruder is NPC ) {
-						return NPCID.Sets.ProjectileNPC[( (NPC)intruder ).type];
-					} else if( intruder is Projectile ) {
-						return ((Projectile)intruder).GetOwner() is NPC;
-					}
-					break;
-				case BarrierHostType.NPC:
-					if( intruder is Projectile ) {
-						return ((Projectile)intruder).GetOwner() is Player;
-					}
-					break;
-				}
+			this.OnPreBarrierEntityCollision.Add( this.PreBarrierEntityCollision );
+		}
 
-				return false;
-			}
 
-			//
-
-			this.OnPreBarrierEntityCollision.Add( onPreBarrierEntityCollision );
+		////////////////
+		
+		public override bool CanSave() {
+			return false;
 		}
 
 
 		////////////////
 
-		public override bool CanSave() {
+		private bool PreBarrierEntityCollision( ref Entity intruder ) {
+			switch( this.HostType ) {
+			case BarrierHostType.Player:
+				return this.PreBarrierEntityCollision_HostPlayer( ref intruder );
+			case BarrierHostType.NPC:
+				return this.PreBarrierEntityCollision_HostNPC( ref intruder );
+			}
+			return false;
+		}
+
+		////
+
+		private bool PreBarrierEntityCollision_HostPlayer( ref Entity intruder ) {
+			if( intruder is Player ) {
+				return false;
+
+			} else if( intruder is NPC ) {
+				return NPCID.Sets.ProjectileNPC[( (NPC)intruder ).type];
+
+			} else if( intruder is Projectile ) {
+				Entity projOwner = ( (Projectile)intruder ).GetOwner();
+
+				return projOwner is NPC
+					|| (projOwner is Player && ((Player)projOwner).hostile)
+					|| projOwner == null;
+			}
+
+			return false;
+		}
+
+		private bool PreBarrierEntityCollision_HostNPC( ref Entity intruder ) {
+			if( intruder is Projectile ) {
+				return ( (Projectile)intruder ).GetOwner() is Player;
+			}
+
 			return false;
 		}
 	}
