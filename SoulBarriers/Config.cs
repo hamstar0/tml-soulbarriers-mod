@@ -81,7 +81,7 @@ namespace SoulBarriers {
 		public int NPCBarrierStrengthAdded { get; set; } = 100;
 		
 		[Range(0f, 1f)]
-		[DefaultValue(1f / 60f)]
+		[DefaultValue( 1f / 60f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float NPCBarrierDefaultRegenPercentPerTick { get; set; } = 1f / 60f;
 

@@ -20,7 +20,7 @@ namespace SoulBarriers {
 		////////////////
 
 		public override void PostSetupContent() {
-			NPCHooks.AddSpawnNPCHook( SoulBarriersNPC.ApplySpawnBarrierIf );
+			NPCHooks.AddSpawnNPCHook( ( npcWho ) => SoulBarriersNPC.ApplySpawnBarrierIf(npcWho) );
 		}
 
 

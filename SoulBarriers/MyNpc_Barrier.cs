@@ -3,6 +3,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using SoulBarriers.Barriers;
+using SoulBarriers.Packets;
+using SoulBarriers.Barriers.BarrierTypes;
+using SoulBarriers.Barriers.BarrierTypes.Spherical.Personal;
 
 
 namespace SoulBarriers {
@@ -33,27 +36,42 @@ namespace SoulBarriers {
 
 		////////////////
 
-		public static bool ApplySpawnBarrierIf( int npcWho ) {
+		public static Barrier ApplySpawnBarrierIf( int npcWho, int? customStrength=null, float? customStrengthRegenPerTick=null ) {
+			if( Main.netMode == NetmodeID.MultiplayerClient ) {
+				return null;
+			}
+
+			//
+
 			if( SoulBarriersNPC.CanSpawnWithBarrier(npcWho) ) {
 				if( SoulBarriersNPC.RollBarrierSpawnChance() ) {
-					SoulBarriersNPC.ApplySpawnBarrier( npcWho );
-
-					return true;
+					return SoulBarriersNPC.ApplySpawnBarrier( npcWho, customStrength, customStrengthRegenPerTick );
 				}
 			}
 
-			return false;
+			return null;
 		}
 
 
-		public static void ApplySpawnBarrier( int npcWho ) {
+		public static Barrier ApplySpawnBarrier( int npcWho, int? customStrength, float? customStrengthRegenPerTick ) {
 			NPC npc = Main.npc[npcWho];
 			var config = SoulBarriersConfig.Instance;
 			
-			int strength = npc.lifeMax * config.Get<int>( nameof(config.NPCBarrierLifeToStrengthScale) );
-			strength += config.Get<int>( nameof(config.NPCBarrierStrengthAdded) );
+			int strength;
+			if( customStrength.HasValue ) {
+				strength = customStrength.Value;
+			} else {
+				strength = npc.lifeMax * config.Get<int>( nameof(config.NPCBarrierLifeToStrengthScale) );
+				strength += config.Get<int>( nameof(config.NPCBarrierStrengthAdded) );
+			}
 
-			float strengthRegenPerTick = config.Get<float>( nameof( config.NPCBarrierDefaultRegenPercentPerTick ) );
+			float strengthRegenPerTick;
+			if( customStrengthRegenPerTick.HasValue ) {
+				strengthRegenPerTick = customStrengthRegenPerTick.Value;
+			} else {
+				strengthRegenPerTick = config.Get<float>( nameof(config.NPCBarrierDefaultRegenPercentPerTick) );
+			}
+
 			//float radius = config.Get<float>( nameof( config.DefaultNPCBarrierRadius ) );
 			float radius = npc.scale
 				* (float)Math.Sqrt( (double)((npc.width * npc.width) + (npc.height * npc.height)) )
@@ -66,6 +84,14 @@ namespace SoulBarriers {
 				strengthRegenPerTick,
 				radius
 			);
+
+			//
+
+			if( Main.netMode == NetmodeID.Server ) {
+				NPCBarrierCreatePacket.BroadcastToClients( (PersonalBarrier)mynpc.Barrier );
+			}
+
+			return mynpc.Barrier;
 		}
 
 
