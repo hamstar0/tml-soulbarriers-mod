@@ -61,7 +61,7 @@ namespace SoulBarriers {
 			if( customStrength.HasValue ) {
 				strength = customStrength.Value;
 			} else {
-				strength = npc.lifeMax * config.Get<int>( nameof(config.NPCBarrierLifeToStrengthScale) );
+				strength = (int)((float)npc.lifeMax * config.Get<float>(nameof(config.NPCBarrierLifeToStrengthScale)) );
 				strength += config.Get<int>( nameof(config.NPCBarrierStrengthAdded) );
 			}
 
