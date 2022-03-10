@@ -9,7 +9,12 @@ using SoulBarriers.Packets;
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
 		public void ApplyMetaphysicalHit( Vector2? hitAt, double damage, bool syncIfServer ) {
-			this.SetStrength( this.Strength - damage, false, false );
+			this.SetStrength(
+				strength: this.Strength - damage,
+				clearRegenBuffer: false,
+				refreshHostBuffState: false,
+				syncsOwnerBuffChanges: syncIfServer && Main.netMode == NetmodeID.Server
+			);
 
 			if( Main.netMode != NetmodeID.Server ) {
 				if( damage > 0d ) {

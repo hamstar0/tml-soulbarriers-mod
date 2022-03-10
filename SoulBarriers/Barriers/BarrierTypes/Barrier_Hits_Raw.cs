@@ -8,16 +8,29 @@ using SoulBarriers.Packets;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public void ApplyRawHit( Vector2? hitAt, double damage, bool syncIfServer ) {
+		public void ApplyRawHit(
+					Vector2? hitAt,
+					double damage,
+					bool syncIfServer,
+					BarrierHitContext context ) {
 			if( !this.OnPreBarrierRawHit.All( f=>f.Invoke(ref damage) ) ) {
 				return;
 			}
 
 			//
 
+			if( SoulBarriersConfig.Instance.DebugModeHitInfo ) {
+				if( context == null ) {
+					context = new BarrierHitContext( damage );
+				}
+				context.Output( this );
+			}
+
+			//
+
 			double oldStr = this.Strength;
 
-			this.SetStrength( this.Strength - damage, false, false );
+			this.SetStrength( this.Strength - damage, false, false, syncIfServer );
 
 			//
 
@@ -40,7 +53,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					barrier: this,
 					hasHitPosition: hitAt.HasValue,
 					hitPosition: hitAt ?? default,
-					damage: damage
+					damage: damage,
+					context: context
 				);
 			}
 		}

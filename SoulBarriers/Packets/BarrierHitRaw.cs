@@ -15,12 +15,13 @@ namespace SoulBarriers.Packets {
 					Barrier barrier,
 					bool hasHitPosition,
 					Vector2 hitPosition,
-					double damage ) {
+					double damage,
+					BarrierHitContext context ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
 
-			var packet = new BarrierHitRawPacket( barrier, hasHitPosition,  hitPosition, damage );
+			var packet = new BarrierHitRawPacket( barrier, hasHitPosition,  hitPosition, damage, context );
 
 			SimplePacket.SendToClient( packet );
 		}
@@ -37,6 +38,8 @@ namespace SoulBarriers.Packets {
 
 		public double Damage;
 
+		public string AbridgedHitContext;
+
 
 
 		////////////////
@@ -47,11 +50,16 @@ namespace SoulBarriers.Packets {
 					Barrier barrier,
 					bool hasHitPosition,
 					Vector2 hitPosition,
-					double damage ) {
+					double damage,
+					BarrierHitContext context ) {
 			this.BarrierID = barrier.ID;
 			this.HasHitPosition = hasHitPosition;
 			this.HitPosition = hitPosition;
 			this.Damage = damage;
+
+			this.AbridgedHitContext = SoulBarriersConfig.Instance.DebugModeHitInfo
+				? context?.SourceToString() ?? ""
+				: "";
 		}
 
 		////////////////
@@ -74,7 +82,10 @@ namespace SoulBarriers.Packets {
 				barrier.ApplyRawHit(
 					this.HasHitPosition ? this.HitPosition : (Vector2?)null,
 					this.Damage,
-					false
+					false,
+					this.AbridgedHitContext != null
+						? new BarrierHitContext("NET_"+this.AbridgedHitContext, this.Damage)
+						: new BarrierHitContext("NET_UKN", this.Damage)
 				);
 			}
 		}

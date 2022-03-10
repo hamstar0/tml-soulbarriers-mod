@@ -162,7 +162,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public void SetStrength( double strength, bool clearRegenBuffer, bool refreshHostBuffState ) {
+		public void SetStrength(
+					double strength,
+					bool clearRegenBuffer,
+					bool refreshHostBuffState,
+					bool syncsOwnerBuffChanges ) {
 			if( strength < 0d ) {
 				strength = 0d;
 			}
@@ -175,9 +179,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			if( refreshHostBuffState ) {
 				if( this.HostType == BarrierHostType.Player ) {
-					this.RefreshBuffForPlayerHost();
+					this.RefreshBuffForPlayerHost( syncsOwnerBuffChanges );
 				} else if( this.HostType == BarrierHostType.NPC ) {
-					this.RefreshBuffForNpcHost();
+					this.RefreshBuffForNpcHost( syncsOwnerBuffChanges );
 				}
 			}
 		}

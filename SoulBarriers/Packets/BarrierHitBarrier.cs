@@ -83,8 +83,8 @@ namespace SoulBarriers.Packets {
 				);
 			}
 
-			barrier.SetStrength( this.BarrierStrength, false, false );
-			otherBarrier.SetStrength( this.OtherBarrierStrength, false, false );
+			barrier.SetStrength( this.BarrierStrength, false, false, false );
+			otherBarrier.SetStrength( this.OtherBarrierStrength, false, false, false );
 
 //LogLibraries.Log( "BARRIER V BARRIER - "
 //	+ "barrier:" + this.BarrierID + " (" + this.BarrierStrength + ") vs "

@@ -26,15 +26,21 @@ namespace SoulBarriers.Items {
 		}
 
 		public override bool UseItem( Player player ) {
+			var myplayer = player.GetModPlayer<SoulBarriersPlayer>();
 			var config = SoulBarriersConfig.Instance;
 
 			float barrierStrScale = config.Get<float>( nameof(config.PBGBarrierStrengthScale) );
 			int barrierStr = (int)(barrierStrScale * (float)player.statMana);
 
-			var myplayer = player.GetModPlayer<SoulBarriersPlayer>();
-			myplayer.Barrier.SetStrength( barrierStr, true, true );
+			//
+
+			myplayer.Barrier.SetStrength( barrierStr, true, true, true );
+
+			//
 
 			player.statMana = 0;
+
+			//
 
 			int overheatDeBuff = ModContent.BuffType<PBGOverheatedDeBuff>();
 			int seconds = config.Get<int>( nameof(config.PBGOverheatDurationSeconds) );
@@ -45,16 +51,6 @@ namespace SoulBarriers.Items {
 			//
 
 			if( Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer ) {
-				NetMessage.SendData(
-					MessageID.AddPlayerBuff,
-					-1,
-					-1,
-					null,
-					player.whoAmI,
-					(float)overheatDeBuff,
-					(float)seconds * 60f
-				);
-
 				BarrierStrengthPacket.SyncToServerForEveryone(
 					barrier: myplayer.Barrier,
 					strength: barrierStr,

@@ -21,23 +21,44 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			hostPlayer.DelBuff( buffIdx );
 
-			double damage = (double)config.Get<float>( nameof(config.BarrierDebuffRemovalCost) );
+			//
 
-			this.SetStrength( this.Strength - damage, false, false );
+			double damage = (double)config.Get<float>( nameof(config.BarrierStrengthCostToRemoveDebuff) );
 
-			if( Main.netMode != NetmodeID.Server ) {
-				if( damage > 0d ) {
-					this.ApplyHitFx( 0, 4f, damage, !this.IsActive );
-				}
+			//
+			
+			if( SoulBarriersConfig.Instance.DebugModeHitInfo ) {
+				var hitData = new BarrierHitContext( "PlrDebuff_"+buffType, damage );
+
+				hitData.Output( this );
 			}
 
-			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitDebuffPacket.BroadcastToClients(
-					barrier: this,
-					buffType: buffType
-				);
+			//
 
-				NetMessage.SendData( MessageID.SyncPlayer, -1, -1, null, hostPlayer.whoAmI );
+			this.SetStrength(
+				strength: this.Strength - damage,
+				clearRegenBuffer: false,
+				refreshHostBuffState: false,
+				syncsOwnerBuffChanges: syncIfServer && Main.netMode == NetmodeID.Server
+			);
+
+			//
+
+			if( damage > 0d ) {
+				if( Main.netMode != NetmodeID.Server ) {
+					this.ApplyHitFx( 0, 4f, damage, !this.IsActive );
+				}
+
+				//
+
+				if( syncIfServer && Main.netMode == NetmodeID.Server ) {
+					BarrierHitDebuffPacket.BroadcastToClients(
+						barrier: this,
+						buffType: buffType
+					);
+
+					NetMessage.SendData( MessageID.SyncPlayer, -1, -1, null, hostPlayer.whoAmI );
+				}
 			}
 
 			return true;

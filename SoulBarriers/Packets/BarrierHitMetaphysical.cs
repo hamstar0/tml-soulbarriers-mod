@@ -71,9 +71,9 @@ namespace SoulBarriers.Packets {
 			}
 
 			barrier.ApplyMetaphysicalHit(
-				this.HasHitPosition ? this.HitPosition : (Vector2?)null,
-				this.Damage,
-				false
+				hitAt: this.HasHitPosition ? this.HitPosition : (Vector2?)null,
+				damage: this.Damage,
+				syncIfServer: false
 			);
 		}
 

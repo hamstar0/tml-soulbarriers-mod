@@ -35,8 +35,13 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 //LogLibraries.Log( "B V B OnBarrierBarrierCollision 1 - " + damage );
 
 			if( damage > 0d ) {
-				this.ApplyRawHit( null, damage, false );
-				otherBarrier.ApplyRawHit( null, damage, false );
+				var toHitData = new BarrierHitContext( otherBarrier, damage );
+				var froHitData = new BarrierHitContext( this, damage );
+
+				//
+
+				this.ApplyRawHit( null, damage, false, toHitData );
+				otherBarrier.ApplyRawHit( null, damage, false, froHitData );
 			}
 
 			if( this.Strength == 0d ) {

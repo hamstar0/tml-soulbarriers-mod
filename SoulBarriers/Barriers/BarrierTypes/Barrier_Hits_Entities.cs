@@ -39,7 +39,15 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
-			this.ApplyRawHit( intruderProjectile.Center, intruderProjectile.damage, syncIfServer );
+			//
+
+			BarrierHitContext hitData = new BarrierHitContext( intruderProjectile, intruderProjectile.damage );
+
+			//
+
+			this.ApplyRawHit( intruderProjectile.Center, intruderProjectile.damage, syncIfServer, hitData );
+
+			//
 
 			intruderProjectile.Kill();
 		}
@@ -55,7 +63,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		private void ApplyNpcCollisionHit( NPC intruderNpc, bool syncIfServer ) {
 			// Is npc a "projectile"?
 			if( NPCID.Sets.ProjectileNPC[intruderNpc.type] ) {
-				this.ApplyRawHit( intruderNpc.Center, intruderNpc.damage, true );
+				var hitData = new BarrierHitContext( intruderNpc, intruderNpc.damage );
+
+				//
+
+				this.ApplyRawHit( intruderNpc.Center, intruderNpc.damage, true, hitData );
 
 				NPCLibraries.Kill( intruderNpc, Main.netMode != NetmodeID.MultiplayerClient );
 

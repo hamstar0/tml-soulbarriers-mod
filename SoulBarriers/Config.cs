@@ -26,7 +26,9 @@ namespace SoulBarriers {
 
 		////////////////
 
-		public bool DebugModeInfo { get; set; } = false;
+		public bool DebugModeStatusInfo { get; set; } = false;
+		
+		public bool DebugModeHitInfo { get; set; } = false;
 
 		public bool DebugModeNetInfo { get; set; } = false;
 
@@ -117,7 +119,7 @@ namespace SoulBarriers {
 
 		[Range(0f, 500f)]
 		[DefaultValue(20f)]
-		public float BarrierDebuffRemovalCost { get; set; } = 20f;
+		public float BarrierStrengthCostToRemoveDebuff { get; set; } = 20f;
 
 		////
 

@@ -13,6 +13,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return;
 			}
 
+			//
+
 			double thisBarrierStrength = this.Strength;
 			double thatBarrierStrength = intruder.Strength;
 			
@@ -40,8 +42,13 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			//
 
 			if( damage > 0d ) {
-				this.ApplyRawHit( null, damage, false );
-				intruder.ApplyRawHit( null, damage, false );
+				var toHitData = new BarrierHitContext( intruder, damage );
+				var froHitData = new BarrierHitContext( this, damage );
+
+				//
+
+				this.ApplyRawHit( null, damage, false, toHitData );
+				intruder.ApplyRawHit( null, damage, false, froHitData );
 			}
 
 			//

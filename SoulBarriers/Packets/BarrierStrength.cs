@@ -87,7 +87,7 @@ namespace SoulBarriers.Packets {
 				}
 			}
 
-			barrier.SetStrength( this.Strength, this.ClearRegenBuffer, false );
+			barrier.SetStrength( this.Strength, this.ClearRegenBuffer, false, false );
 
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
 				LogLibraries.Alert( "Barrier strength set: "+barrier.ID

@@ -31,7 +31,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 
 		private void UpdateForPlayer( Player plr ) {
 			if( plr.dead ) {
-				this.SetStrength( 0, true, true );
+				this.SetStrength( 0, true, true, false );	// TODO: Confirm no sync
 
 				return;
 			}
@@ -42,7 +42,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 			this.UpdateForPlayerForBuffs( plr, out bool hasSoulBuff );
 
 			if( !hasSoulBuff ) {
-				this.SetStrength( 0, true, false );
+				this.SetStrength( 0, true, false, false );
 
 				if( Main.netMode == NetmodeID.MultiplayerClient ) {
 					BarrierStrengthPacket.SyncToServerForEveryone( this, 0, false, true );
@@ -52,7 +52,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 
 		private void UpdateForNPC( NPC npc ) {
 			if( npc.life <= 0 || !npc.active ) {
-				this.SetStrength( 0, true, true );
+				this.SetStrength( 0, true, true, false );
 
 				return;
 			}
