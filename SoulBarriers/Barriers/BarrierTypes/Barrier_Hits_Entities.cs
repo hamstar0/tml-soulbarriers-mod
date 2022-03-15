@@ -43,17 +43,20 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			BarrierHitContext hitData = new BarrierHitContext( intruderProjectile, intruderProjectile.damage );
 
-			//
-
 			this.ApplyRawHit( intruderProjectile.Center, intruderProjectile.damage, syncIfServer, hitData );
 
 			//
 
 			intruderProjectile.Kill();
+			intruderProjectile.active = false;
+
+			//if( Main.netMode == NetmodeID.MultiplayerClient || (Main.netMode == NetmodeID.Server && syncIfServer) ) {
+			//	NetMessage.SendData( MessageID.SyncProjectile, -1, -1, null, intruderProjectile.identity );
+			//}
 		}
 
 		private void ApplyPlayerCollisionHit( Player intruderPlayer, bool syncIfServer ) {
-			// No effect, by default; (Pre)BarrierEntityCollision hook must implement behavior
+			// No effect, by default; (Pre)BarrierEntityCollision hook(s) must implement behavior
 
 			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitEntityPacket.BroadcastToClients( this, BarrierIntruderType.Player, intruderPlayer.whoAmI );
@@ -65,17 +68,17 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			if( NPCID.Sets.ProjectileNPC[intruderNpc.type] ) {
 				var hitData = new BarrierHitContext( intruderNpc, intruderNpc.damage );
 
+				this.ApplyRawHit( intruderNpc.Center, intruderNpc.damage, syncIfServer, hitData );
+
 				//
 
-				this.ApplyRawHit( intruderNpc.Center, intruderNpc.damage, true, hitData );
-
-				NPCLibraries.Kill( intruderNpc, Main.netMode != NetmodeID.MultiplayerClient );
-
-				Main.PlaySound( SoundID.NPCHit15, intruderNpc.Center );
+				NPCLibraries.Kill( intruderNpc, syncIfServer && Main.netMode == NetmodeID.Server );
 
 				if( syncIfServer && Main.netMode == NetmodeID.Server ) {
 					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, intruderNpc.whoAmI );
 				}
+
+				Main.PlaySound( SoundID.NPCHit15, intruderNpc.Center );
 			} else {
 				// Non-"projectile" NPC? No effect, by default
 

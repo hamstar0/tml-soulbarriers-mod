@@ -5,7 +5,6 @@ using Terraria;
 using Terraria.ID;
 using ModLibsCore.Classes.Loadable;
 using ModLibsCore.Libraries.Debug;
-using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers.BarrierTypes;
 
 
@@ -47,6 +46,10 @@ namespace SoulBarriers.Barriers {
 //);
 				if( barrier.IsEntityColliding(ent) ) {
 					barrier.ApplyEntityCollisionHitIf( ent, true );
+
+					if( !ent.active ) {
+						return;
+					}
 				}
 			}
 
@@ -65,6 +68,10 @@ namespace SoulBarriers.Barriers {
 
 				if( barrier.IsEntityColliding(ent) ) {
 					barrier.ApplyEntityCollisionHitIf( ent, true );
+
+					if( !ent.active ) {
+						return;
+					}
 				}
 			}
 
@@ -85,6 +92,10 @@ namespace SoulBarriers.Barriers {
 ) );*/
 				if( barrier.IsEntityColliding(ent) ) {
 					barrier.ApplyEntityCollisionHitIf( ent, Main.netMode == NetmodeID.Server );
+
+					if( !ent.active ) {
+						return;
+					}
 				}
 			}
 		}
