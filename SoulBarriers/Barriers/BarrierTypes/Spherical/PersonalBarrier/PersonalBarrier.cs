@@ -24,7 +24,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 					strengthRegenPerTick: strengthRegenPerTick,
 					radius: radius,
 					color: color ) {
-			this.OnPreBarrierEntityCollision.Add( this.PreBarrierEntityCollision );
+			this.OnBarrierEntityCanCollide.Add( this.PreBarrierEntityCollision );
 		}
 
 

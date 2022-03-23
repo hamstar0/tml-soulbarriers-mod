@@ -10,7 +10,7 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 namespace SoulBarriers.Barriers {
 	partial class BarrierManager : ILoadable {
-		private void CheckCollisionsAgainstAllBarriers() {
+		private void CheckCollisionsAgainstAllBarriers_Host() {
 			if( Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
@@ -19,7 +19,7 @@ namespace SoulBarriers.Barriers {
 				.Where( b => b.IsActive );
 
 			foreach( Barrier barrier in activeBarriers ) {
-				barrier.CheckCollisionsAgainstBarriers( activeBarriers );
+				barrier.CheckCollisionsAgainstBarriers_Host( activeBarriers );
 			}
 		}
 
@@ -44,8 +44,8 @@ namespace SoulBarriers.Barriers {
 //	"pb_v_e_"+barrier.ID+"_"+ent,
 //	"collide? "+barrier.IsEntityColliding( ent)
 //);
-				if( barrier.IsEntityColliding(ent) ) {
-					barrier.ApplyEntityCollisionHitIf( ent, true );
+				if( barrier.IsEntityColliding(ref ent) ) {
+					barrier.ApplyEntityCollisionHit_If( ent, null, true );
 
 					if( !ent.active ) {
 						return;
@@ -66,8 +66,8 @@ namespace SoulBarriers.Barriers {
 					continue;
 				}
 
-				if( barrier.IsEntityColliding(ent) ) {
-					barrier.ApplyEntityCollisionHitIf( ent, true );
+				if( barrier.IsEntityColliding(ref ent) ) {
+					barrier.ApplyEntityCollisionHit_If( ent, null, true );
 
 					if( !ent.active ) {
 						return;
@@ -90,8 +90,8 @@ namespace SoulBarriers.Barriers {
 	ent.width,
 	ent.height
 ) );*/
-				if( barrier.IsEntityColliding(ent) ) {
-					barrier.ApplyEntityCollisionHitIf( ent, Main.netMode == NetmodeID.Server );
+				if( barrier.IsEntityColliding(ref ent) ) {
+					barrier.ApplyEntityCollisionHit_If( ent, null, Main.netMode == NetmodeID.Server );
 
 					if( !ent.active ) {
 						return;

@@ -27,13 +27,16 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		internal void CheckCollisionsAgainstBarriers( IEnumerable<Barrier> barriers ) {
+		internal void CheckCollisionsAgainstBarriers_Host( IEnumerable<Barrier> barriers ) {
 			if( Main.netMode == NetmodeID.MultiplayerClient ) {
 				return;
 			}
+
 			if( !this.IsActive ) {
 				return;
 			}
+
+			//
 
 			foreach( Barrier barrier in barriers ) {
 				if( barrier == this ) {
@@ -49,7 +52,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 	);
 }*/
 				if( this.IsBarrierColliding(barrier) ) {
-					this.ApplyBarrierCollisionHitIf( barrier, true );
+					double damage = this.ComputeCollisionDamage( barrier );
+
+					this.ApplyBarrierCollisionHit_If( barrier, true, damage, true );
 				}
 			}
 		}

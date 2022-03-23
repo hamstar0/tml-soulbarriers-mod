@@ -10,7 +10,11 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 namespace SoulBarriers.Packets {
 	class BarrierHitEntityPacket : SimplePacketPayload {
-		public static void BroadcastToClients( Barrier barrier, BarrierIntruderType entityType, int entityWhoAmI ) {
+		public static void BroadcastToClients(
+					Barrier barrier,
+					BarrierIntruderType entityType,
+					int entityIdentity,
+					bool defaultCollisionAllowed ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
@@ -19,7 +23,12 @@ namespace SoulBarriers.Packets {
 				throw new ModLibsException( "Use BarrierCollideBarrierHitPacket instead." );
 			}
 
-			var packet = new BarrierHitEntityPacket( barrier, entityType, entityWhoAmI );
+			var packet = new BarrierHitEntityPacket(
+				barrier: barrier,
+				entityType: entityType,
+				entityIdentity: entityIdentity,
+				defaultCollisionAllowed: defaultCollisionAllowed
+			);
 
 			SimplePacket.SendToClient( packet );
 		}
@@ -32,7 +41,9 @@ namespace SoulBarriers.Packets {
 
 		public int EntityType;
 
-		public int EntityWhoAmI;
+		public int EntityIdentity;
+
+		public bool DefaultCollisionAllowed;
 
 
 
@@ -40,10 +51,15 @@ namespace SoulBarriers.Packets {
 
 		private BarrierHitEntityPacket() { }
 
-		private BarrierHitEntityPacket( Barrier barrier, BarrierIntruderType entityType, int entityWhoAmI ) {
+		private BarrierHitEntityPacket(
+					Barrier barrier,
+					BarrierIntruderType entityType,
+					int entityIdentity,
+					bool defaultCollisionAllowed ) {
 			this.BarrierID = barrier.ID;
 			this.EntityType = (int)entityType;
-			this.EntityWhoAmI = entityWhoAmI;
+			this.EntityIdentity = entityIdentity;
+			this.DefaultCollisionAllowed = defaultCollisionAllowed;
 		}
 
 		////////////////
@@ -52,34 +68,46 @@ namespace SoulBarriers.Packets {
 			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
 			if( barrier == null ) {
 				LogLibraries.Warn( "No such barrier id'd: "+this.BarrierID );
+
 				return;
 			}
+
+			//
 
 			var entType = (BarrierIntruderType)this.EntityType;
 			Entity entity = null;
 
 			switch( entType ) {
 			case BarrierIntruderType.Player:
-				entity = Main.player[ this.EntityWhoAmI ];
+				entity = Main.player[ this.EntityIdentity ];
 				break;
 			case BarrierIntruderType.NPC:
-				entity = Main.npc[ this.EntityWhoAmI ];
+				entity = Main.npc[ this.EntityIdentity ];
 				break;
 			case BarrierIntruderType.Projectile:
-				entity = Main.projectile[ this.EntityWhoAmI ];
+				entity = Main.projectile[ this.EntityIdentity ];
 				break;
 			}
 
 			if( entity == null ) {
-				LogLibraries.Warn( "Could not identify intruder entity "+entType+" "+this.EntityWhoAmI );
+				LogLibraries.Warn( "Could not identify intruder entity "+entType+" "+this.EntityIdentity );
+
 				return;
 			}
 
-			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
-				LogLibraries.Alert( "Barrier hit: "+this.BarrierID+", entity: "+entity );
-			}
+			//
 
-			barrier.ApplyEntityCollisionHitIf( entity, false );
+			bool hasHit = barrier.ApplyEntityCollisionHit_If(
+				intruder: entity,
+				defaultCollisionAllowed: this.DefaultCollisionAllowed,
+				syncIfServer: false
+			);
+
+			//
+
+			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
+				LogLibraries.Alert( "Barrier hit? "+hasHit+", "+this.BarrierID+" vs ent "+entity );
+			}
 		}
 
 		////

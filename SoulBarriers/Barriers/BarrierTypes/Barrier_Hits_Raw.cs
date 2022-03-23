@@ -34,7 +34,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			//
 
-			foreach( BarrierRawHitHook e in this.OnBarrierRawHit ) {
+			foreach( PostBarrierRawHitHook e in this.OnPostBarrierRawHit ) {
 				e.Invoke( oldStr, damage );
 			}
 

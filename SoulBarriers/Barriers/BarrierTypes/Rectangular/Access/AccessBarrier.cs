@@ -26,9 +26,12 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					isSaveable: isSaveable,
 					hostType: hostType,
 					hostWhoAmI: hostWhoAmI ) {
-			//this.OnPreBarrierEntityCollision += ( ref Entity intruder ) => true;
-			this.OnBarrierEntityCollision.Add( this.OnBarrierEntityCollide );
-			this.OnBarrierBarrierCollision.Add( this.OnBarrierBarrierCollide );
+			this.OnPreBarrierEntityCollision.Add( (ref Entity intruder, ref double damage) => false );
+			this.OnPreBarrierBarrierCollision.Add( (Barrier thatBarrier, ref double damage) => false );
+			//this.OnPreBarrierRawHit.Add( (ref double damage) => false );
+
+			this.OnPostBarrierEntityCollision.Add( this.OnPostBarrierEntityCollide );
+			this.OnPostBarrierBarrierCollision.Add( this.OnPostBarrierBarrierCollide );
 		}
 	}
 }

@@ -7,7 +7,7 @@ using ModLibsCore.Libraries.Debug;
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 	public partial class AccessBarrier : RectangularBarrier {
-		private void OnBarrierEntityCollide( Entity intruder ) {
+		private void OnPostBarrierEntityCollide( Entity intruder, bool isDefaultHit, double damage ) {
 			if( !intruder.active ) {
 				return;
 			}
@@ -23,25 +23,22 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 		}
 
 
-		private void OnBarrierBarrierCollide( Barrier otherBarrier ) {
+		private void OnPostBarrierBarrierCollide( Barrier otherBarrier, bool isDefaultHit, double damage ) {
 			if( !otherBarrier.IsActive || otherBarrier is AccessBarrier ) {
 				return;
 			}
 
-			double damage = this.Strength > otherBarrier.Strength
-				? otherBarrier.Strength
-				: this.Strength;
-			damage = Math.Ceiling( damage );
+			double myDamage = this.ComputeCollisionDamage( otherBarrier );
 //LogLibraries.Log( "B V B OnBarrierBarrierCollision 1 - " + damage );
 
 			if( damage > 0d ) {
-				var toHitData = new BarrierHitContext( otherBarrier, damage );
-				var froHitData = new BarrierHitContext( this, damage );
+				var toHitData = new BarrierHitContext( otherBarrier, myDamage );
+				var froHitData = new BarrierHitContext( this, myDamage );
 
 				//
 
-				this.ApplyRawHit( null, damage, false, toHitData );
-				otherBarrier.ApplyRawHit( null, damage, false, froHitData );
+				this.ApplyRawHit( null, myDamage, false, toHitData );
+				otherBarrier.ApplyRawHit( null, myDamage, false, froHitData );
 			}
 
 			if( this.Strength == 0d ) {

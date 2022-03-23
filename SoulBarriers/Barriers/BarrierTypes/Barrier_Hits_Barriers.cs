@@ -8,39 +8,58 @@ using SoulBarriers.Packets;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public void ApplyBarrierCollisionHitIf( Barrier intruder, bool syncIfServer ) {
-			if( !this.OnPreBarrierBarrierCollision.All( f=>f.Invoke(intruder) ) ) {
-				return;
-			}
-
-			//
-
-			double thisBarrierStrength = this.Strength;
-			double thatBarrierStrength = intruder.Strength;
-			
-//LogLibraries.Log( "B V B ApplyBarrierCollisionHitIf - "+this.GetType().Name+" - "+this.OnBarrierBarrierCollision.Count );
-			foreach( BarrierBarrierCollisionHook e in this.OnBarrierBarrierCollision ) {
-				e.Invoke( intruder );
-			}
-			
-			this.ApplyBarrierCollisionHit( intruder, thisBarrierStrength, thatBarrierStrength, syncIfServer );
+		public double ComputeCollisionDamage( Barrier otherBarrier ) {
+			double damage = this.Strength > otherBarrier.Strength
+				? otherBarrier.Strength
+				: this.Strength;
+			return Math.Ceiling( damage );
 		}
 
 
 		////////////////
 
-		private void ApplyBarrierCollisionHit(
+		public bool ApplyBarrierCollisionHit_If(
 					Barrier intruder,
-					double prevBarrierStrength,
-					double prevIntruderBarrierStrength,
+					bool defaultCollisionAllowed,
+					double damage,
 					bool syncIfServer ) {
-			double damage = this.Strength > intruder.Strength
-				? intruder.Strength
-				: this.Strength;
-			damage = Math.Ceiling( damage );
+			bool isDefaultCollision = this.OnPreBarrierBarrierCollision
+				.All( f => f.Invoke(intruder, ref damage) );
+			bool canDefaultCollide = defaultCollisionAllowed && isDefaultCollision;
 
 			//
 
+			if( canDefaultCollide ) {
+				if( damage > 0f ) {
+					this.ApplyBarrierCollisionHit( intruder, damage, syncIfServer );
+				}
+			}
+
+			//
+
+			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
+				BarrierHitBarrierPacket.BroadcastToClients(
+					sourceBarrier: this,
+					otherBarrier: intruder,
+					defaultCollisionAllowed: canDefaultCollide,
+					newSourceBarrierStrength: this.Strength,
+					newOtherBarrierStrength: intruder.Strength
+				);
+			}
+
+			//
+
+			foreach( PostBarrierBarrierCollisionHook e in this.OnPostBarrierBarrierCollision ) {
+				e.Invoke( intruder, canDefaultCollide, damage );
+			}
+
+			return isDefaultCollision;
+		}
+
+
+		////////////////
+
+		private void ApplyBarrierCollisionHit( Barrier intruder, double damage, bool syncIfServer ) {
 			if( damage > 0d ) {
 				var toHitData = new BarrierHitContext( intruder, damage );
 				var froHitData = new BarrierHitContext( this, damage );
@@ -49,17 +68,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 				this.ApplyRawHit( null, damage, false, toHitData );
 				intruder.ApplyRawHit( null, damage, false, froHitData );
-			}
-
-			//
-
-			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitBarrierPacket.BroadcastToClients(
-					this,
-					intruder,
-					prevBarrierStrength,
-					prevIntruderBarrierStrength
-				);
 			}
 		}
 	}

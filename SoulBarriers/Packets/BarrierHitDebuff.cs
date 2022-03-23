@@ -10,12 +10,12 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 namespace SoulBarriers.Packets {
 	class BarrierHitDebuffPacket : SimplePacketPayload {
-		public static void BroadcastToClients( Barrier barrier, int buffType ) {
+		public static void BroadcastToClients( Barrier barrier, int buffType, double newBarrierStrength ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
 
-			var packet = new BarrierHitDebuffPacket( barrier, buffType );
+			var packet = new BarrierHitDebuffPacket( barrier, buffType, newBarrierStrength );
 
 			SimplePacket.SendToClient( packet );
 		}
@@ -28,15 +28,18 @@ namespace SoulBarriers.Packets {
 
 		public int BuffType;
 
+		public double NewBarrierStrength;
+
 
 
 		////////////////
 
 		private BarrierHitDebuffPacket() { }
 
-		private BarrierHitDebuffPacket( Barrier barrier, int buffType ) {
+		private BarrierHitDebuffPacket( Barrier barrier, int buffType, double newBarrierStrength ) {
 			this.BarrierID = barrier.ID;
 			this.BuffType = buffType;
+			this.NewBarrierStrength = newBarrierStrength;
 		}
 
 		////////////////
@@ -49,10 +52,16 @@ namespace SoulBarriers.Packets {
 			}
 
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
-				LogLibraries.Alert( "Barrier hit: "+this.BarrierID+", BuffType: "+this.BuffType );
+				LogLibraries.Alert(
+					"Barrier hit: "+this.BarrierID
+					+", BuffType: "+this.BuffType
+					+", NewBarrierStrength: "+this.NewBarrierStrength
+				);
 			}
 
-			barrier.ApplyPlayerDebuffHitIf( this.BuffType, false );
+			//
+
+			barrier.ApplyPlayerDebuffHitAndBarrierHit( this.BuffType, this.NewBarrierStrength, false );
 		}
 
 		////

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Terraria;
 
 
@@ -23,12 +24,24 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public bool IsEntityColliding( Entity intruder ) {
+		public bool IsEntityColliding( ref Entity intruder ) {
 			if( !this.CanEntityCollide(intruder) ) {
 				return false;
 			}
 
-			return this.IsEntityCollidingPhysically( intruder );
+			if( !this.IsEntityCollidingPhysically( intruder ) ) {
+				return false;
+			}
+
+			//
+
+			Entity myIntruder = intruder;
+
+			bool canCollide = this.OnBarrierEntityCanCollide
+				.All( f => f.Invoke(ref myIntruder) );
+
+			intruder = myIntruder;
+			return canCollide;
 		}
 
 		////

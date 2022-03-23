@@ -108,7 +108,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 
 			if( hasSoulBuff ) {
 				foreach( int debuffIdx in badBuffIdxs ) {
-					if( !this.ApplyPlayerDebuffHitIf(hostPlayer.buffType[debuffIdx], true) ) {
+					if( !this.ApplyPlayerDebuffHit_If(hostPlayer.buffType[debuffIdx], true) ) {
 						LogLibraries.Alert( "Personal barrier failed to remove player debuff" );
 					}
 				}

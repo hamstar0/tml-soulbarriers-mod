@@ -14,7 +14,7 @@ namespace SoulBarriers.Barriers {
 
 			//
 
-			this.CheckCollisionsAgainstAllBarriers();
+			this.CheckCollisionsAgainstAllBarriers_Host();
 
 			//
 

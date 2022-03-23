@@ -11,19 +11,21 @@ using SoulBarriers.Barriers.BarrierTypes;
 namespace SoulBarriers.Packets {
 	class BarrierHitBarrierPacket : SimplePacketPayload {
 		public static void BroadcastToClients(
-					Barrier barrier,
+					Barrier sourceBarrier,
 					Barrier otherBarrier,
-					double prevBarrierStrength,
-					double prevIntruderBarrierStrength ) {
+					bool defaultCollisionAllowed,
+					double newSourceBarrierStrength,
+					double newOtherBarrierStrength ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
 
 			var packet = new BarrierHitBarrierPacket(
-				barrier,
-				otherBarrier,
-				prevBarrierStrength,
-				prevIntruderBarrierStrength
+				barrier: sourceBarrier,
+				otherBarrier: otherBarrier,
+				defaultCollisionAllowed: defaultCollisionAllowed,
+				newBarrierStrength: newSourceBarrierStrength,
+				newIntruderBarrierStrength: newOtherBarrierStrength
 			);
 
 			SimplePacket.SendToClient( packet );
@@ -37,9 +39,11 @@ namespace SoulBarriers.Packets {
 
 		public string OtherBarrierID;
 
-		public double BarrierStrength;
+		public bool DefaultCollisionAllowed;
 
-		public double OtherBarrierStrength;
+		public double NewBarrierStrength;
+
+		public double NewIntruderBarrierStrength;
 
 
 
@@ -50,15 +54,15 @@ namespace SoulBarriers.Packets {
 		private BarrierHitBarrierPacket(
 					Barrier barrier,
 					Barrier otherBarrier,
-					double prevBarrierStrength,
-					double prevIntruderBarrierStrength ) {
+					bool defaultCollisionAllowed,
+					double newBarrierStrength,
+					double newIntruderBarrierStrength ) {
 			this.BarrierID = barrier.ID;
 			this.OtherBarrierID = otherBarrier.ID;
 
-			//this.BarrierStrength = barrier.Strength;
-			//this.OtherBarrierStrength = otherBarrier.Strength;
-			this.BarrierStrength = prevBarrierStrength;
-			this.OtherBarrierStrength = prevIntruderBarrierStrength;
+			this.DefaultCollisionAllowed = defaultCollisionAllowed;
+			this.NewBarrierStrength = newBarrierStrength;
+			this.NewIntruderBarrierStrength = newIntruderBarrierStrength;
 		}
 		
 
@@ -78,18 +82,31 @@ namespace SoulBarriers.Packets {
 			}
 
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
-				LogLibraries.Alert( "Barrier hit: "+this.BarrierID+" ("+this.BarrierStrength+")"
-					+" vs "+this.OtherBarrierID+" ("+this.OtherBarrierStrength+")"
+				LogLibraries.Alert( "Barrier hit: "+this.BarrierID+" ("+this.NewBarrierStrength+")"
+					+" vs "+this.OtherBarrierID+" ("+this.NewIntruderBarrierStrength+")"
 				);
 			}
 
-			barrier.SetStrength( this.BarrierStrength, false, false, false );
-			otherBarrier.SetStrength( this.OtherBarrierStrength, false, false, false );
+			//
+
+			double prevThisBarrierStr = barrier.Strength;
+			double prevThatBarrierStr = otherBarrier.Strength;
+
+			barrier.SetStrength( this.NewBarrierStrength, false, false, false );
+			otherBarrier.SetStrength( this.NewIntruderBarrierStrength, false, false, false );
+
+			double thisDamage = prevThisBarrierStr - barrier.Strength;
+			double thatDamage = prevThatBarrierStr - otherBarrier.Strength;
+			double damage = thisDamage > thatDamage
+				? thisDamage
+				: thatDamage;
+
+			//
 
 //LogLibraries.Log( "BARRIER V BARRIER - "
 //	+ "barrier:" + this.BarrierID + " (" + this.BarrierStrength + ") vs "
 //	+ "barrier:" + this.OtherBarrierID + " (" + this.OtherBarrierStrength + ")" );
-			barrier.ApplyBarrierCollisionHitIf( otherBarrier, false );
+			barrier.ApplyBarrierCollisionHit_If( otherBarrier, this.DefaultCollisionAllowed, damage, false );
 		}
 
 		////
