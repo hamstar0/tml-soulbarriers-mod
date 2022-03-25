@@ -15,7 +15,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 
 
 		public virtual bool CanHitNPC( NPC intruder ) {
-			if( intruder.friendly ) {	// Townsfolk are fucking stupid and I can't be arsed to program a nanny for them
+			if( intruder.friendly ) {	// Townsfolk are fucking stupid and I can't be arsed to program a nanny
 				return false;
 			}
 			if( intruder.realLife >= 1 ) {	// Hopefully eliminates some debugging woes
@@ -24,7 +24,10 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 			if( Main.invasionSize >= 1 ) {	// Disabled against NPCs during invasions
 				return false;
 			}
-			if( Main.npc.Any( n => n?.active == true && n.boss ) ) {	// Free boss grinder!
+			if( intruder.netID == NPCID.DungeonGuardian ) {	// Guess these guys are special
+				return false;
+			}
+			if( Main.npc.Any(n => n?.active == true && n.boss) ) {	// Free boss grinder! /s
 				return false;
 			}
 			return true;
