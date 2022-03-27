@@ -52,7 +52,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			this.OnPreBarrierEntityCollision.Add( hook );
 		}
 
-		public void AddBarrierEntityCollisionHook( PostBarrierEntityCollisionHook hook ) {
+		public void AddPostBarrierEntityCollisionHook( PostBarrierEntityCollisionHook hook ) {
 			this.OnPostBarrierEntityCollision.Add( hook );
 		}
 
@@ -61,7 +61,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			this.OnPreBarrierBarrierCollision.Add( hook );
 		}
 
-		public void AddBarrierBarrierCollisionHook( PostBarrierBarrierCollisionHook hook ) {
+		public void AddPostBarrierBarrierCollisionHook( PostBarrierBarrierCollisionHook hook ) {
 			this.OnPostBarrierBarrierCollision.Add( hook );
 		}
 
@@ -70,7 +70,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			this.OnPreBarrierRawHit.Add( hook );
 		}
 
-		public void AddBarrierRawHit( PostBarrierRawHitHook hook ) {
+		public void AddPostBarrierRawHit( PostBarrierRawHitHook hook ) {
 			this.OnPostBarrierRawHit.Add( hook );
 		}
 	}

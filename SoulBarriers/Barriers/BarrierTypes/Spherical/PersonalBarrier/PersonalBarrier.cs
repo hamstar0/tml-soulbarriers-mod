@@ -24,7 +24,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 					strengthRegenPerTick: strengthRegenPerTick,
 					radius: radius,
 					color: color ) {
-			this.OnBarrierEntityCanCollide.Add( this.PreBarrierEntityCollision );
+			this.AddBarrierEntityCanCollideHook( this.MyPreBarrierEntityCollision );
+			this.AddPreBarrierBarrierCollisionHook( this.MyPreBarrierBarrierCollision );
 		}
 
 
@@ -37,19 +38,19 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 
 		////////////////
 
-		private bool PreBarrierEntityCollision( ref Entity intruder ) {
+		private bool MyPreBarrierEntityCollision( ref Entity intruder ) {
 			switch( this.HostType ) {
 			case BarrierHostType.Player:
-				return this.PreBarrierEntityCollision_HostPlayer( ref intruder );
+				return this.MyPreBarrierEntityCollision_HostPlayer( ref intruder );
 			case BarrierHostType.NPC:
-				return this.PreBarrierEntityCollision_HostNPC( ref intruder );
+				return this.MyPreBarrierEntityCollision_HostNPC( ref intruder );
 			}
 			return false;
 		}
 
 		////
 
-		private bool PreBarrierEntityCollision_HostPlayer( ref Entity intruder ) {
+		private bool MyPreBarrierEntityCollision_HostPlayer( ref Entity intruder ) {
 			if( intruder is Player ) {
 				return false;
 
@@ -67,9 +68,32 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 			return false;
 		}
 
-		private bool PreBarrierEntityCollision_HostNPC( ref Entity intruder ) {
+		private bool MyPreBarrierEntityCollision_HostNPC( ref Entity intruder ) {
 			if( intruder is Projectile ) {
 				return ( (Projectile)intruder ).GetOwner() is Player;
+			}
+
+			return false;
+		}
+
+		////////////////
+
+		private bool MyPreBarrierBarrierCollision( Barrier intruder, ref double damage ) {
+			switch( this.HostType ) {
+			case BarrierHostType.Player:
+				if( intruder.HostType == BarrierHostType.Player ) {
+					return ((Player)intruder.Host).hostile;
+				} else if( intruder.HostType == BarrierHostType.NPC ) {
+					return !((NPC)intruder.Host).friendly;
+				}
+				break;
+			case BarrierHostType.NPC:
+				if( intruder.HostType == BarrierHostType.Player ) {
+					return ((NPC)intruder.Host).friendly;
+				} else if( intruder.HostType == BarrierHostType.NPC ) {
+					return ((NPC)this.Host).friendly != ((NPC)intruder.Host).friendly;
+				}
+				break;
 			}
 
 			return false;
