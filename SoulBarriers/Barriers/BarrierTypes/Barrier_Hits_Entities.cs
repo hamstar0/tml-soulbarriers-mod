@@ -9,48 +9,73 @@ using SoulBarriers.Packets;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public bool ApplyEntityCollisionHit_If(
-					Entity intruder,
-					bool? defaultCollisionAllowed,
+		public bool ApplyEntityCollisionHit_Syncs(
+					Entity intruderEnt,
+					bool? defaultCollisionAllowedIf,
 					bool syncIfServer ) {
 			double damage = 0d;
-			bool collisionAllowed = !defaultCollisionAllowed.HasValue
-				|| (defaultCollisionAllowed.HasValue && defaultCollisionAllowed.Value);
+			bool defaultCollisionAllowed = !defaultCollisionAllowedIf.HasValue
+				|| (defaultCollisionAllowedIf.HasValue && defaultCollisionAllowedIf.Value);
+
+			bool isDefaultCollision = false;
+
+			int entId = -1;
+			BarrierIntruderType entType = default;
 
 			//
 
-			if( intruder.active ) {
-				if( intruder is Projectile ) {
-					collisionAllowed = this.ApplyProjectileCollisionHit_If(
-						intruderProjectile: (Projectile)intruder,
-						defaultCollisionAllowed: collisionAllowed,
+			if( intruderEnt.active ) {
+				if( intruderEnt is Projectile ) {
+					isDefaultCollision = this.ApplyProjectileCollisionHit_If(
+						intruderProjectile: (Projectile)intruderEnt,
+						defaultCollisionAllowed: defaultCollisionAllowed,
+						damage: out damage
+					);
+
+					entId = ((Projectile)intruderEnt).identity;
+					entType = BarrierIntruderType.Projectile;
+				} else if( intruderEnt is Player ) {
+					isDefaultCollision = this.ApplyPlayerCollisionHit_If(
+						intruderPlayer: (Player)intruderEnt,
+						defaultCollisionAllowed: defaultCollisionAllowed,
+						damage: out damage
+					);
+
+					entId = ((Player)intruderEnt).whoAmI;
+					entType = BarrierIntruderType.Player;
+				} else if( intruderEnt is NPC ) {
+					isDefaultCollision = this.ApplyNpcCollisionHit_If(
+						intruderNpc: (NPC)intruderEnt,
+						defaultCollisionAllowed: defaultCollisionAllowed,
 						syncIfServer: syncIfServer,
 						damage: out damage
 					);
-				} else if( intruder is Player ) {
-					collisionAllowed = this.ApplyPlayerCollisionHit_If(
-						intruderPlayer: (Player)intruder,
-						defaultCollisionAllowed: collisionAllowed,
-						syncIfServer: syncIfServer,
-						damage: out damage
-					);
-				} else if( intruder is NPC ) {
-					collisionAllowed = this.ApplyNpcCollisionHit_If(
-						intruderNpc: (NPC)intruder,
-						defaultCollisionAllowed: collisionAllowed,
-						syncIfServer: syncIfServer,
-						damage: out damage
-					);
+
+					entId = ((NPC)intruderEnt).whoAmI;
+					entType = BarrierIntruderType.NPC;
 				}
 			}
+
+			bool isDefaultCollisionHappening = defaultCollisionAllowed && isDefaultCollision;
 
 			//
 
 			foreach( PostBarrierEntityCollisionHook e in this.OnPostBarrierEntityCollision ) {
-				e.Invoke( intruder, collisionAllowed, damage );
+				e.Invoke( intruderEnt, isDefaultCollisionHappening, damage );
 			}
 
-			return collisionAllowed;
+			//
+
+			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
+				BarrierHitEntityPacket.BroadcastToClients(
+					barrier: this,
+					entityType: entType,
+					entityIdentity: entId,
+					defaultCollisionAllowed: isDefaultCollisionHappening
+				);
+			}
+
+			return isDefaultCollision;
 		}
 
 
@@ -59,7 +84,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		private bool ApplyProjectileCollisionHit_If(
 					Projectile intruderProjectile,
 					bool defaultCollisionAllowed,
-					bool syncIfServer,
 					out double damage ) {
 			if( !intruderProjectile.active || intruderProjectile.damage == 0 ) {
 				damage = 0d;
@@ -73,6 +97,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			
 			bool isDefaultCollision = this.OnPreBarrierEntityCollision
 				.All( f=>f.Invoke(ref myIntruder, ref myDamage) );
+
+			//
 
 			intruderProjectile = myIntruder as Projectile;
 			damage = myDamage;
@@ -90,20 +116,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				intruderProjectile.active = false;
 			}
 
-			//
-
-			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitEntityPacket.BroadcastToClients(
-					barrier: this,
-					entityType: BarrierIntruderType.Projectile,
-					entityIdentity: intruderProjectile.identity,
-					defaultCollisionAllowed: defaultCollisionAllowed && isDefaultCollision
-				);
-			}
-			//if( Main.netMode == NetmodeID.MultiplayerClient || (Main.netMode == NetmodeID.Server && syncIfServer) ) {
-			//	NetMessage.SendData( MessageID.SyncProjectile, -1, -1, null, intruderProjectile.identity );
-			//}
-
 			return isDefaultCollision;
 		}
 
@@ -113,7 +125,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		private bool ApplyPlayerCollisionHit_If(
 					Player intruderPlayer,
 					bool defaultCollisionAllowed,
-					bool syncIfServer,
 					out double damage ) {
 			Entity myIntruder = intruderPlayer;
 			double myDamage = 0d;
@@ -127,17 +138,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			if( defaultCollisionAllowed && isCollisionAllowed ) {
 				// No effect, by default; (Pre)BarrierEntityCollision hook(s) must implement behavior
-			}
-
-			//
-
-			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitEntityPacket.BroadcastToClients(
-					barrier: this,
-					entityType: BarrierIntruderType.Player,
-					entityIdentity: intruderPlayer.whoAmI,
-					defaultCollisionAllowed: defaultCollisionAllowed && isCollisionAllowed
-				);
 			}
 
 			return isCollisionAllowed;
@@ -163,7 +163,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				return this.ApplyNonProjectileNpcCollisionHit_If(
 					intruderNpc: intruderNpc,
 					defaultCollisionAllowed: defaultCollisionAllowed,
-					syncIfServer: syncIfServer,
 					damage: out damage
 				);
 			}
@@ -194,7 +193,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 				//
 
-				NPCLibraries.Kill( intruderNpc, syncIfServer && Main.netMode == NetmodeID.Server );	// Redundant?
+				// Kill "projectile" NPC just like regular projectiles
+				NPCLibraries.Kill( intruderNpc, syncIfServer && Main.netMode == NetmodeID.Server );
 
 				//
 
@@ -209,17 +209,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			//
 
-			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitEntityPacket.BroadcastToClients(
-					barrier: this,
-					entityType: BarrierIntruderType.NPC,
-					entityIdentity: intruderNpc.whoAmI,
-					defaultCollisionAllowed: defaultCollisionAllowed && isDefaultCollision
-				);
-			}
-
-			//
-
 			return isDefaultCollision;
 		}
 
@@ -227,7 +216,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 		private bool ApplyNonProjectileNpcCollisionHit_If(
 					NPC intruderNpc,
 					bool defaultCollisionAllowed,
-					bool syncIfServer,
 					out double damage ) {
 			Entity myIntruder = intruderNpc;
 			double myDamage = 0d;
@@ -244,15 +232,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 
 			//
-
-			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
-				BarrierHitEntityPacket.BroadcastToClients(
-					barrier: this,
-					entityType: BarrierIntruderType.NPC,
-					entityIdentity: intruderNpc.whoAmI,
-					defaultCollisionAllowed: defaultCollisionAllowed && isDefaultCollision
-				);
-			}
 
 			return isDefaultCollision;
 		}

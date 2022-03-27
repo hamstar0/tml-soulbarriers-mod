@@ -25,14 +25,23 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					bool syncIfServer ) {
 			bool isDefaultCollision = this.OnPreBarrierBarrierCollision
 				.All( f => f.Invoke(intruder, ref damage) );
-			bool canDefaultCollide = defaultCollisionAllowed && isDefaultCollision;
 
 			//
 
-			if( canDefaultCollide ) {
+			bool isDefaultCollisionHappening = defaultCollisionAllowed && isDefaultCollision;
+
+			//
+			
+			if( isDefaultCollisionHappening ) {
 				if( damage > 0f ) {
 					this.ApplyBarrierCollisionHit( intruder, damage, syncIfServer );
 				}
+			}
+
+			//
+
+			foreach( PostBarrierBarrierCollisionHook e in this.OnPostBarrierBarrierCollision ) {
+				e.Invoke( intruder, isDefaultCollisionHappening, damage );
 			}
 
 			//
@@ -41,16 +50,10 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				BarrierHitBarrierPacket.BroadcastToClients(
 					sourceBarrier: this,
 					otherBarrier: intruder,
-					defaultCollisionAllowed: canDefaultCollide,
+					defaultCollisionAllowed: isDefaultCollisionHappening,
 					newSourceBarrierStrength: this.Strength,
 					newOtherBarrierStrength: intruder.Strength
 				);
-			}
-
-			//
-
-			foreach( PostBarrierBarrierCollisionHook e in this.OnPostBarrierBarrierCollision ) {
-				e.Invoke( intruder, canDefaultCollide, damage );
 			}
 
 			return isDefaultCollision;

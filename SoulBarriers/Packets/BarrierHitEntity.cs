@@ -97,9 +97,9 @@ namespace SoulBarriers.Packets {
 
 			//
 
-			bool hasHit = barrier.ApplyEntityCollisionHit_If(
-				intruder: entity,
-				defaultCollisionAllowed: this.DefaultCollisionAllowed,
+			bool hasHit = barrier.ApplyEntityCollisionHit_Syncs(
+				intruderEnt: entity,
+				defaultCollisionAllowedIf: this.DefaultCollisionAllowed,
 				syncIfServer: false
 			);
 
