@@ -19,7 +19,14 @@ namespace SoulBarriers.Barriers {
 				.Where( b => b.IsActive );
 
 			foreach( Barrier barrier in activeBarriers ) {
-				barrier.CheckCollisionsAgainstBarriers_Host( activeBarriers );
+				IList<Barrier> hitBarriers = barrier.CheckCollisionsAgainstBarriers_Host_If( activeBarriers );
+				if( hitBarriers == null ) {
+					continue;
+				}
+
+				foreach( Barrier hitBarrier in hitBarriers ) {
+					barrier.ApplyBarrierCollisionHit( hitBarrier, true, true );
+				}
 			}
 		}
 

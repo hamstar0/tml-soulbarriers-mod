@@ -60,7 +60,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			//
 
-			foreach( PostBarrierEntityCollisionHook e in this.OnPostBarrierEntityCollision ) {
+			foreach( PostBarrierEntityHitHook e in this.OnPostBarrierEntityHit ) {
 				e.Invoke( intruderEnt, isDefaultCollisionHappening, damage );
 			}
 
@@ -95,7 +95,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			Entity myIntruder = intruderProjectile;
 			double myDamage = intruderProjectile.damage;
 			
-			bool isDefaultCollision = this.OnPreBarrierEntityCollision
+			bool isDefaultCollision = this.OnPreBarrierEntityHit
 				.All( f=>f.Invoke(ref myIntruder, ref myDamage) );
 
 			//
@@ -129,7 +129,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			Entity myIntruder = intruderPlayer;
 			double myDamage = 0d;
 
-			bool isCollisionAllowed = this.OnPreBarrierEntityCollision
+			bool isCollisionAllowed = this.OnPreBarrierEntityHit
 				.All( f => f.Invoke( ref myIntruder, ref myDamage ) );
 
 			damage = myDamage;
@@ -179,7 +179,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			Entity myIntruder = intruderNpc;
 			double myDamage = intruderNpc.damage;
 
-			bool isDefaultCollision = this.OnPreBarrierEntityCollision
+			bool isDefaultCollision = this.OnPreBarrierEntityHit
 				.All( f => f.Invoke( ref myIntruder, ref myDamage ) );
 
 			damage = myDamage;
@@ -220,7 +220,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			Entity myIntruder = intruderNpc;
 			double myDamage = 0d;
 
-			bool isDefaultCollision = this.OnPreBarrierEntityCollision
+			bool isDefaultCollision = this.OnPreBarrierEntityHit
 				.All( f => f.Invoke( ref myIntruder, ref myDamage ) );
 
 			damage = myDamage;

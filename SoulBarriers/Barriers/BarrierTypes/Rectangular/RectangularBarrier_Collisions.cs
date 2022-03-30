@@ -21,7 +21,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 			if( barrier is RectangularBarrier ) {
 				return ((RectangularBarrier)barrier).TileArea
 					.Intersects( this.TileArea );
-			} else if( barrier is SphericalBarrier ) {
+			}
+			else if( barrier is SphericalBarrier ) {
 				var sphBarrier = (SphericalBarrier)barrier;
 				Vector2 sphPos = barrier.GetBarrierWorldCenter();
 

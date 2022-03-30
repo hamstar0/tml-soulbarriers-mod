@@ -106,7 +106,7 @@ namespace SoulBarriers.Packets {
 //LogLibraries.Log( "BARRIER V BARRIER - "
 //	+ "barrier:" + this.BarrierID + " (" + this.BarrierStrength + ") vs "
 //	+ "barrier:" + this.OtherBarrierID + " (" + this.OtherBarrierStrength + ")" );
-			barrier.ApplyBarrierCollisionHit_If( otherBarrier, this.DefaultCollisionAllowed, damage, false );
+			barrier.ApplyBarrierCollisionHit( otherBarrier, this.DefaultCollisionAllowed, damage, false );
 		}
 
 		////

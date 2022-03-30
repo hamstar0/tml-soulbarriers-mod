@@ -6,16 +6,20 @@ using Terraria;
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public delegate bool BarrierEntityCanCollideHook( ref Entity intruder );
 	
-	public delegate bool PreBarrierEntityCollisionHook( ref Entity intruder, ref double damage );
+	////
 
-	public delegate void PostBarrierEntityCollisionHook( Entity intruder, bool isDefaultHit, double damage );
+	public delegate bool PreBarrierEntityHitHook( ref Entity intruder, ref double damage );
+
+	public delegate void PostBarrierEntityHitHook( Entity intruder, bool isDefaultHit, double damage );
 
 
-	public delegate bool PreBarrierBarrierCollisionHook( Barrier thatBarrier, ref double damage );
+	public delegate bool PreBarrierBarrierHitHook( Barrier thatBarrier, ref double damage );
 
-	public delegate void PostBarrierBarrierCollisionHook( Barrier otherBarrier, bool isDefaultHit, double damage );
+	public delegate void PostBarrierBarrierHitHook( Barrier otherBarrier, bool isDefaultHit, double damage );
 
-	
+
+	////
+
 	public delegate bool PreBarrierRawHitHook( ref double damage );
 	
 	public delegate void PostBarrierRawHitHook( double previousStrength, double attemptedDamage );
@@ -25,16 +29,19 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 	public abstract partial class Barrier {
 		protected ISet<BarrierEntityCanCollideHook> OnBarrierEntityCanCollide = new HashSet<BarrierEntityCanCollideHook>();
-		
-		protected ISet<PreBarrierEntityCollisionHook> OnPreBarrierEntityCollision = new HashSet<PreBarrierEntityCollisionHook>();
 
-		protected ISet<PostBarrierEntityCollisionHook> OnPostBarrierEntityCollision = new HashSet<PostBarrierEntityCollisionHook>();
+		////
+
+		protected ISet<PreBarrierEntityHitHook> OnPreBarrierEntityHit = new HashSet<PreBarrierEntityHitHook>();
+
+		protected ISet<PostBarrierEntityHitHook> OnPostBarrierEntityHit = new HashSet<PostBarrierEntityHitHook>();
 
 
-		protected ISet<PreBarrierBarrierCollisionHook> OnPreBarrierBarrierCollision = new HashSet<PreBarrierBarrierCollisionHook>();
+		protected ISet<PreBarrierBarrierHitHook> OnPreBarrierBarrierHit = new HashSet<PreBarrierBarrierHitHook>();
 
-		protected ISet<PostBarrierBarrierCollisionHook> OnPostBarrierBarrierCollision = new HashSet<PostBarrierBarrierCollisionHook>();
+		protected ISet<PostBarrierBarrierHitHook> OnPostBarrierBarrierHit = new HashSet<PostBarrierBarrierHitHook>();
 
+		////
 
 		protected ISet<PreBarrierRawHitHook> OnPreBarrierRawHit = new HashSet<PreBarrierRawHitHook>();
 
@@ -48,21 +55,21 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			this.OnBarrierEntityCanCollide.Add( hook );
 		}
 
-		public void AddPreBarrierEntityCollisionHook( PreBarrierEntityCollisionHook hook ) {
-			this.OnPreBarrierEntityCollision.Add( hook );
+		public void AddPreBarrierEntityCollisionHook( PreBarrierEntityHitHook hook ) {
+			this.OnPreBarrierEntityHit.Add( hook );
 		}
 
-		public void AddPostBarrierEntityCollisionHook( PostBarrierEntityCollisionHook hook ) {
-			this.OnPostBarrierEntityCollision.Add( hook );
+		public void AddPostBarrierEntityCollisionHook( PostBarrierEntityHitHook hook ) {
+			this.OnPostBarrierEntityHit.Add( hook );
 		}
 
 
-		public void AddPreBarrierBarrierCollisionHook( PreBarrierBarrierCollisionHook hook ) {
-			this.OnPreBarrierBarrierCollision.Add( hook );
+		public void AddPreBarrierBarrierCollisionHook( PreBarrierBarrierHitHook hook ) {
+			this.OnPreBarrierBarrierHit.Add( hook );
 		}
 
-		public void AddPostBarrierBarrierCollisionHook( PostBarrierBarrierCollisionHook hook ) {
-			this.OnPostBarrierBarrierCollision.Add( hook );
+		public void AddPostBarrierBarrierCollisionHook( PostBarrierBarrierHitHook hook ) {
+			this.OnPostBarrierBarrierHit.Add( hook );
 		}
 
 

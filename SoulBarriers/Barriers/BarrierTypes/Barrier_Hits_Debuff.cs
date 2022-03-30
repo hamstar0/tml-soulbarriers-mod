@@ -25,13 +25,13 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			//
 
-			this.ApplyPlayerDebuffHitAndBarrierHit( buffType, this.Strength - damage, syncIfServer );
+			this.ApplyPlayerDebuffRemoveAndBarrierHit( buffType, this.Strength - damage, syncIfServer );
 
 			return true;
 		}
 
 
-		internal void ApplyPlayerDebuffHitAndBarrierHit(
+		internal void ApplyPlayerDebuffRemoveAndBarrierHit(
 					int buffType,
 					double newBarrierStrength,
 					bool syncIfServer ) {

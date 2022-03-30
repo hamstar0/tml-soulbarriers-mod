@@ -61,7 +61,7 @@ namespace SoulBarriers.Packets {
 
 			//
 
-			barrier.ApplyPlayerDebuffHitAndBarrierHit( this.BuffType, this.NewBarrierStrength, false );
+			barrier.ApplyPlayerDebuffRemoveAndBarrierHit( this.BuffType, this.NewBarrierStrength, false );
 		}
 
 		////

@@ -7,10 +7,12 @@ using ModLibsCore.Libraries.Debug;
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 	public partial class AccessBarrier : RectangularBarrier {
-		private void OnPostBarrierEntityCollide( Entity intruder, bool isDefaultHit, double damage ) {
+		private bool PreBarrierEntityHit( ref Entity intruder, ref double damage ) {
 			if( !intruder.active ) {
-				return;
+				return false;
 			}
+
+			//
 
 //DebugLibraries.ChatOnce( "b_col_ent_"+this.GetID(), "ent: "+intruder );
 			if( intruder is Player ) {
@@ -20,33 +22,17 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 			} else if( intruder is Projectile ) {
 				this.ApplyAccessProjectileHit( intruder as Projectile );
 			}
+
+			return false;
 		}
 
 
-		private void OnPostBarrierBarrierCollide( Barrier otherBarrier, bool isDefaultHit, double damage ) {
+		private bool PreBarrierBarrierHit( Barrier otherBarrier, ref double damage ) {
 			if( !otherBarrier.IsActive || otherBarrier is AccessBarrier ) {
-				return;
+				return false;
 			}
 
-			double myDamage = this.ComputeCollisionDamage( otherBarrier );
-//LogLibraries.Log( "B V B OnBarrierBarrierCollision 1 - " + damage );
-
-			if( damage > 0d ) {
-				var toHitData = new BarrierHitContext( otherBarrier, myDamage );
-				var froHitData = new BarrierHitContext( this, myDamage );
-
-				//
-
-				this.ApplyRawHit( null, myDamage, false, toHitData );
-				otherBarrier.ApplyRawHit( null, myDamage, false, froHitData );
-			}
-
-			if( this.Strength == 0d ) {
-				Main.NewText( "Access granted.", Color.Lime );
-				Main.PlaySound( SoundID.Item94 );
-			} else {
-				//Main.NewText( "Access denied.", Color.Red );
-			}
+			return true;
 		}
 	}
 }

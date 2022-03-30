@@ -18,12 +18,29 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		public bool ApplyBarrierCollisionHit_If(
+		public void ApplyBarrierCollisionHit(
+					Barrier intruder,
+					bool defaultCollisionAllowed,
+					bool syncIfServer ) {
+			double damage = this.ComputeCollisionDamage( intruder );
+
+			this.ApplyBarrierCollisionHit(
+				intruder: intruder,
+				defaultCollisionAllowed: defaultCollisionAllowed,
+				damage: damage,
+				syncIfServer: syncIfServer
+			);
+		}
+
+		////
+
+		public bool ApplyBarrierCollisionHit(
 					Barrier intruder,
 					bool defaultCollisionAllowed,
 					double damage,
 					bool syncIfServer ) {
-			bool isDefaultCollision = this.OnPreBarrierBarrierCollision
+			// Pre
+			bool isDefaultCollision = this.OnPreBarrierBarrierHit
 				.All( f => f.Invoke(intruder, ref damage) );
 
 			//
@@ -34,13 +51,14 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			
 			if( isDefaultCollisionHappening ) {
 				if( damage > 0f ) {
-					this.ApplyBarrierCollisionHit( intruder, damage, syncIfServer );
+					this.ApplyBarrierCollisionDefaultHit( intruder, damage );
 				}
 			}
 
 			//
 
-			foreach( PostBarrierBarrierCollisionHook e in this.OnPostBarrierBarrierCollision ) {
+			// Post
+			foreach( PostBarrierBarrierHitHook e in this.OnPostBarrierBarrierHit ) {
 				e.Invoke( intruder, isDefaultCollisionHappening, damage );
 			}
 
@@ -62,7 +80,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
-		private void ApplyBarrierCollisionHit( Barrier intruder, double damage, bool syncIfServer ) {
+		private void ApplyBarrierCollisionDefaultHit( Barrier intruder, double damage ) {
 			if( damage > 0d ) {
 				var toHitData = new BarrierHitContext( intruder, damage );
 				var froHitData = new BarrierHitContext( this, damage );
