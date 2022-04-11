@@ -39,7 +39,7 @@ namespace SoulBarriers {
 		////
 
 		public static void DeclareWorldAccessBarrier( AccessBarrier barrier ) {
-			BarrierManager.Instance.DeclareWorldBarrierUnsynced( barrier );
+			BarrierManager.Instance.DeclareWorldBarrier_Unsynced( barrier );
 
 			if( Main.netMode == NetmodeID.Server ) {
 				AccessBarrierCreatePacket.BroadcastToClients( barrier );
@@ -49,7 +49,7 @@ namespace SoulBarriers {
 		////
 		
 		public static void DeclareWorldBarrierUnsynced( RectangularBarrier barrier ) {
-			BarrierManager.Instance.DeclareWorldBarrierUnsynced( barrier );
+			BarrierManager.Instance.DeclareWorldBarrier_Unsynced( barrier );
 		}
 
 		////

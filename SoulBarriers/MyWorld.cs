@@ -14,39 +14,52 @@ namespace SoulBarriers {
 	class SoulBarriersWorld : ModWorld {
 		public override void Load( TagCompound tag ) {
 			var mngr = BarrierManager.Instance;
+
+			//
+
 			mngr.RemoveAllWorldBarriersNoSync();
 
+			//
+
 			if( !tag.ContainsKey("barrier_count2") ) {
-				int count = tag.GetInt( "barrier_count2" );
+				return;
+			}
+			
+			//
 
-				for( int i=0; i<count; i++ ) {
-					string typeName = tag.GetString( "barrier_"+i+"_type" );
-					int x = tag.GetInt( "barrier_"+i+"_area_x" );
-					int y = tag.GetInt( "barrier_"+i+"_area_y" );
-					int w = tag.GetInt( "barrier_"+i+"_area_w" );
-					int h = tag.GetInt( "barrier_"+i+"_area_h" );
-					byte cR = tag.GetByte( "barrier_"+i+"_color_r" );
-					byte cG = tag.GetByte( "barrier_"+i+"_color_g" );
-					byte cB = tag.GetByte( "barrier_"+i+"_color_b" );
-					double maxStr = tag.GetDouble( "barrier_"+i+"_max_str" );
-					double strRegen = tag.GetDouble( "barrier_"+i+"_str_regen" );
+			int count = tag.GetInt( "barrier_count2" );
 
-					Barrier barrier = BarrierManager.Instance.FactoryCreateBarrier(
-						barrierTypeName: typeName,
-						hostType: BarrierHostType.None,
-						hostWhoAmI: -1,
-						data: new Rectangle(x, y, w, h),
-						strength: maxStr,
-						maxRegenStrength: maxStr,
-						strengthRegenPerTick: strRegen,
-						color: new Color(cR, cG, cB),
-						isSaveable: true
-					);
+			for( int i=0; i<count; i++ ) {
+				string typeName = tag.GetString( $"barrier_{i}_type" );
+				int x = tag.GetInt( $"barrier_{i}_area_x" );
+				int y = tag.GetInt( $"barrier_{i}_area_y" );
+				int w = tag.GetInt( $"barrier_{i}_area_w" );
+				int h = tag.GetInt( $"barrier_{i}_area_h" );
+				byte cR = tag.GetByte( $"barrier_{i}_color_r" );
+				byte cG = tag.GetByte( $"barrier_{i}_color_g" );
+				byte cB = tag.GetByte( $"barrier_{i}_color_b" );
+				double maxStr = tag.GetDouble( $"barrier_{i}_max_str" );
+				double strRegen = tag.GetDouble( $"barrier_{i}_str_regen" );
 
-					// TODO
-					if( barrier is RectangularBarrier ) {
-						mngr.DeclareWorldBarrierUnsynced( barrier as RectangularBarrier );
-					}
+				//
+
+				Barrier barrier = BarrierManager.Instance.FactoryCreateBarrier(
+					barrierTypeName: typeName,
+					hostType: BarrierHostType.None,
+					hostWhoAmI: -1,
+					data: new Rectangle(x, y, w, h),
+					strength: maxStr,
+					maxRegenStrength: maxStr,
+					strengthRegenPerTick: strRegen,
+					color: new Color(cR, cG, cB),
+					isSaveable: true
+				);
+
+				//
+
+				// TODO
+				if( barrier is RectangularBarrier ) {
+					mngr.DeclareWorldBarrier_Unsynced( barrier as RectangularBarrier );
 				}
 			}
 		}
@@ -56,26 +69,32 @@ namespace SoulBarriers {
 			var mngr = BarrierManager.Instance;
 			var tag = new TagCompound();
 
+			//
+
 			int i = 0;
 			foreach( (Rectangle tileRect, Barrier barrier) in mngr.GetTileBarriers() ) {
 				if( !barrier.CanSave() ) {
 					continue;
 				}
 
-				tag[ "barrier_"+i+"_type" ] = barrier.GetType().FullName;
-				tag[ "barrier_"+i+"_area_x" ] = (int)tileRect.X;
-				tag[ "barrier_"+i+"_area_y" ] = (int)tileRect.Y;
-				tag[ "barrier_"+i+"_area_w" ] = (int)tileRect.Width;
-				tag[ "barrier_"+i+"_area_h" ] = (int)tileRect.Height;
-				tag[ "barrier_"+i+"_color_r" ] = barrier.Color.R;
-				tag[ "barrier_"+i+"_color_g" ] = barrier.Color.G;
-				tag[ "barrier_"+i+"_color_b" ] = barrier.Color.B;
-				tag[ "barrier_"+i+"_max_str" ] = (double)barrier.MaxRegenStrength;
-				tag[ "barrier_"+i+"_str_regen" ] = (double)barrier.StrengthRegenPerTick;
+				//
+
+				tag[ $"barrier_{i}_type" ] = barrier.GetType().FullName;
+				tag[ $"barrier_{i}_area_x" ] = (int)tileRect.X;
+				tag[ $"barrier_{i}_area_y" ] = (int)tileRect.Y;
+				tag[ $"barrier_{i}_area_w" ] = (int)tileRect.Width;
+				tag[ $"barrier_{i}_area_h" ] = (int)tileRect.Height;
+				tag[ $"barrier_{i}_color_r" ] = barrier.Color.R;
+				tag[ $"barrier_{i}_color_g" ] = barrier.Color.G;
+				tag[ $"barrier_{i}_color_b" ] = barrier.Color.B;
+				tag[ $"barrier_{i}_max_str" ] = (double)barrier.MaxRegenStrength;
+				tag[ $"barrier_{i}_str_regen" ] = (double)barrier.StrengthRegenPerTick;
 				i++;
 			}
 
 			tag["barrier_count2"] = (int)i;
+
+			//
 
 			return tag;
 		}

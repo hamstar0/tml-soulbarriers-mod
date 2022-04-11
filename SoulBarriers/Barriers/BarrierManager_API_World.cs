@@ -36,7 +36,7 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 		
-		public bool DeclareWorldBarrierUnsynced( RectangularBarrier barrier ) {
+		public bool DeclareWorldBarrier_Unsynced( RectangularBarrier barrier ) {
 			this.TileBarriers[barrier.TileArea] = barrier;
 
 			//

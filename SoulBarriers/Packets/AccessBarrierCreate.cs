@@ -78,7 +78,7 @@ namespace SoulBarriers.Packets {
 				isSaveable: true
 			);
 
-			BarrierManager.Instance.DeclareWorldBarrierUnsynced( barrier );
+			BarrierManager.Instance.DeclareWorldBarrier_Unsynced( barrier );
 
 			//
 

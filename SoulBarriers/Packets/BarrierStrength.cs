@@ -36,7 +36,7 @@ namespace SoulBarriers.Packets {
 			if( Main.netMode != NetmodeID.MultiplayerClient ) {
 				throw new ModLibsException( "Not client." );
 			}
-			if( barrier.Host.whoAmI != Main.myPlayer ) {
+			if( barrier.HostType != BarrierHostType.Player || barrier.Host.whoAmI != Main.myPlayer ) {
 				throw new ModLibsException( "Not local client." );
 			}
 
@@ -88,11 +88,16 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
-		private void Receive( int fromWho ) {
+		private void Receive() {
 			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
+
 			if( barrier == null ) {
-				LogLibraries.Warn( $"No such barrier from {Main.player[fromWho].name} ({fromWho}) id'd: "
-					+this.BarrierID );
+				Player plr = Main.player[this.PlayerWho];
+
+				LogLibraries.Warn( 
+					$"No such barrier from {plr?.name} ({this.PlayerWho}) id'd: "
+					+this.BarrierID
+				);
 
 				return;
 			}
@@ -130,11 +135,13 @@ namespace SoulBarriers.Packets {
 		////
 
 		public override void ReceiveOnClient() {
-			this.Receive( this.PlayerWho );
+			this.Receive();
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {
-			this.Receive( fromWho );
+			this.Receive();
+
+			//
 
 			SimplePacket.SendToClient( this, -1, fromWho );
 		}
