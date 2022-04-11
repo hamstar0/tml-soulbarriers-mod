@@ -67,6 +67,28 @@ namespace SoulBarriers.Barriers {
 			SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
 		}
 
+		public void RemoveNonWorldBarrier( Barrier barrier, bool syncIfServer ) {
+			if( barrier.Host != null ) {
+				this.RemoveEntityBarrier( barrier.Host, syncIfServer );
+
+				return;
+			}
+
+			//
+
+			this.BarriersByID.Remove( barrier.ID );
+
+			//
+			
+			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
+				BarrierRemovePacket.BroadcastToClients( barrier );
+			}
+
+			//
+			
+			SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
+		}
+
 		////
 
 		public void RemoveAllWorldBarriersNoSync() {

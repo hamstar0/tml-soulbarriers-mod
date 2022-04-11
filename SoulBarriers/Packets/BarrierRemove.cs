@@ -6,6 +6,7 @@ using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Services.Network.SimplePacket;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
+using SoulBarriers.Barriers.BarrierTypes.Spherical;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 
 
@@ -48,8 +49,9 @@ namespace SoulBarriers.Packets {
 
 			if( barrier is RectangularBarrier ) {
 				barrierMngr.RemoveWorldBarrier( ((RectangularBarrier)barrier).TileArea, false );
-			} else {    //if( barrier is SphericalBarrier )
-				throw new NotImplementedException( "Removal of non-`RectangularBarrier`s not yet implemented." );
+			} else {    // if( barrier is SphericalBarrier )
+				barrierMngr.RemoveNonWorldBarrier( barrier, false );
+				//throw new NotImplementedException( "Removal of non-`RectangularBarrier`s not yet implemented." );
 			}
 
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {

@@ -22,6 +22,7 @@ namespace SoulBarriers {
 
 		internal static void RunBarrierCreateHooks( Barrier barrier ) {
 			var api = ModContent.GetInstance<SoulBarriersAPI>();
+
 			foreach( Action<Barrier> hook in api.BarrierCreateHooks ) {
 				hook.Invoke( barrier );
 			}
@@ -29,6 +30,7 @@ namespace SoulBarriers {
 
 		internal static void RunBarrierRemoveHooks( Barrier barrier ) {
 			var api = ModContent.GetInstance<SoulBarriersAPI>();
+
 			foreach( Action<Barrier> hook in api.BarrierRemoveHooks ) {
 				hook.Invoke( barrier );
 			}
