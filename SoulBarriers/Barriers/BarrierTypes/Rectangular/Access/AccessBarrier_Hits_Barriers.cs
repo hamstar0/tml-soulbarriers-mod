@@ -25,6 +25,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					str = ((int)this.Strength).ToString();
 				}
 
+				//
+
 				Main.NewText( $"Gate barrier is too strong. +{str} strength needed to breach.", Color.Yellow );
 				Main.PlaySound( SoundID.NPCHit53 );
 			}

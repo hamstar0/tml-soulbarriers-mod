@@ -43,19 +43,24 @@ namespace SoulBarriers.Packets {
 		public override void ReceiveOnClient() {
 			var barrierMngr = BarrierManager.Instance;
 			Barrier barrier = barrierMngr.GetBarrierByID( this.BarrierID );
+
 			if( barrier == null ) {
 				return;
 			}
+
+			//
+
+			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
+				LogLibraries.Alert( "Barrier removed: "+ barrier.ID );
+			}
+
+			//
 
 			if( barrier is RectangularBarrier ) {
 				barrierMngr.RemoveWorldBarrier( ((RectangularBarrier)barrier).TileArea, false );
 			} else {    // if( barrier is SphericalBarrier )
 				barrierMngr.RemoveNonWorldBarrier( barrier, false );
 				//throw new NotImplementedException( "Removal of non-`RectangularBarrier`s not yet implemented." );
-			}
-
-			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
-				LogLibraries.Alert( "Barrier removed: "+ barrier.ID );
 			}
 		}
 

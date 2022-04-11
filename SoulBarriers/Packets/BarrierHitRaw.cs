@@ -68,8 +68,11 @@ namespace SoulBarriers.Packets {
 			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
 			if( barrier == null ) {
 				LogLibraries.Warn( "No such barrier id'd: "+this.BarrierID );
+
 				return;
 			}
+
+			//
 
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
 				LogLibraries.Alert( "Barrier hit: "+this.BarrierID
@@ -77,6 +80,8 @@ namespace SoulBarriers.Packets {
 					+", dmg: "+this.Damage
 				);
 			}
+
+			//
 
 			if( this.Damage > 0d ) {
 				barrier.ApplyRawHit(

@@ -14,8 +14,9 @@ namespace SoulBarriers.Packets {
 					Barrier sourceBarrier,
 					Barrier otherBarrier,
 					bool defaultCollisionAllowed,
-					double newSourceBarrierStrength,
-					double newOtherBarrierStrength ) {
+					double damage,
+					double oldSourceBarrierStrength,
+					double oldOtherBarrierStrength ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
@@ -24,8 +25,9 @@ namespace SoulBarriers.Packets {
 				barrier: sourceBarrier,
 				otherBarrier: otherBarrier,
 				defaultCollisionAllowed: defaultCollisionAllowed,
-				newBarrierStrength: newSourceBarrierStrength,
-				newIntruderBarrierStrength: newOtherBarrierStrength
+				damage: damage,
+				oldSourceBarrierStrength: oldSourceBarrierStrength,
+				oldOtherBarrierStrength: oldOtherBarrierStrength
 			);
 
 			SimplePacket.SendToClient( packet );
@@ -41,9 +43,11 @@ namespace SoulBarriers.Packets {
 
 		public bool DefaultCollisionAllowed;
 
-		public double NewBarrierStrength;
+		public double Damage;
 
-		public double NewIntruderBarrierStrength;
+		public double OldSourceBarrierStrength;
+
+		public double OldOtherBarrierStrength;
 
 
 
@@ -55,64 +59,64 @@ namespace SoulBarriers.Packets {
 					Barrier barrier,
 					Barrier otherBarrier,
 					bool defaultCollisionAllowed,
-					double newBarrierStrength,
-					double newIntruderBarrierStrength ) {
+					double damage,
+					double oldSourceBarrierStrength,
+					double oldOtherBarrierStrength ) {
 			this.BarrierID = barrier.ID;
 			this.OtherBarrierID = otherBarrier.ID;
 
 			this.DefaultCollisionAllowed = defaultCollisionAllowed;
-			this.NewBarrierStrength = newBarrierStrength;
-			this.NewIntruderBarrierStrength = newIntruderBarrierStrength;
+			this.Damage = damage;
+			this.OldSourceBarrierStrength = oldSourceBarrierStrength;
+			this.OldOtherBarrierStrength = oldOtherBarrierStrength;
 		}
 		
 
 		////////////////
 
-		private void Receive() {
-			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
+		private void Receive_If() {
+			var barrierMngr = BarrierManager.Instance;
+
+			Barrier barrier = barrierMngr.GetBarrierByID( this.BarrierID );
 			if( barrier == null ) {
 				LogLibraries.Warn( "No such barrier id'd: "+this.BarrierID );
+
 				return;
 			}
 
-			Barrier otherBarrier = BarrierManager.Instance.GetBarrierByID( this.OtherBarrierID );
+			Barrier otherBarrier = barrierMngr.GetBarrierByID( this.OtherBarrierID );
 			if( otherBarrier == null ) {
 				LogLibraries.Warn( "No such other barrier id'd: "+this.OtherBarrierID );
+
 				return;
 			}
 
+			//
+
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
-				LogLibraries.Alert( "Barrier hit: "+this.BarrierID+" ("+this.NewBarrierStrength+")"
-					+" vs "+this.OtherBarrierID+" ("+this.NewIntruderBarrierStrength+")"
+				LogLibraries.Alert( "Barrier hit: "+this.BarrierID+" ("+this.OldSourceBarrierStrength+")"
+					+" vs "+this.OtherBarrierID+" ("+this.OldOtherBarrierStrength+")"
 				);
 			}
 
 			//
 
-			double prevThisBarrierStr = barrier.Strength;
-			double prevThatBarrierStr = otherBarrier.Strength;
-
-			barrier.SetStrength( this.NewBarrierStrength, false, false, false );
-			otherBarrier.SetStrength( this.NewIntruderBarrierStrength, false, false, false );
-
-			double thisDamage = prevThisBarrierStr - barrier.Strength;
-			double thatDamage = prevThatBarrierStr - otherBarrier.Strength;
-			double damage = thisDamage > thatDamage
-				? thisDamage
-				: thatDamage;
+			barrier.SetStrength( this.OldSourceBarrierStrength, false, false, false );
+			otherBarrier.SetStrength( this.OldOtherBarrierStrength, false, false, false );
 
 			//
 
 //LogLibraries.Log( "BARRIER V BARRIER - "
 //	+ "barrier:" + this.BarrierID + " (" + this.BarrierStrength + ") vs "
 //	+ "barrier:" + this.OtherBarrierID + " (" + this.OtherBarrierStrength + ")" );
-			barrier.ApplyBarrierCollisionHit( otherBarrier, this.DefaultCollisionAllowed, damage, false );
+			barrier.ApplyBarrierCollisionHit( otherBarrier, this.DefaultCollisionAllowed, this.Damage, false );
 		}
+
 
 		////
 
 		public override void ReceiveOnClient() {
-			this.Receive();
+			this.Receive_If();
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {

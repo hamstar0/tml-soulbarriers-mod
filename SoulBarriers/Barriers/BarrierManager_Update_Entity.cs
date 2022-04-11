@@ -16,7 +16,7 @@ namespace SoulBarriers.Barriers {
 		////////////////
 
 		private void UpdatedTrackedBarrierOfEntity( Entity entity ) {
-			if( this.GarbageCollectBarrierIf(entity) ) {
+			if( this.GarbageCollectEntityBarrier_If(entity) ) {
 				this.RemoveEntityBarrier( entity, true );
 
 				return;
@@ -49,9 +49,9 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		private bool GarbageCollectBarrierIf( Entity entity ) {
+		private bool GarbageCollectEntityBarrier_If( Entity entity ) {
 			if( entity?.active != true ) {
-				return true ;
+				return true;
 			}
 
 			//

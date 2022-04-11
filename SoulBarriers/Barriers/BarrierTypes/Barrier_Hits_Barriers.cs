@@ -39,6 +39,11 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					bool defaultCollisionAllowed,
 					double damage,
 					bool syncIfServer ) {
+			double oldSourceBarrierStrength = this.Strength;
+			double oldOtherBarrierStrength = intruder.Strength;
+
+			//
+
 			// Pre
 			bool isDefaultCollision = this.OnPreBarrierBarrierHit
 				.All( f => f.Invoke(intruder, ref damage) );
@@ -50,9 +55,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			//
 			
 			if( isDefaultCollisionHappening ) {
-				if( damage > 0f ) {
-					this.ApplyBarrierCollisionDefaultHit( intruder, damage );
-				}
+				this.ApplyBarrierCollisionDefaultHit( intruder, damage );
 			}
 
 			//
@@ -69,8 +72,9 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					sourceBarrier: this,
 					otherBarrier: intruder,
 					defaultCollisionAllowed: isDefaultCollisionHappening,
-					newSourceBarrierStrength: this.Strength,
-					newOtherBarrierStrength: intruder.Strength
+					damage: damage,
+					oldSourceBarrierStrength: oldSourceBarrierStrength,
+					oldOtherBarrierStrength: oldOtherBarrierStrength
 				);
 			}
 

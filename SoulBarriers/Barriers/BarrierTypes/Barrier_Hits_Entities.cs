@@ -9,52 +9,33 @@ using SoulBarriers.Packets;
 
 namespace SoulBarriers.Barriers.BarrierTypes {
 	public abstract partial class Barrier {
-		public bool ApplyEntityCollisionHit_Syncs(
+		public bool ApplyEntityCollisionHit_If_Syncs(
 					Entity intruderEnt,
 					bool? defaultCollisionAllowedIf,
 					bool syncIfServer ) {
-			double damage = 0d;
-			bool defaultCollisionAllowed = !defaultCollisionAllowedIf.HasValue
-				|| (defaultCollisionAllowedIf.HasValue && defaultCollisionAllowedIf.Value);
-
-			bool isDefaultCollision = false;
-
-			int entId = -1;
-			BarrierIntruderType entType = default;
+			if( !intruderEnt.active ) {
+				return false;
+			}
 
 			//
 
-			if( intruderEnt.active ) {
-				if( intruderEnt is Projectile ) {
-					isDefaultCollision = this.ApplyProjectileCollisionHit_If(
-						intruderProjectile: (Projectile)intruderEnt,
-						defaultCollisionAllowed: defaultCollisionAllowed,
-						damage: out damage
-					);
+			bool defaultCollisionAllowed = !defaultCollisionAllowedIf.HasValue
+				|| (defaultCollisionAllowedIf.HasValue && defaultCollisionAllowedIf.Value);
 
-					entId = ((Projectile)intruderEnt).identity;
-					entType = BarrierIntruderType.Projectile;
-				} else if( intruderEnt is Player ) {
-					isDefaultCollision = this.ApplyPlayerCollisionHit_If(
-						intruderPlayer: (Player)intruderEnt,
-						defaultCollisionAllowed: defaultCollisionAllowed,
-						damage: out damage
-					);
+			//
 
-					entId = ((Player)intruderEnt).whoAmI;
-					entType = BarrierIntruderType.Player;
-				} else if( intruderEnt is NPC ) {
-					isDefaultCollision = this.ApplyNpcCollisionHit_If(
-						intruderNpc: (NPC)intruderEnt,
-						defaultCollisionAllowed: defaultCollisionAllowed,
-						syncIfServer: syncIfServer,
-						damage: out damage
-					);
+			double oldBarrierStrength = this.Strength;
 
-					entId = ((NPC)intruderEnt).whoAmI;
-					entType = BarrierIntruderType.NPC;
-				}
-			}
+			bool isDefaultCollision = this.ApplyEntityCollisionHit_If(
+				intruderEnt: intruderEnt,
+				defaultCollisionAllowed: defaultCollisionAllowed,
+				syncProjectileIfServer: syncIfServer,
+				entId: out int entId,
+				entType: out BarrierIntruderType entType,
+				damage: out double damage
+			);
+
+			//
 
 			bool isDefaultCollisionHappening = defaultCollisionAllowed && isDefaultCollision;
 
@@ -71,9 +52,65 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 					barrier: this,
 					entityType: entType,
 					entityIdentity: entId,
-					defaultCollisionAllowed: isDefaultCollisionHappening
+					defaultCollisionAllowed: isDefaultCollisionHappening,
+					//damage: damage,
+					oldBarrierStrength: oldBarrierStrength
 				);
 			}
+
+			//
+
+			return isDefaultCollision;
+		}
+
+		////
+		
+		public bool ApplyEntityCollisionHit_If(
+					Entity intruderEnt,
+					bool defaultCollisionAllowed,
+					bool syncProjectileIfServer,
+					out int entId,
+					out BarrierIntruderType entType,
+					out double damage ) {
+			bool isDefaultCollision = false;
+
+			entId = -1;
+			entType = default;
+			damage = 0d;
+
+			//
+
+			if( intruderEnt is Projectile ) {
+				isDefaultCollision = this.ApplyProjectileCollisionHit_If(
+					intruderProjectile: (Projectile)intruderEnt,
+					defaultCollisionAllowed: defaultCollisionAllowed,
+					damage: out damage
+				);
+
+				entId = ((Projectile)intruderEnt).identity;
+				entType = BarrierIntruderType.Projectile;
+			} else if( intruderEnt is Player ) {
+				isDefaultCollision = this.ApplyPlayerCollisionHit_If(
+					intruderPlayer: (Player)intruderEnt,
+					defaultCollisionAllowed: defaultCollisionAllowed,
+					damage: out damage
+				);
+
+				entId = ((Player)intruderEnt).whoAmI;
+				entType = BarrierIntruderType.Player;
+			} else if( intruderEnt is NPC ) {
+				isDefaultCollision = this.ApplyNpcCollisionHit_If(
+					intruderNpc: (NPC)intruderEnt,
+					defaultCollisionAllowed: defaultCollisionAllowed,
+					syncIfServer: syncProjectileIfServer,
+					damage: out damage
+				);
+
+				entId = ((NPC)intruderEnt).whoAmI;
+				entType = BarrierIntruderType.NPC;
+			}
+
+			//
 
 			return isDefaultCollision;
 		}

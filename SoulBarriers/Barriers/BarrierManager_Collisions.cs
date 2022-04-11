@@ -15,6 +15,8 @@ namespace SoulBarriers.Barriers {
 				return;
 			}
 
+			//
+
 			IEnumerable<Barrier> activeBarriers = this.BarriersByID.Values
 				.Where( b => b.IsActive );
 
@@ -23,6 +25,8 @@ namespace SoulBarriers.Barriers {
 				if( hitBarriers == null ) {
 					continue;
 				}
+
+				//
 
 				foreach( Barrier hitBarrier in hitBarriers ) {
 					barrier.ApplyBarrierCollisionHit( hitBarrier, true, true );
@@ -52,7 +56,7 @@ namespace SoulBarriers.Barriers {
 //	"collide? "+barrier.IsEntityColliding( ent)
 //);
 				if( barrier.IsEntityColliding(ref ent) ) {
-					barrier.ApplyEntityCollisionHit_Syncs( ent, null, true );
+					barrier.ApplyEntityCollisionHit_If_Syncs( ent, null, true );
 
 					if( !ent.active ) {
 						return;
@@ -74,7 +78,7 @@ namespace SoulBarriers.Barriers {
 				}
 
 				if( barrier.IsEntityColliding(ref ent) ) {
-					barrier.ApplyEntityCollisionHit_Syncs( ent, null, true );
+					barrier.ApplyEntityCollisionHit_If_Syncs( ent, null, true );
 
 					if( !ent.active ) {
 						return;
@@ -98,7 +102,7 @@ namespace SoulBarriers.Barriers {
 	ent.height
 ) );*/
 				if( barrier.IsEntityColliding(ref ent) ) {
-					barrier.ApplyEntityCollisionHit_Syncs( ent, null, Main.netMode == NetmodeID.Server );
+					barrier.ApplyEntityCollisionHit_If_Syncs( ent, null, Main.netMode == NetmodeID.Server );
 
 					if( !ent.active ) {
 						return;

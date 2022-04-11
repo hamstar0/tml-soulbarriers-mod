@@ -41,7 +41,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 
 		////////////////
 
-		public void ApplyAccessPlayerHit( Player intruder ) {
+		public void ApplyPlayerHit_If( Player intruder ) {
 			if( intruder.dead ) {
 				return;
 			}
@@ -49,14 +49,20 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 				return;
 			}
 
+			//
+
 			intruder.KillMe(
 				damageSource: PlayerDeathReason.ByCustomReason( "Access denied." ),
 				dmg: 999999999,
 				hitDirection: 0
 			);
 
+			//
+
 			var myplayer = intruder.GetModPlayer<SoulBarriersPlayer>();
 			myplayer.BarrierImmunityTimer = 60 * 2;
+
+			//
 
 			if( Main.netMode == NetmodeID.Server ) {
 				NetMessage.SendData( MessageID.PlayerHealth, -1, -1, null, intruder.whoAmI );
@@ -64,22 +70,28 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 		}
 
 
-		public void ApplyAccessNpcHit( NPC intruder ) {
+		public void ApplyNpcHit_If( NPC intruder ) {
 			if( !this.CanHitNPC(intruder) ) {
 				return;
 			}
+
+			//
 
 			var mynpc = intruder.GetGlobalNPC<SoulBarriersNPC>();
 			mynpc.KillFromBarrier = true;
 		}
 
 
-		public void ApplyAccessProjectileHit( Projectile intruder ) {
+		public void ApplyProjectileHit_If( Projectile intruder ) {
 			if( !this.CanHitProjectile(intruder) ) {
 				return;
 			}
 
+			//
+
 			intruder.Kill();
+
+			//
 
 			if( Main.netMode == NetmodeID.Server ) {
 				NetMessage.SendData( MessageID.KillProjectile, -1, -1, null, intruder.whoAmI );

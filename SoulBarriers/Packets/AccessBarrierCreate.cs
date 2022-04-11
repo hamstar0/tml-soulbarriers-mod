@@ -77,7 +77,10 @@ namespace SoulBarriers.Packets {
 				color: color,
 				isSaveable: true
 			);
+
 			BarrierManager.Instance.DeclareWorldBarrierUnsynced( barrier );
+
+			//
 
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
 				LogLibraries.Alert( "Barrier created: "+ barrier.ID

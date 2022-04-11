@@ -20,13 +20,15 @@ namespace SoulBarriers.Packets {
 				throw new ModLibsException( "Not server." );
 			}
 
-			var packet = new BarrierStrengthPacket( barrier, strength, applyHitFx, clearRegenBuffer );
+			//
+
+			var packet = new BarrierStrengthPacket( plrWho, barrier, strength, applyHitFx, clearRegenBuffer );
 
 			SimplePacket.SendToClient( packet, plrWho, -1 );
 		}
 
 
-		public static void SyncToServerForEveryone(
+		public static void SyncToServerToEveryone_Local(
 					Barrier barrier,
 					double strength,
 					bool applyHitFx,
@@ -34,8 +36,19 @@ namespace SoulBarriers.Packets {
 			if( Main.netMode != NetmodeID.MultiplayerClient ) {
 				throw new ModLibsException( "Not client." );
 			}
+			if( barrier.Host.whoAmI != Main.myPlayer ) {
+				throw new ModLibsException( "Not local client." );
+			}
 
-			var packet = new BarrierStrengthPacket( barrier, strength, applyHitFx, clearRegenBuffer );
+			//
+
+			var packet = new BarrierStrengthPacket(
+				barrier.Host.whoAmI,
+				barrier,
+				strength,
+				applyHitFx,
+				clearRegenBuffer
+			);
 
 			SimplePacket.SendToServer( packet );
 		}
@@ -43,6 +56,8 @@ namespace SoulBarriers.Packets {
 
 
 		////////////////
+
+		public int PlayerWho;
 
 		public string BarrierID;
 
@@ -58,7 +73,13 @@ namespace SoulBarriers.Packets {
 
 		private BarrierStrengthPacket() { }
 
-		private BarrierStrengthPacket( Barrier barrier, double strength, bool applyHitFx, bool clearRegenBuffer ) {
+		private BarrierStrengthPacket(
+					int playerWho,
+					Barrier barrier,
+					double strength,
+					bool applyHitFx,
+					bool clearRegenBuffer ) {
+			this.PlayerWho = playerWho;
 			this.BarrierID = barrier.ID;
 			this.Strength = strength;
 			this.ApplyHitFx = applyHitFx;
@@ -70,9 +91,13 @@ namespace SoulBarriers.Packets {
 		private void Receive( int fromWho ) {
 			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
 			if( barrier == null ) {
-				LogLibraries.Warn( "No such barrier from "+Main.player[fromWho]+" ("+fromWho+") id'd: "+this.BarrierID );
+				LogLibraries.Warn( $"No such barrier from {Main.player[fromWho].name} ({fromWho}) id'd: "
+					+this.BarrierID );
+
 				return;
 			}
+
+			//
 
 			if( Main.netMode != NetmodeID.Server ) {
 				double damage = barrier.Strength - this.Strength;
@@ -87,7 +112,11 @@ namespace SoulBarriers.Packets {
 				}
 			}
 
+			//
+
 			barrier.SetStrength( this.Strength, this.ClearRegenBuffer, false, false );
+
+			//
 
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
 				LogLibraries.Alert( "Barrier strength set: "+barrier.ID
@@ -101,7 +130,7 @@ namespace SoulBarriers.Packets {
 		////
 
 		public override void ReceiveOnClient() {
-			this.Receive( 255 );
+			this.Receive( this.PlayerWho );
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {

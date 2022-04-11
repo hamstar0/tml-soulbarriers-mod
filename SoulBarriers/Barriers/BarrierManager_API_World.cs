@@ -55,6 +55,8 @@ namespace SoulBarriers.Barriers {
 			if( barrier != null ) {
 				this.BarriersByID.Remove( barrier.ID );
 
+				//
+
 				if( syncIfServer && Main.netMode == NetmodeID.Server ) {
 					BarrierRemovePacket.BroadcastToClients( barrier );
 				}

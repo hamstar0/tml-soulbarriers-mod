@@ -54,6 +54,8 @@ namespace SoulBarriers.Packets {
 				customStrengthRegenPerTick: (int?)this.StrengthRegenPerTick
 			);
 
+			//
+
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
 				LogLibraries.Alert( "NPC barrier created: "+ barrier.ID
 					+", NPC Who:"+barrier.HostWhoAmI

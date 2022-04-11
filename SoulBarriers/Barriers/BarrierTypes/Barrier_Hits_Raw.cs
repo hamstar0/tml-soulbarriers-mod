@@ -48,6 +48,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				}
 			}
 
+			//
+
 			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
 				BarrierHitRawPacket.BroadcastToClients(
 					barrier: this,

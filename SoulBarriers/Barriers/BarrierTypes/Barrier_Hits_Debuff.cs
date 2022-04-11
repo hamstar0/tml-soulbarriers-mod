@@ -25,7 +25,7 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			//
 
-			this.ApplyPlayerDebuffRemoveAndBarrierHit( buffType, this.Strength - damage, syncIfServer );
+			this.ApplyPlayerDebuffRemoveAndBarrierHit( buffType, damage, syncIfServer );
 
 			return true;
 		}
@@ -33,9 +33,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		internal void ApplyPlayerDebuffRemoveAndBarrierHit(
 					int buffType,
-					double newBarrierStrength,
+					double damage,
 					bool syncIfServer ) {
-			var config = SoulBarriersConfig.Instance;
 			var hostPlayer = (Player)this.Host;
 			int buffIdx = hostPlayer?.FindBuffIndex( buffType ) ?? -1;
 
@@ -47,10 +46,6 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 			//
 
-			double damage = (double)config.Get<float>( nameof(config.BarrierStrengthCostToRemoveDebuff) );
-
-			//
-			
 			if( SoulBarriersConfig.Instance.DebugModeHitInfo ) {
 				var hitData = new BarrierHitContext( "PlrDebuff_"+buffType, damage );
 
@@ -58,6 +53,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 			}
 
 			//
+
+			double oldBarrierStrength = this.Strength;
 
 			this.SetStrength(
 				strength: this.Strength - damage,
@@ -80,7 +77,8 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				BarrierHitDebuffPacket.BroadcastToClients(
 					barrier: this,
 					buffType: buffType,
-					newBarrierStrength: this.Strength
+					damage: damage,
+					oldBarrierStrength: oldBarrierStrength
 				);
 
 				NetMessage.SendData( MessageID.SyncPlayer, -1, -1, null, hostPlayer.whoAmI );

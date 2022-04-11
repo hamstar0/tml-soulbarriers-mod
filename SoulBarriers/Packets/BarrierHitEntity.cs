@@ -14,7 +14,9 @@ namespace SoulBarriers.Packets {
 					Barrier barrier,
 					BarrierIntruderType entityType,
 					int entityIdentity,
-					bool defaultCollisionAllowed ) {
+					bool defaultCollisionAllowed,
+					//double damage,
+					double oldBarrierStrength ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
@@ -27,7 +29,9 @@ namespace SoulBarriers.Packets {
 				barrier: barrier,
 				entityType: entityType,
 				entityIdentity: entityIdentity,
-				defaultCollisionAllowed: defaultCollisionAllowed
+				defaultCollisionAllowed: defaultCollisionAllowed,
+				//damage: damage
+				oldBarrierStrength: oldBarrierStrength
 			);
 
 			SimplePacket.SendToClient( packet );
@@ -45,6 +49,10 @@ namespace SoulBarriers.Packets {
 
 		public bool DefaultCollisionAllowed;
 
+		//public double Damage;
+
+		public double OldBarrierStrength;
+
 
 
 		////////////////
@@ -55,16 +63,20 @@ namespace SoulBarriers.Packets {
 					Barrier barrier,
 					BarrierIntruderType entityType,
 					int entityIdentity,
-					bool defaultCollisionAllowed ) {
+					bool defaultCollisionAllowed,
+					//double damage,
+					double oldBarrierStrength ) {
 			this.BarrierID = barrier.ID;
 			this.EntityType = (int)entityType;
 			this.EntityIdentity = entityIdentity;
 			this.DefaultCollisionAllowed = defaultCollisionAllowed;
+			//this.Damage = damage;
+			this.OldBarrierStrength = oldBarrierStrength;
 		}
 
 		////////////////
 
-		private void Receive() {
+		private void Receive_If() {
 			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
 			if( barrier == null ) {
 				LogLibraries.Warn( "No such barrier id'd: "+this.BarrierID );
@@ -97,7 +109,11 @@ namespace SoulBarriers.Packets {
 
 			//
 
-			bool hasHit = barrier.ApplyEntityCollisionHit_Syncs(
+			barrier.SetStrength( this.OldBarrierStrength, false, false, false );
+
+			//
+
+			bool hasHit = barrier.ApplyEntityCollisionHit_If_Syncs(
 				intruderEnt: entity,
 				defaultCollisionAllowedIf: this.DefaultCollisionAllowed,
 				syncIfServer: false
@@ -113,7 +129,7 @@ namespace SoulBarriers.Packets {
 		////
 
 		public override void ReceiveOnClient() {
-			this.Receive();
+			this.Receive_If();
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {

@@ -44,8 +44,12 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 			if( !hasSoulBuff ) {
 				this.SetStrength( 0, true, false, false );
 
+				//
+
 				if( Main.netMode == NetmodeID.MultiplayerClient ) {
-					BarrierStrengthPacket.SyncToServerForEveryone( this, 0, false, true );
+					if( plr.whoAmI == Main.myPlayer ) {
+						BarrierStrengthPacket.SyncToServerToEveryone_Local( this, 0, false, true );
+					}
 				}
 			}
 		}

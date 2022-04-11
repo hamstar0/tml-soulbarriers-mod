@@ -60,8 +60,11 @@ namespace SoulBarriers.Packets {
 			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
 			if( barrier == null ) {
 				LogLibraries.Warn( "No such barrier id'd: "+this.BarrierID );
+
 				return;
 			}
+
+			//
 
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
 				LogLibraries.Alert( "Barrier hit: "+this.BarrierID
@@ -69,6 +72,8 @@ namespace SoulBarriers.Packets {
 					+", dmg: "+this.Damage
 				);
 			}
+
+			//
 
 			barrier.ApplyMetaphysicalHit(
 				hitAt: this.HasHitPosition ? this.HitPosition : (Vector2?)null,

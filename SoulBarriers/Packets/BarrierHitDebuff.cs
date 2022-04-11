@@ -10,12 +10,16 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 namespace SoulBarriers.Packets {
 	class BarrierHitDebuffPacket : SimplePacketPayload {
-		public static void BroadcastToClients( Barrier barrier, int buffType, double newBarrierStrength ) {
+		public static void BroadcastToClients(
+					Barrier barrier,
+					int buffType,
+					double damage,
+					double oldBarrierStrength ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
 
-			var packet = new BarrierHitDebuffPacket( barrier, buffType, newBarrierStrength );
+			var packet = new BarrierHitDebuffPacket( barrier, buffType, damage, oldBarrierStrength );
 
 			SimplePacket.SendToClient( packet );
 		}
@@ -28,7 +32,9 @@ namespace SoulBarriers.Packets {
 
 		public int BuffType;
 
-		public double NewBarrierStrength;
+		public double Damage;
+
+		public double OldBarrierStrength;
 
 
 
@@ -36,38 +42,51 @@ namespace SoulBarriers.Packets {
 
 		private BarrierHitDebuffPacket() { }
 
-		private BarrierHitDebuffPacket( Barrier barrier, int buffType, double newBarrierStrength ) {
+		private BarrierHitDebuffPacket(
+					Barrier barrier,
+					int buffType,
+					double damage,
+					double oldBarrierStrength ) {
 			this.BarrierID = barrier.ID;
 			this.BuffType = buffType;
-			this.NewBarrierStrength = newBarrierStrength;
+			this.Damage = damage;
+			this.OldBarrierStrength = oldBarrierStrength;
 		}
 
 		////////////////
 
-		private void Receive() {
+		private void Receive_If() {
 			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
 			if( barrier == null ) {
 				LogLibraries.Warn( "No such barrier id'd: "+this.BarrierID );
+
 				return;
 			}
+
+			//
 
 			if( SoulBarriersConfig.Instance.DebugModeNetInfo ) {
 				LogLibraries.Alert(
 					"Barrier hit: "+this.BarrierID
 					+", BuffType: "+this.BuffType
-					+", NewBarrierStrength: "+this.NewBarrierStrength
+					+", Damage: "+this.Damage
+					+", OldBarrierStrength: "+this.OldBarrierStrength
 				);
 			}
 
 			//
 
-			barrier.ApplyPlayerDebuffRemoveAndBarrierHit( this.BuffType, this.NewBarrierStrength, false );
+			barrier.SetStrength( this.OldBarrierStrength, false, false, false );
+
+			//
+
+			barrier.ApplyPlayerDebuffRemoveAndBarrierHit( this.BuffType, this.Damage, false );
 		}
 
 		////
 
 		public override void ReceiveOnClient() {
-			this.Receive();
+			this.Receive_If();
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {

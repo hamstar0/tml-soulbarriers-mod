@@ -50,13 +50,15 @@ namespace SoulBarriers.Items {
 
 			//
 
-			if( Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer ) {
-				BarrierStrengthPacket.SyncToServerForEveryone(
-					barrier: myplayer.Barrier,
-					strength: barrierStr,
-					applyHitFx: false,
-					clearRegenBuffer: true
-				);
+			if( Main.netMode == NetmodeID.MultiplayerClient ) {
+				if( player.whoAmI == Main.myPlayer ) {
+					BarrierStrengthPacket.SyncToServerToEveryone_Local(
+						barrier: myplayer.Barrier,
+						strength: barrierStr,
+						applyHitFx: false,
+						clearRegenBuffer: true
+					);
+				}
 			}
 
 			//

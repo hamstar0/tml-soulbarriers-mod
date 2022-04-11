@@ -16,11 +16,11 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 
 //DebugLibraries.ChatOnce( "b_col_ent_"+this.GetID(), "ent: "+intruder );
 			if( intruder is Player ) {
-				this.ApplyAccessPlayerHit( intruder as Player );
+				this.ApplyPlayerHit_If( intruder as Player );
 			} else if( intruder is NPC ) {
-				this.ApplyAccessNpcHit( intruder as NPC );
+				this.ApplyNpcHit_If( intruder as NPC );
 			} else if( intruder is Projectile ) {
-				this.ApplyAccessProjectileHit( intruder as Projectile );
+				this.ApplyProjectileHit_If( intruder as Projectile );
 			}
 
 			return false;
