@@ -22,7 +22,7 @@ namespace SoulBarriers.Packets {
 
 			//
 
-			var packet = new BarrierStrengthPacket( plrWho, barrier, strength, applyHitFx, clearRegenBuffer );
+			var packet = new BarrierStrengthPacket( barrier, strength, applyHitFx, clearRegenBuffer );
 
 			SimplePacket.SendToClient( packet, plrWho, -1 );
 		}
@@ -43,7 +43,6 @@ namespace SoulBarriers.Packets {
 			//
 
 			var packet = new BarrierStrengthPacket(
-				barrier.Host.whoAmI,
 				barrier,
 				strength,
 				applyHitFx,
@@ -56,8 +55,6 @@ namespace SoulBarriers.Packets {
 
 
 		////////////////
-
-		public int PlayerWho;
 
 		public string BarrierID;
 
@@ -74,12 +71,10 @@ namespace SoulBarriers.Packets {
 		private BarrierStrengthPacket() { }
 
 		private BarrierStrengthPacket(
-					int playerWho,
 					Barrier barrier,
 					double strength,
 					bool applyHitFx,
 					bool clearRegenBuffer ) {
-			this.PlayerWho = playerWho;
 			this.BarrierID = barrier.ID;
 			this.Strength = strength;
 			this.ApplyHitFx = applyHitFx;
@@ -92,12 +87,7 @@ namespace SoulBarriers.Packets {
 			Barrier barrier = BarrierManager.Instance.GetBarrierByID( this.BarrierID );
 
 			if( barrier == null ) {
-				Player plr = Main.player[this.PlayerWho];
-
-				LogLibraries.Warn( 
-					$"No such barrier from {plr?.name} ({this.PlayerWho}) id'd: "
-					+this.BarrierID
-				);
+				LogLibraries.Warn(  $"No such barrier id'd: {this.BarrierID}" );
 
 				return;
 			}

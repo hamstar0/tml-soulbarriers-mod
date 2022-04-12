@@ -53,6 +53,8 @@ namespace SoulBarriers.Barriers {
 				.SafeSelect( mod => mod.Code )
 				.SafeWhere( code => code != null );
 
+			//
+
 			foreach( Assembly ass in asses ) {
 				foreach( Type classType in ass.GetTypes() ) {
 					try {
@@ -62,6 +64,8 @@ namespace SoulBarriers.Barriers {
 						if( !iBarrierFactoryType.IsAssignableFrom(classType) ) {
 							continue;
 						}
+
+						//
 
 						object obj = TmlLibraries.SafelyGetInstanceForType( classType );
 
