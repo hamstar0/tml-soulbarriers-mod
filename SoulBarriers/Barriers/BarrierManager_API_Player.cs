@@ -41,10 +41,14 @@ namespace SoulBarriers.Barriers {
 				throw new ModLibsException( "Player barrier already exists." );
 			}
 
+			//
+
 			var config = SoulBarriersConfig.Instance;
 			float radius = config.Get<float>( nameof(config.DefaultPlayerBarrierRadius) );
 			// Decays slowly (1 hp / 3s)
 			float strengthRegenPerTick = config.Get<float>( nameof(config.PBGBarrierDefaultRegenPercentPerTick) );
+
+			//
 
 			Barrier barrier = new PersonalBarrier(
 				id: "PlayerPersonalBarrier_"+playerWho,
@@ -57,8 +61,13 @@ namespace SoulBarriers.Barriers {
 			);
 
 			this.PlayerBarriers[playerWho] = barrier;
+			this.BarriersByID[barrier.ID] = barrier;
+
+			//
 
 			SoulBarriersAPI.RunBarrierCreateHooks( barrier );
+
+			//
 
 			return barrier;
 		}
@@ -69,6 +78,8 @@ namespace SoulBarriers.Barriers {
 		public void RemovePlayerBarrier( int playerWho, bool syncIfServer ) {
 			Barrier barrier = this.PlayerBarriers.GetOrDefault( playerWho );
 
+			//
+
 			if( barrier != null ) {
 				this.BarriersByID.Remove( barrier.ID );
 
@@ -76,6 +87,8 @@ namespace SoulBarriers.Barriers {
 					BarrierRemovePacket.BroadcastToClients( barrier );
 				}
 			}
+
+			//
 
 			this.PlayerBarriers.Remove( playerWho );
 
@@ -86,14 +99,12 @@ namespace SoulBarriers.Barriers {
 
 		////
 
-		public void RemoveAllPlayerBarriersNoSync() {
-			foreach( string id in this.PlayerBarriers.Values.Select(b=>b.ID) ) {
-				Barrier barrier = this.BarriersByID[id];
-
-				if( this.BarriersByID.Remove(id) ) {
-					SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
-				}
+		public void RemoveAllPlayerBarriers( bool syncIfServer ) {
+			foreach( int plrWho in this.PlayerBarriers.Keys.ToArray() ) {
+				this.RemovePlayerBarrier( plrWho, syncIfServer );
 			}
+
+			//
 
 			this.PlayerBarriers.Clear();
 		}

@@ -17,7 +17,7 @@ namespace SoulBarriers {
 
 			//
 
-			mngr.RemoveAllWorldBarriersNoSync();
+			mngr.RemoveAllWorldBarriers( false );
 
 			//
 

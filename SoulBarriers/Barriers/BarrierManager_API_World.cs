@@ -21,6 +21,12 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
+		public Barrier GetWorldBarrier( Rectangle tileArea ) {
+			return this.TileBarriers.GetOrDefault( tileArea );
+		}
+
+		////
+
 		public IDictionary<Rectangle, Barrier> GetTileBarriers() {
 			return this.TileBarriers
 				.ToDictionary( kv => kv.Key, kv => kv.Value );
@@ -28,16 +34,11 @@ namespace SoulBarriers.Barriers {
 
 
 		////////////////
-
-		public Barrier GetWorldBarrier( Rectangle tileArea ) {
-			return this.TileBarriers.GetOrDefault( tileArea );
-		}
-
-
-		////////////////
 		
 		public bool DeclareWorldBarrier_Unsynced( RectangularBarrier barrier ) {
 			this.TileBarriers[barrier.TileArea] = barrier;
+
+			this.BarriersByID[barrier.ID] = barrier;
 
 			//
 
@@ -62,29 +63,9 @@ namespace SoulBarriers.Barriers {
 				}
 			}
 
+			//
+
 			this.TileBarriers.Remove( tileArea );
-
-			//
-			
-			SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
-		}
-
-		public void RemoveNonWorldBarrier( Barrier barrier, bool syncIfServer ) {
-			if( barrier.Host != null ) {
-				this.RemoveEntityBarrier( barrier.Host, syncIfServer );
-
-				return;
-			}
-
-			//
-
-			this.BarriersByID.Remove( barrier.ID );
-
-			//
-			
-			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
-				BarrierRemovePacket.BroadcastToClients( barrier );
-			}
 
 			//
 			
@@ -93,16 +74,31 @@ namespace SoulBarriers.Barriers {
 
 		////
 
-		public void RemoveAllWorldBarriersNoSync() {
-			foreach( string id in this.TileBarriers.Values.Select(b=>b.ID) ) {
-				Barrier barrier = this.BarriersByID[id];
-
-				if( this.BarriersByID.Remove(id) ) {
-					SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
-				}
+		public void RemoveAllWorldBarriers( bool syncIfServer ) {
+			foreach( Rectangle rect in this.TileBarriers.Keys.ToArray() ) {
+				this.RemoveWorldBarrier( rect, syncIfServer );
 			}
 
+			//
+
 			this.TileBarriers.Clear();
+		}
+
+
+		////////////////
+
+		public void RemoveNonWorldBarrier( Barrier barrier, bool syncIfServer ) {
+			this.BarriersByID.Remove( barrier.ID );
+
+			//
+
+			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
+				BarrierRemovePacket.BroadcastToClients( barrier );
+			}
+
+			//
+
+			SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
 		}
 	}
 }

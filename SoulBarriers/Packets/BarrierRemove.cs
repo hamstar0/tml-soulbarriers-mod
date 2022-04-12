@@ -6,7 +6,6 @@ using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Services.Network.SimplePacket;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
-using SoulBarriers.Barriers.BarrierTypes.Spherical;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular;
 
 

@@ -41,6 +41,8 @@ namespace SoulBarriers.Barriers {
 				throw new ModLibsException( "NPC barrier already exists." );
 			}
 
+			//
+
 			Barrier barrier = new PersonalBarrier(
 				id: "NPCPersonalBarrier_"+npcWho,
 				hostType: BarrierHostType.NPC,
@@ -51,9 +53,16 @@ namespace SoulBarriers.Barriers {
 				color: Color.Magenta
 			);
 
+			//
+
 			this.NPCBarriers[npcWho] = barrier;
+			this.BarriersByID[barrier.ID] = barrier;
+
+			//
 
 			SoulBarriersAPI.RunBarrierCreateHooks( barrier );
+
+			//
 
 			return barrier;
 		}
@@ -64,6 +73,8 @@ namespace SoulBarriers.Barriers {
 		public void RemoveNPCBarrier( int npcWho, bool syncIfServer ) {
 			Barrier barrier = this.NPCBarriers.GetOrDefault( npcWho );
 
+			//
+
 			if( barrier != null ) {
 				this.BarriersByID.Remove( barrier.ID );
 
@@ -72,23 +83,23 @@ namespace SoulBarriers.Barriers {
 				}
 			}
 
+			//
+
 			this.NPCBarriers.Remove( npcWho );
 
 			//
-
+			
 			SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
 		}
 
 		////
 
-		public void RemoveAllNPCBarriersNoSync() {
-			foreach( string id in this.NPCBarriers.Values.Select(b=>b.ID) ) {
-				Barrier barrier = this.BarriersByID[id];
-
-				if( this.BarriersByID.Remove(id) ) {
-					SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
-				}
+		public void RemoveAllNPCBarriers( bool syncIfServer ) {
+			foreach( int npcWho in this.NPCBarriers.Keys.ToArray() ) {
+				this.RemoveNPCBarrier( npcWho, syncIfServer );
 			}
+
+			//
 
 			this.NPCBarriers.Clear();
 		}
