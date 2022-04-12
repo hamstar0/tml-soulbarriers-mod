@@ -58,7 +58,7 @@ namespace SoulBarriers.Commands {
 			);
 
 			if( Main.netMode != NetmodeID.MultiplayerClient ) {
-				SoulBarriersAPI.DeclareWorldAccessBarrier( barrier );
+				SoulBarriersAPI.DeclareWorldBarrier( barrier, true );
 			} else {
 				Main.NewText( "Cannot call command in MP?" );
 			}

@@ -21,16 +21,17 @@ namespace SoulBarriers {
 
 			//
 
-			if( !tag.ContainsKey("barrier_count2") ) {
+			if( !tag.ContainsKey("barrier_count3") ) {
 				return;
 			}
 			
 			//
 
-			int count = tag.GetInt( "barrier_count2" );
+			int count = tag.GetInt( "barrier_count3" );
 
 			for( int i=0; i<count; i++ ) {
 				string typeName = tag.GetString( $"barrier_{i}_type" );
+				string id = tag.GetString( $"barrier_{i}_id" );
 				int x = tag.GetInt( $"barrier_{i}_area_x" );
 				int y = tag.GetInt( $"barrier_{i}_area_y" );
 				int w = tag.GetInt( $"barrier_{i}_area_w" );
@@ -45,6 +46,7 @@ namespace SoulBarriers {
 
 				Barrier barrier = BarrierManager.Instance.FactoryCreateBarrier(
 					barrierTypeName: typeName,
+					id: id,
 					hostType: BarrierHostType.None,
 					hostWhoAmI: -1,
 					data: new Rectangle(x, y, w, h),
@@ -52,7 +54,7 @@ namespace SoulBarriers {
 					maxRegenStrength: maxStr,
 					strengthRegenPerTick: strRegen,
 					color: new Color(cR, cG, cB),
-					isSaveable: true
+					isSaveable: true	// obvious?
 				);
 
 				//
@@ -80,6 +82,7 @@ namespace SoulBarriers {
 				//
 
 				tag[ $"barrier_{i}_type" ] = barrier.GetType().FullName;
+				tag[ $"barrier_{i}_id" ] = barrier.ID;
 				tag[ $"barrier_{i}_area_x" ] = (int)tileRect.X;
 				tag[ $"barrier_{i}_area_y" ] = (int)tileRect.Y;
 				tag[ $"barrier_{i}_area_w" ] = (int)tileRect.Width;
@@ -92,7 +95,7 @@ namespace SoulBarriers {
 				i++;
 			}
 
-			tag["barrier_count2"] = (int)i;
+			tag["barrier_count3"] = (int)i;
 
 			//
 

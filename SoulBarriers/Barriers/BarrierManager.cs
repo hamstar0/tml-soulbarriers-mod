@@ -80,6 +80,7 @@ namespace SoulBarriers.Barriers {
 
 		public Barrier FactoryCreateBarrier(
 					string barrierTypeName,
+					string id,
 					BarrierHostType hostType,
 					int hostWhoAmI,
 					object data,
@@ -91,6 +92,7 @@ namespace SoulBarriers.Barriers {
 			IBarrierFactory factoryBarrier = this.BarrierFactories.GetOrDefault( barrierTypeName );
 
 			return factoryBarrier?.FactoryCreate(
+				id: id,
 				hostType: hostType,
 				hostWhoAmI: hostWhoAmI,
 				data: data,
