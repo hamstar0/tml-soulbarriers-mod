@@ -63,9 +63,17 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 			myplayer.BarrierImmunityTimer = 60 * 2;
 
 			//
-
+			
 			if( Main.netMode == NetmodeID.Server ) {
-				NetMessage.SendData( MessageID.PlayerHealth, -1, -1, null, intruder.whoAmI );
+				NetMessage.SendPlayerHurt(
+					playerTargetIndex: intruder.whoAmI,
+					reason: PlayerDeathReason.ByCustomReason("Access denies."),
+					damage: 999999999,
+					direction: 0,
+					critical: false,
+					pvp: false,
+					hitContext: -1
+				);
 			}
 		}
 
