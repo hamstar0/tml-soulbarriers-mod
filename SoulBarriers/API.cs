@@ -38,16 +38,16 @@ namespace SoulBarriers {
 
 		////
 
-		public static void DeclareWorldBarrier( AccessBarrier barrier, bool syncIfServer ) {
+		public static void DeclareWorldBarrier( RectangularBarrier barrier, bool syncIfServer ) {
 			BarrierManager.Instance.DeclareWorldBarrier_Unsynced( barrier );
 
 			//
 
 			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
-				AccessBarrierCreatePacket.BroadcastToClients( barrier );
+				WorldBarrierCreatePacket.BroadcastToClients( barrier );
 			}
 		}
-
+		
 		[Obsolete( "use `DeclareWorldBarrier`)", true )]
 		public static void DeclareWorldAccessBarrier( AccessBarrier barrier ) {
 			SoulBarriersAPI.DeclareWorldBarrier( barrier, true );

@@ -8,17 +8,16 @@ using ModLibsCore.Services.Network.SimplePacket;
 using SoulBarriers.Barriers;
 using SoulBarriers.Barriers.BarrierTypes;
 using SoulBarriers.Barriers.BarrierTypes.Rectangular;
-using SoulBarriers.Barriers.BarrierTypes.Rectangular.Access;
 
 
 namespace SoulBarriers.Packets {
-	class AccessBarrierCreatePacket : SimplePacketPayload {
-		public static void BroadcastToClients( AccessBarrier barrier ) {
+	class WorldBarrierCreatePacket : SimplePacketPayload {
+		public static void BroadcastToClients( RectangularBarrier barrier ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException( "Not server." );
 			}
 
-			var packet = new AccessBarrierCreatePacket( barrier );
+			var packet = new WorldBarrierCreatePacket( barrier );
 
 			SimplePacket.SendToClient( packet );
 		}
@@ -51,9 +50,9 @@ namespace SoulBarriers.Packets {
 
 		////////////////
 
-		private AccessBarrierCreatePacket() { }
+		private WorldBarrierCreatePacket() { }
 
-		private AccessBarrierCreatePacket( AccessBarrier barrier ) {
+		private WorldBarrierCreatePacket( RectangularBarrier barrier ) {
 			this.BarrierType = barrier.GetType().Name;
 			this.ID = barrier.ID;
 			this.HostType = (int)barrier.HostType;
