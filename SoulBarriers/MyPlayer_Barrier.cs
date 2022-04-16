@@ -15,6 +15,8 @@ namespace SoulBarriers {
 				}
 			}
 
+			//
+
 			if( this.player.dead ) {
 				if( this.Barrier.Strength > 0d ) {
 					this.Barrier.SetStrength( 0, true, true, false );	// TODO: Confirm no sync

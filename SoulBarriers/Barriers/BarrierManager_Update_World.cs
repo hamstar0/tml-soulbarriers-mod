@@ -14,6 +14,8 @@ namespace SoulBarriers.Barriers {
 			// New barrier found
 			if( !this.BarriersByID.ContainsKey( barrier.ID ) ) {
 				this.BarriersByID[ barrier.ID ] = barrier;
+
+				LogLibraries.Warn( "New world barrier unexpectedly discovered: " + barrier.ID );
 			}
 		}
 	}
