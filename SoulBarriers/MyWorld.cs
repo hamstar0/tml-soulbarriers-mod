@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -58,8 +60,7 @@ namespace SoulBarriers {
 				);
 
 				//
-
-				// TODO
+				
 				if( barrier is RectangularBarrier ) {
 					mngr.DeclareWorldBarrier_Unsynced( barrier as RectangularBarrier );
 				}
@@ -74,7 +75,7 @@ namespace SoulBarriers {
 			//
 
 			int i = 0;
-			foreach( (Rectangle tileRect, Barrier barrier) in mngr.GetTileBarriers() ) {
+			foreach( (Rectangle tileRect, Barrier barrier) in mngr.GetWorldBarriers() ) {
 				if( !barrier.CanSave() ) {
 					continue;
 				}
@@ -103,96 +104,51 @@ namespace SoulBarriers {
 		}
 
 
-		////
+		////////////////
 
-		/*	<- World barriers aren't yet 'generalized' for this use; manual sync required
-		
 		public override void NetReceive( BinaryReader reader ) {
 			var mngr = BarrierManager.Instance;
 
 			int count = reader.ReadInt32();
 
-			for( int i=0; i<count; i++ ) {
-				var rect = new Rectangle(
-					reader.ReadInt32(),
-					reader.ReadInt32(),
-					reader.ReadInt32(),
-					reader.ReadInt32()
-				);
-				double strength = reader.ReadDouble();
-				double maxRegenStrength = reader.ReadDouble();
-				double strengthRegen = reader.ReadDouble();
-				byte colorR = reader.ReadByte();
-				byte colorG = reader.ReadByte();
-				byte colorB = reader.ReadByte();
+			//
 
-				var barrier = new AccessBarrier(
-					tileArea: rect,
-					strength: strength,
-					maxRegenStrength: maxRegenStrength == -1 ? (int?)null : (int?)maxRegenStrength,
-					strengthRegenPerTick: strengthRegen,
-					color: new Color(colorR, colorG, colorB),
-					isSaveable: true,
-					hostType: BarrierHostType.None,
-					hostWhoAmI: -1
-				);
-				mngr.DeclareWorldBarrierUnsynced( barrier );
+			for( int i=0; i<count; i++ ) {
+				Barrier barrier = mngr.NetReceiveWorldBarrier( reader );
+
+				//
+
+				if( barrier is RectangularBarrier ) {
+					mngr.DeclareWorldBarrier_Unsynced( barrier as RectangularBarrier );
+				}
 			}
 		}
 
 
 		public override void NetSend( BinaryWriter writer ) {
 			var mngr = BarrierManager.Instance;
-			int count = mngr.GetWorldBarrierCount();
+			int count = mngr.GetWorldBarriers()
+				.Where( kv => (kv.Value as IBarrierFactory)?.CanSync() ?? false )
+				.Count();
+
+			//
 
 			writer.Write( count );
 
+			//
+
 			foreach( (Rectangle rect, Barrier barrier) in mngr.GetWorldBarriers() ) {
-				writer.Write( rect.X );
-				writer.Write( rect.Y );
-				writer.Write( rect.Width );
-				writer.Write( rect.Height );
-				writer.Write( (double)barrier.Strength );
-				writer.Write( (double)(barrier.MaxRegenStrength.HasValue ? barrier.MaxRegenStrength.Value : -1d) );;
-				writer.Write( (double)barrier.StrengthRegenPerTick );
-				writer.Write( barrier.Color.R );
-				writer.Write( barrier.Color.G );
-				writer.Write( barrier.Color.B );
-			}
-		}*/
-
-
-		////////////////
-
-		/*public override void PostDrawTiles() {
-			int tileDistBuffer = 8 * 16;
-
-			Rectangle plrWldRect = Main.LocalPlayer.getRect();
-			plrWldRect.X -= 80 * 16 + tileDistBuffer;
-			plrWldRect.Y -= 60 * 16 + tileDistBuffer;
-			plrWldRect.Width += 160 * 16 + (tileDistBuffer * tileDistBuffer);
-			plrWldRect.Height += 120 * 16 + (tileDistBuffer * tileDistBuffer);
-
-			Rectangle plrTileRect = new Rectangle(
-				plrWldRect.X / 16,
-				plrWldRect.Y / 16,
-				plrWldRect.Width / 16,
-				plrWldRect.Height / 16
-			);
-
-			foreach( (Rectangle tileRect, Barrier barrier) in BarrierManager.Instance.GetTileBarriers() ) {
-				if( !barrier.IsActive ) {
-					continue;
-				}
-				if( !plrTileRect.Intersects(tileRect) ) {
+				IBarrierFactory barrierFac = barrier as IBarrierFactory;
+				if( barrierFac == null ) {
 					continue;
 				}
 
-				int particles = barrier.ComputeCappedNormalParticleCount();
+				//
 
-				barrier.Animate( particles );
-//DebugLibraries.Print( "worldbarrier "+rect, "has:"+barrier.ParticleOffsets.Count+", of:"+particles );
+				writer.Write( barrier.GetType().FullName );
+
+				barrierFac.NetSend( writer );
 			}
-		}*/
+		}
 	}
 }

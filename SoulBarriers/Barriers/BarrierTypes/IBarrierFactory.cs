@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Terraria;
 using Microsoft.Xna.Framework;
 
@@ -15,5 +16,14 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 				double strengthRegenPerTick,
 				Color color,
 				bool isSaveable );
+
+
+		////
+
+		bool CanSync();
+
+		Barrier NetReceiveAsNewBarrier( BinaryReader reader );
+
+		void NetSend( BinaryWriter writer );
 	}
 }

@@ -30,7 +30,7 @@ namespace SoulBarriers {
 		////
 
 		public static Barrier[] GetWorldBarriers() {
-			return BarrierManager.Instance.GetTileBarriers()
+			return BarrierManager.Instance.GetWorldBarriers()
 				.Values
 				.ToArray();
 		}

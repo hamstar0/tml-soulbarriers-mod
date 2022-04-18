@@ -26,7 +26,7 @@ namespace SoulBarriers {
 				plrWldRect.Height / 16
 			);
 
-			foreach( (Rectangle tileRect, Barrier barrier) in BarrierManager.Instance.GetTileBarriers() ) {
+			foreach( (Rectangle tileRect, Barrier barrier) in BarrierManager.Instance.GetWorldBarriers() ) {
 				if( !barrier.IsActive ) {
 					continue;
 				}

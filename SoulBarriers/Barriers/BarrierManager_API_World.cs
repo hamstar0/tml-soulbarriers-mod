@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -27,7 +28,7 @@ namespace SoulBarriers.Barriers {
 
 		////
 
-		public IDictionary<Rectangle, Barrier> GetTileBarriers() {
+		public IDictionary<Rectangle, Barrier> GetWorldBarriers() {
 			return this.TileBarriers
 				.ToDictionary( kv => kv.Key, kv => kv.Value );
 		}
@@ -86,7 +87,7 @@ namespace SoulBarriers.Barriers {
 
 
 		////////////////
-
+		
 		public void RemoveNonWorldBarrier( Barrier barrier, bool syncIfServer ) {
 			this.BarriersByID.Remove( barrier.ID );
 
@@ -99,6 +100,18 @@ namespace SoulBarriers.Barriers {
 			//
 
 			SoulBarriersAPI.RunBarrierRemoveHooks( barrier );
+		}
+
+
+		////////////////
+
+		public Barrier NetReceiveWorldBarrier( BinaryReader reader ) {
+			string typeName = reader.ReadString();
+
+			//
+
+			return this.BarrierFactories[ typeName ]
+				.NetReceiveAsNewBarrier( reader );
 		}
 	}
 }
