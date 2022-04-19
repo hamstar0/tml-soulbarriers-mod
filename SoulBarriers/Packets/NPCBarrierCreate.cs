@@ -15,6 +15,8 @@ namespace SoulBarriers.Packets {
 				throw new ModLibsException( "Not server." );
 			}
 
+			//
+
 			var packet = new NPCBarrierCreatePacket( barrier );
 
 			SimplePacket.SendToClient( packet );
@@ -48,10 +50,12 @@ namespace SoulBarriers.Packets {
 		////////////////
 
 		public override void ReceiveOnClient() {
-			Barrier barrier = SoulBarriersNPC.ApplySpawnBarrierIf(
+			Barrier barrier = SoulBarriersNPC.ApplySpawnBarrier_If(
 				npcWho: this.HostWhoAmI,
 				customStrength: (int?)this.Strength,
-				customStrengthRegenPerTick: (int?)this.StrengthRegenPerTick
+				customStrengthRegenPerTick: (int?)this.StrengthRegenPerTick,
+				noRandomChance: true,
+				syncIfServer: false
 			);
 
 			//

@@ -8,7 +8,7 @@ using SoulBarriers.Barriers.BarrierTypes;
 
 namespace SoulBarriers {
 	partial class SoulBarriersNPC : GlobalNPC {
-		internal bool KillFromBarrier = false;
+		internal bool KillFromBarrier_Host = false;
 
 
 		////////////////
@@ -27,35 +27,50 @@ namespace SoulBarriers {
 		////////////////
 
 		public override bool SpecialNPCLoot( NPC npc ) {
-			return this.KillFromBarrier;
+			return this.KillFromBarrier_Host;
 		}
+
 
 		////////////////
 
 		public override bool PreAI( NPC npc ) {
-			if( npc.life > 0 ) {
-				BarrierManager.Instance.CheckCollisionsAgainstEntity( npc );
-			}
+			bool isKilledByBarrier = this.KillFromBarrier_Host
+				&& Main.netMode != NetmodeID.MultiplayerClient;
 
-			//
+			this.UpdateForBarriers( npc, isKilledByBarrier );
 
-			if( this.KillFromBarrier ) {
-				npc.HitEffect();
-				npc.life = 0;
-				npc.checkDead();
+			return !isKilledByBarrier;
+		}
+
+
+		////////////////
+
+		private void UpdateForBarriers( NPC npc, bool isKilledByBarrier ) {
+			if( Main.netMode != NetmodeID.MultiplayerClient ) {
+				if( !isKilledByBarrier && npc.life > 0 ) {
+					BarrierManager.Instance.CheckCollisionsAgainstEntity( npc );
+				}
+
+				//
+
+				if( isKilledByBarrier ) {
+					npc.HitEffect();
+					npc.life = 0;
+					npc.checkDead();
+
+					//
 				
-				if( Main.netMode == NetmodeID.Server ) {
-					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npc.whoAmI );
+					if( Main.netMode == NetmodeID.Server ) {
+						NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npc.whoAmI );
+					}
 				}
 			}
 
 			//
 
-			this.AnimateBarrierFxIf();
-
-			//
-
-			return !this.KillFromBarrier;
+			if( !isKilledByBarrier ) {
+				this.AnimateBarrierFx_If();
+			}
 		}
 	}
 }

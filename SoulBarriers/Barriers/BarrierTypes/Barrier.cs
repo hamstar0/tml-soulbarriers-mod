@@ -147,6 +147,20 @@ namespace SoulBarriers.Barriers.BarrierTypes {
 
 		////////////////
 
+		public virtual void CopyFrom( Barrier barrier ) {
+			this.ID = barrier.ID;
+			this.InitialStrength = barrier.InitialStrength;
+			this.Strength = barrier.Strength;
+			this.MaxRegenStrength = barrier.MaxRegenStrength;
+			this.StrengthRegenPerTick = barrier.StrengthRegenPerTick;
+			this.Color = barrier.Color;
+			this.HostType = barrier.HostType;
+			this.HostWhoAmI = barrier.HostWhoAmI;
+		}
+
+
+		////////////////
+
 		public double GetStrengthPercent( double? maxStrength = null ) {
 			if( this.MaxRegenStrength.HasValue && this.MaxRegenStrength > 0d ) {
 				return this.Strength / this.MaxRegenStrength.Value;

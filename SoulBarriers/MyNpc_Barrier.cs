@@ -36,28 +36,45 @@ namespace SoulBarriers {
 
 		////////////////
 
-		public static Barrier ApplySpawnBarrierIf( int npcWho, int? customStrength=null, float? customStrengthRegenPerTick=null ) {
-			if( Main.netMode == NetmodeID.MultiplayerClient ) {
+		public static Barrier ApplySpawnBarrier_If(
+					int npcWho,
+					int? customStrength,
+					float? customStrengthRegenPerTick,
+					bool noRandomChance,
+					bool syncIfServer ) {
+			if( !SoulBarriersNPC.CanSpawnWithBarrier(npcWho) ) {
+				return null;
+			}
+
+			if( !noRandomChance && !SoulBarriersNPC.RollBarrierSpawnChance() ) {
 				return null;
 			}
 
 			//
 
-			if( SoulBarriersNPC.CanSpawnWithBarrier(npcWho) ) {
-				if( SoulBarriersNPC.RollBarrierSpawnChance() ) {
-					return SoulBarriersNPC.ApplySpawnBarrier( npcWho, customStrength, customStrengthRegenPerTick );
-				}
-			}
-
-			return null;
+			return SoulBarriersNPC.ApplySpawnBarrier(
+				npcWho,
+				customStrength,
+				customStrengthRegenPerTick,
+				syncIfServer
+			);
 		}
 
 
-		public static Barrier ApplySpawnBarrier( int npcWho, int? customStrength, float? customStrengthRegenPerTick ) {
+		////
+
+		public static Barrier ApplySpawnBarrier(
+					int npcWho,
+					int? customStrength,
+					float? customStrengthRegenPerTick,
+					bool syncIfServer ) {
 			NPC npc = Main.npc[npcWho];
 			var config = SoulBarriersConfig.Instance;
+
+			//
 			
 			int strength;
+
 			if( customStrength.HasValue ) {
 				strength = customStrength.Value;
 			} else {
@@ -65,29 +82,36 @@ namespace SoulBarriers {
 				strength += config.Get<int>( nameof(config.NPCBarrierStrengthAdded) );
 			}
 
+			//
+
 			float strengthRegenPerTick;
+
 			if( customStrengthRegenPerTick.HasValue ) {
 				strengthRegenPerTick = customStrengthRegenPerTick.Value;
 			} else {
 				strengthRegenPerTick = config.Get<float>( nameof(config.NPCBarrierDefaultRegenPercentPerTick) );
 			}
 
+			//
+
 			//float radius = config.Get<float>( nameof( config.DefaultNPCBarrierRadius ) );
 			float radius = npc.scale
 				* (float)Math.Sqrt( (double)((npc.width * npc.width) + (npc.height * npc.height)) )
 				* 1.25f;
 
+			//
+
 			var mynpc = npc.GetGlobalNPC<SoulBarriersNPC>();
 			mynpc.Barrier = BarrierManager.Instance.CreateAndDeclareActiveNPCBarrier(
-				npcWho,
-				strength,
-				strengthRegenPerTick,
-				radius
+				npcWho: npcWho,
+				strength: strength,
+				strengthRegenPerTick: strengthRegenPerTick,
+				radius: radius
 			);
 
 			//
 
-			if( Main.netMode == NetmodeID.Server ) {
+			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
 				NPCBarrierCreatePacket.BroadcastToClients( (PersonalBarrier)mynpc.Barrier );
 			}
 
@@ -98,7 +122,7 @@ namespace SoulBarriers {
 
 		////////////////
 
-		private void AnimateBarrierFxIf() {
+		private void AnimateBarrierFx_If() {
 			if( this.Barrier == null || !this.Barrier.IsActive ) {
 				return;
 			}

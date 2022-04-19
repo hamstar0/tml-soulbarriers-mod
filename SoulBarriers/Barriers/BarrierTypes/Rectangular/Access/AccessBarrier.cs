@@ -26,8 +26,9 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 					isSaveable: isSaveable,
 					hostType: hostType,
 					hostWhoAmI: hostWhoAmI ) {
-			this.OnPreBarrierEntityHit.Add( this.PreBarrierEntityHit );
-			this.OnPreBarrierBarrierHit.Add( this.PreBarrierBarrierHit );
+			this.OnPreBarrierEntityHit.Add( this.ApplyBarrierEntityHit );
+			this.OnPreBarrierBarrierHit.Add( this.ApplyBarrierBarrierHit );
+
 			this.OnPostBarrierBarrierHit.Add( this.PostBarrierBarrierHit );
 		}
 	}

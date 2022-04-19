@@ -36,7 +36,11 @@ namespace SoulBarriers.Barriers {
 
 		////////////////
 
-		public Barrier CreateAndDeclareActiveNPCBarrier( int npcWho, int strength, float strengthRegenPerTick, float radius ) {
+		public Barrier CreateAndDeclareActiveNPCBarrier(
+					int npcWho,
+					int strength,
+					float strengthRegenPerTick,
+					float radius ) {
 			if( this.NPCBarriers.ContainsKey(npcWho) ) {
 				throw new ModLibsException( "NPC barrier already exists." );
 			}

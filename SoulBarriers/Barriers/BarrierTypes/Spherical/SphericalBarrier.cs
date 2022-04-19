@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
+using ModLibsCore.Classes.Errors;
 
 
 namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
@@ -64,6 +65,27 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical {
 					Color color
 				) : base( id, hostType, hostWhoAmI, strength, maxRegenStrength, strengthRegenPerTick, color ) {
 			this.Radius = radius;
+		}
+
+
+		////////////////
+
+		public override void CopyFrom( Barrier barrier ) {
+			if( !(barrier is SphericalBarrier) ) {
+				throw new ModLibsException( $"Invalid barrier type ({barrier.ToString()})." );
+			}
+
+			//
+
+			var otherBarrier = barrier as SphericalBarrier;
+
+			//
+
+			this.Radius = otherBarrier.Radius;
+
+			//
+
+			base.CopyFrom( barrier );
 		}
 
 

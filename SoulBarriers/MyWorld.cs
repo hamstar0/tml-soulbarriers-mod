@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using ModLibsCore.Classes.Errors;
 using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Libraries.DotNET.Extensions;
 using SoulBarriers.Barriers;
@@ -116,10 +117,20 @@ namespace SoulBarriers {
 			for( int i=0; i<count; i++ ) {
 				Barrier barrier = mngr.NetReceiveWorldBarrier( reader );
 
+				Barrier existingBarrier = mngr.GetBarrierByID( barrier.ID );
+
 				//
 
-				if( barrier is RectangularBarrier ) {
-					mngr.DeclareWorldBarrier_Unsynced( barrier as RectangularBarrier );
+				if( existingBarrier != null ) {
+					existingBarrier.CopyFrom( barrier );
+				} else {
+					if( barrier is RectangularBarrier ) {
+						mngr.DeclareWorldBarrier_Unsynced( barrier as RectangularBarrier );
+					} else {
+						throw new ModLibsException(
+							$"Cannot add {barrier.ToString()} ({barrier.GetType().Name}) to world."
+						);
+					}
 				}
 			}
 		}

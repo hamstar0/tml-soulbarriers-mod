@@ -7,7 +7,7 @@ using ModLibsCore.Libraries.Debug;
 
 namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 	public partial class AccessBarrier : RectangularBarrier {
-		private bool PreBarrierEntityHit( ref Entity intruder, ref double damage ) {
+		private bool ApplyBarrierEntityHit( ref Entity intruder, ref double damage ) {
 			if( !intruder.active ) {
 				return false;
 			}
@@ -27,7 +27,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 		}
 
 
-		private bool PreBarrierBarrierHit( Barrier otherBarrier, ref double damage ) {
+		private bool ApplyBarrierBarrierHit( Barrier otherBarrier, ref double damage ) {
 			if( !otherBarrier.IsActive || otherBarrier is AccessBarrier ) {
 				return false;
 			}

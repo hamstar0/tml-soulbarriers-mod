@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ModLibsCore.Classes.Errors;
 using Terraria;
 
 
@@ -39,6 +40,28 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular {
 				) : base( id, hostType, hostWhoAmI, strength, maxRegenStrength, strengthRegenPerTick, color ) {
 			this.TileArea = tileArea;
 			this.IsSaveable = isSaveable;
+		}
+
+
+		////////////////
+
+		public override void CopyFrom( Barrier barrier ) {
+			if( !(barrier is RectangularBarrier) ) {
+				throw new ModLibsException( $"Invalid barrier type {barrier.ToString()}." );
+			}
+
+			//
+
+			var otherBarrier = barrier as RectangularBarrier;
+
+			//
+
+			this.TileArea = otherBarrier.TileArea;
+			this.IsSaveable = otherBarrier.IsSaveable;
+
+			//
+
+			base.CopyFrom( barrier );
 		}
 
 

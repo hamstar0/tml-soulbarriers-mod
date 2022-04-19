@@ -43,13 +43,17 @@ namespace SoulBarriers.Barriers {
 				if( !barrier.IsActive ) {
 					continue;
 				}
+
+				// Owner cannot collide with their own barrier
 				if( barrier.Host != null && barrier.Host == ent ) {
 					continue;
 				}
 
-				if( barrier.Host?.active != true || ((Player)barrier.Host).dead ) {
+				if( barrier.Host?.active != true || (barrier.Host as Player)?.dead == true ) {
 					continue;
 				}
+
+				//
 
 //DebugLibraries.Print(
 //	"pb_v_e_"+barrier.ID+"_"+ent,
@@ -64,11 +68,15 @@ namespace SoulBarriers.Barriers {
 				}
 			}
 
+			//
+
 			// Check for npc barriers:
 			foreach( Barrier barrier in this.NPCBarriers.Values ) {
 				if( !barrier.IsActive ) {
 					continue;
 				}
+
+				// Owner cannot collide with their own barrier
 				if( barrier.Host != null && barrier.Host == ent ) {
 					continue;
 				}
@@ -76,6 +84,8 @@ namespace SoulBarriers.Barriers {
 				if( barrier.Host?.active != true ) {
 					continue;
 				}
+
+				//
 
 				if( barrier.IsEntityColliding(ref ent) ) {
 					barrier.ApplyEntityCollisionHit_If_Syncs( ent, null, true );
@@ -86,14 +96,20 @@ namespace SoulBarriers.Barriers {
 				}
 			}
 
+			//
+
 			// Check for world barriers:
 			foreach( Barrier barrier in this.TileBarriers.Values ) {
 				if( !barrier.IsActive ) {
 					continue;
 				}
+
+				// Owner cannot collide with their own barrier
 				if( barrier.Host != null && barrier.Host == ent ) {
 					continue;
 				}
+
+				//
 
 /*DebugLibraries.Print( "wb_v_e_"+barrier.GetID(), "collide? "+barrier.IsColliding(ent)+", ent: "+new Rectangle(
 	(int)ent.position.X,
@@ -102,7 +118,7 @@ namespace SoulBarriers.Barriers {
 	ent.height
 ) );*/
 				if( barrier.IsEntityColliding(ref ent) ) {
-					barrier.ApplyEntityCollisionHit_If_Syncs( ent, null, Main.netMode == NetmodeID.Server );
+					barrier.ApplyEntityCollisionHit_If_Syncs( ent, null, true );
 
 					if( !ent.active ) {
 						return;

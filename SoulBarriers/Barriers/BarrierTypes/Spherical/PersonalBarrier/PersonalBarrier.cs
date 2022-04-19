@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using ModLibsCore.Classes.Errors;
 using ModLibsCore.Services.ProjectileOwner;
 
 
@@ -30,7 +31,7 @@ namespace SoulBarriers.Barriers.BarrierTypes.Spherical.Personal {
 
 
 		////////////////
-		
+
 		public override bool CanSave() {
 			return false;
 		}

@@ -21,7 +21,13 @@ namespace SoulBarriers {
 		////////////////
 
 		public override void PostSetupContent() {
-			NPCHooks.AddSpawnNPCHook( ( npcWho ) => SoulBarriersNPC.ApplySpawnBarrierIf(npcWho) );
+			NPCHooks.AddSpawnNPCHook( ( npcWho ) => SoulBarriersNPC.ApplySpawnBarrier_If(
+				npcWho: npcWho,
+				customStrength: null,
+				customStrengthRegenPerTick: null,
+				noRandomChance: false,
+				syncIfServer: true
+			) );
 		}
 
 

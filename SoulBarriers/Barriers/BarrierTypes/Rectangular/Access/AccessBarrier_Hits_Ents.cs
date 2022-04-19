@@ -86,7 +86,8 @@ namespace SoulBarriers.Barriers.BarrierTypes.Rectangular.Access {
 			//
 
 			var mynpc = intruder.GetGlobalNPC<SoulBarriersNPC>();
-			mynpc.KillFromBarrier = true;
+
+			mynpc.KillFromBarrier_Host = true;
 		}
 
 

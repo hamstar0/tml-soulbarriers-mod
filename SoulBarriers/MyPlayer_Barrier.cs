@@ -1,5 +1,6 @@
 using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsCore.Libraries.Debug;
 using SoulBarriers.Barriers;
@@ -22,6 +23,7 @@ namespace SoulBarriers {
 					this.Barrier.SetStrength( 0, true, true, false );	// TODO: Confirm no sync
 				}
 			} else {
+				//if( Main.netMode != NetmodeID.MultiplayerClient ) {
 				BarrierManager.Instance.CheckCollisionsAgainstEntity( this.player );
 			}
 		}
