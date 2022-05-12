@@ -33,6 +33,14 @@ namespace SoulBarriers {
 
 		////////////////
 
+		public override bool? CanBeHitByProjectile( NPC npc, Projectile projectile ) {
+			return !this.Barrier?.IsActive  // <- collision code handled elsewhere
+				?? base.CanBeHitByProjectile( npc, projectile );
+		}
+
+
+		////////////////
+
 		public override bool PreAI( NPC npc ) {
 			bool isKilledByBarrier = this.KillFromBarrier_Host
 				&& Main.netMode != NetmodeID.MultiplayerClient;

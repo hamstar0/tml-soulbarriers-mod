@@ -30,5 +30,13 @@ namespace SoulBarriers {
 
 			this.AnimateBarrierFxIf();
 		}
+
+
+		////////////////
+
+		public override bool CanBeHitByProjectile( Projectile proj ) {
+			return !this.Barrier?.IsActive	// <- collision code handled elsewhere
+				?? base.CanBeHitByProjectile( proj );
+		}
 	}
 }
